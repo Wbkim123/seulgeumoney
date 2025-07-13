@@ -13,6 +13,7 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   return (
     <div
+      onClick={(e) => e.stopPropagation()}
       className={`fixed top-0 left-0 h-full w-64 bg-white shadow-lg transform transition-transform duration-300 z-50 ${
         isOpen ? 'translate-x-0' : '-translate-x-full'
       } flex flex-col justify-between`} // ✅ 전체 영역을 위아래로 분할
