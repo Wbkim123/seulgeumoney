@@ -41,6 +41,12 @@ export default function Home() {
       </div>
 
       {/* 사이드바 */}
+      {isSidebarOpen && (
+        <div
+          className="fixed inset-0 z-40"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
       <Sidebar isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       {/* 메인 콘텐츠 */}
