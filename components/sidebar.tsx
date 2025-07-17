@@ -28,7 +28,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
               height={60}
             />
           </Link>
-          <button onClick={onClose} className="text-[#98c195] hover:text-[#649566] text-2xl">
+          <button onClick={onClose} className="text-[#98c195] hover:text-[#649566] text-2xl cursor-pointer">
             &times;
           </button>
         </div>
