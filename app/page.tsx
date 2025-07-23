@@ -37,7 +37,7 @@ export default function Home() {
       {/* Hero Section */}
       <section className="max-w-5xl mx-auto text-center pt-43 px-6 space-y-20">
         <h1 className="text-5xl font-extrabold text-gray-900 leading-tight">
-          Manage your spending with<br />
+          Manage your spending <br />
           <span className="text-[#649566]">seulgeumoney (automatically)</span>
         </h1>
 
