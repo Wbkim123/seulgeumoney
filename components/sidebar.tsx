@@ -1,55 +1,115 @@
-// components/Sidebar.tsx
 'use client';
 
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import {
+  HiXMark,
+  HiCurrencyDollar,
+  HiChartBarSquare,
+  HiFlag,
+  HiCalendarDays,
+  HiCog6Tooth,
+} from 'react-icons/hi2';
 
 interface SidebarProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
+const navItems = [
+  { label: 'Spending', href: '/spending', icon: HiCurrencyDollar },
+  { label: 'Report', href: '/report', icon: HiChartBarSquare },
+  { label: 'Goals', href: '/goals', icon: HiFlag },
+  { label: 'Calender', href: '/calendar', icon: HiCalendarDays }, // (사진 표기 그대로 Calender)
+];
+
+export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   return (
-    <div
+    <aside
       onClick={(e) => e.stopPropagation()}
-      className={`fixed top-0 left-0 h-full w-64 bg-white shadow-lg transform transition-transform duration-300 z-50 ${
-        isOpen ? 'translate-x-0' : '-translate-x-full'
-      } flex flex-col justify-between`} // ✅ 전체 영역을 위아래로 분할
+      className={[
+        'fixed z-50',
+        'left-6 top-6 bottom-6 w-[260px]',
+        'rounded-2xl',
+        // ✅ 투명도: 너무 비치면 /95 또는 그냥 bg-white 추천
+        'bg-white/95 backdrop-blur-md',
+        'shadow-[0_18px_50px_rgba(0,0,0,0.14)]',
+        'ring-1 ring-black/10',
+        'transition-transform duration-300 ease-out',
+        isOpen ? 'translate-x-0' : '-translate-x-[120%]',
+      ].join(' ')}
+      aria-hidden={!isOpen}
     >
-      {/* 상단: 로고 + 메뉴 */}
-      <div>
-        <div className="p-4 flex justify-between items-center border-b">
-          <Link href="/" onClick={onClose} className="flex items-center">
-            <Image
-              src="/logo.jpg"
-              alt="슬그머니 로고"
-              width={60}
-              height={60}
-            />
-          </Link>
-          <button onClick={onClose} className="text-[#98c195] hover:text-[#649566] text-2xl cursor-pointer">
-            &times;
+      <div className="flex h-full flex-col">
+        {/* Top: Logo + Close */}
+        <div className="flex items-start justify-between px-5 py-4">
+          <div className="relative h-14 w-14">
+            <Image src="/logo.png" alt="Logo" fill className="object-contain" priority />
+          </div>
+
+          <button
+            onClick={onClose}
+            className="rounded-full p-2 text-[#7fb57c] hover:bg-black/5"
+            aria-label="Close sidebar"
+          >
+            <HiXMark size={20} />
           </button>
         </div>
 
-        <ul className="p-4 space-y-3">
-          <li className="text-[#98c195] hover:text-[#649566] cursor-pointer">Spending</li>
-          <li className="text-[#98c195] hover:text-[#649566] cursor-pointer">Report</li>
-          <li className="text-[#98c195] hover:text-[#649566] cursor-pointer">Goals</li>
-          <li className="text-[#98c195] hover:text-[#649566] cursor-pointer">App Settings</li>
-          <li className="text-[#98c195] hover:text-[#649566] cursor-pointer">Account Settings</li>
-        </ul>
-      </div>
+        {/* ✅ Top Divider: nav와 동일한 기준(px-3 + mx-4)으로 맞추기 */}
+        <div className="px-3">
+          <div className="mx-4 h-px bg-black/10" />
+        </div>
 
-      {/* 하단: 고정된 계정 영역 */}
-      <div className="p-4 border-t space-y-3">
-        <li className="text-[#98c195] hover:text-[#649566] cursor-pointer list-none">Logout</li>
+        {/* Menu */}
+        <nav className="mt-0 px-3">
+          <ul className="flex flex-col">
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              return (
+                <li key={item.label}>
+                  <Link
+                    href={item.href}
+                    onClick={onClose}
+                    className="
+                      flex items-center gap-3
+                      rounded-xl px-4 py-4
+                      text-[#7fb57c]
+                      hover:bg-black/5
+                      transition
+                    "
+                  >
+                    <Icon size={18} className="text-[#7fb57c]" />
+                    <span className="text-[14px] tracking-tight">{item.label}</span>
+                  </Link>
+
+                  {/* ✅ row divider: 동일한 mx-4 */}
+                  <div className="mx-4 h-px bg-black/10" />
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+
+        <div className="flex-1" />
+
+        {/* Bottom-left gear */}
+        <div className="px-5 pb-5">
+          <button
+            className="
+              inline-flex items-center justify-center
+              rounded-full p-2
+              text-[#7fb57c]
+              hover:bg-black/5
+              transition
+            "
+            aria-label="Settings"
+          >
+            <HiCog6Tooth size={20} />
+          </button>
+        </div>
       </div>
-    </div>
+    </aside>
   );
-};
-
-
-export default Sidebar;
+}
