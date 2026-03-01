@@ -1,150 +1,209 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { HiChevronLeft, HiChevronRight, HiXMark } from 'react-icons/hi2';
 
 interface SideCalendarProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as const;
 
-const monthNames = [
+const MONTH_NAMES = [
   'January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December'
-];
+  'July', 'August', 'September', 'October', 'November', 'December',
+] as const;
 
+type Selected = { day: number; month: number; year: number };
 
-const SideCalendar: React.FC<SideCalendarProps> = ({ isOpen, onClose }) => {
-  const today = new Date();
-  const [currentDate, setCurrentDate] = useState(today);
-  const [selectedDate, setSelectedDate] = useState<{ day: number; month: number; year: number } | null>({
+function isSameDate(a: Selected, b: Selected) {
+  return a.day === b.day && a.month === b.month && a.year === b.year;
+}
+
+export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
+  const today = useMemo(() => new Date(), []);
+  const [currentDate, setCurrentDate] = useState<Date>(today);
+  const [selected, setSelected] = useState<Selected>({
     day: today.getDate(),
     month: today.getMonth(),
-    year: today.getFullYear()
+    year: today.getFullYear(),
   });
 
   useEffect(() => {
-    if (isOpen) {
-      setCurrentDate(today);
-      setSelectedDate({
-        day: today.getDate(),
-        month: today.getMonth(),
-        year: today.getFullYear()
-      });
-    }
+    if (!isOpen) return;
+    const now = new Date();
+    setCurrentDate(new Date(now.getFullYear(), now.getMonth(), 1));
+    setSelected({ day: now.getDate(), month: now.getMonth(), year: now.getFullYear() });
   }, [isOpen]);
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
 
-  const firstDay = new Date(year, month, 1).getDay();
+  const firstDayIndex = new Date(year, month, 1).getDay(); // 0(Sun)~6(Sat)
   const lastDate = new Date(year, month + 1, 0).getDate();
 
   const prevMonth = () => setCurrentDate(new Date(year, month - 1, 1));
   const nextMonth = () => setCurrentDate(new Date(year, month + 1, 1));
 
-  const calendarCells = [];
-  const isToday = (day: number) => {
-    return (
-      day === today.getDate() &&
-      month === today.getMonth() &&
-      year === today.getFullYear()
-    );
+  const isToday = (d: number) =>
+    d === today.getDate() && month === today.getMonth() && year === today.getFullYear();
+
+  // ✅ 핵심: "오늘" 이후 날짜면 미래로 판단 (시간 영향 제거 위해 00:00 기준으로 비교)
+  const isFuture = (d: number) => {
+    const t = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
+    const cand = new Date(year, month, d).getTime();
+    return cand > t;
   };
 
-  const isFutureDate = (day: number) => {
-    const dateToCheck = new Date(year, month, day);
-    return dateToCheck > today;
-  };
+  const cells: Array<{ key: string; day?: number }> = [];
 
-  for (let i = 0; i < firstDay; i++) {
-    calendarCells.push(
-      <span key={`empty-${i}`} className="text-gray-300">-</span>
-    );
+  // leading blanks
+  for (let i = 0; i < firstDayIndex; i++) {
+    cells.push({ key: `blank-start-${i}` });
   }
-
-  for (let i = 1; i <= lastDate; i++) {
-    const isTodayCell =
-      i === today.getDate() &&
-      month === today.getMonth() &&
-      year === today.getFullYear();
-    
-    const isSelected =
-      selectedDate &&
-      i === selectedDate.day &&
-      month === selectedDate.month &&
-      year === selectedDate.year;
-
-    const future = isFutureDate(i);
-
-    calendarCells.push(
-      <button
-        key={i}
-        onClick={() => !future && setSelectedDate({ day: i, month: month, year: year })}
-        disabled={future}
-        className={`flex items-center justify-center w-8 h-8 rounded-full ${
-            isSelected
-              ? 'bg-[#649566] text-white font-bold cursor-pointer'
-              : isTodayCell
-              ? 'border border-[#98c195] text-[#98c195] cursor-pointer'
-              : future
-              ? 'text-gray-300'
-              : 'text-[#98c195] cursor-pointer'
-        }`}
-      >
-        {i}
-      </button>
-    );
+  // days
+  for (let d = 1; d <= lastDate; d++) {
+    cells.push({ key: `day-${d}`, day: d });
   }
-
+  // trailing blanks
+  while (cells.length % 7 !== 0) {
+    cells.push({ key: `blank-end-${cells.length}` });
+  }
 
   return (
-    <div
-      style={{
-        right: isOpen ? '1.5rem' : '-21rem',
-        top: '50%',
-        transform: 'translateY(-50%)',
-        transition: 'right 0.3s ease',
-      }}
-      className="fixed w-80 h-80 bg-white shadow-lg z-50 rounded-lg border flex flex-col"
+    <aside
+      onClick={(e) => e.stopPropagation()}
+      className={[
+        'fixed z-50',
+        'right-6 top-1/2 -translate-y-1/2',
+        'transition-transform duration-300 ease-out',
+        isOpen ? 'translate-x-0' : 'translate-x-[120%]',
+      ].join(' ')}
+      aria-hidden={!isOpen}
     >
-        {/* 상단 헤더 */}
-        <div className="p-2 flex justify-between items-center border-b">
-            <h2 className="text-[#98c195] font-bold text-lg">Calendar</h2>
-            <button onClick={onClose} className="text-[#98c195] hover:text-[#649566] text-2xl cursor-pointer">
-                &times;
-            </button>
+      <div
+        className="
+          w-[320px] rounded-2xl
+          bg-white
+          shadow-[0_18px_50px_rgba(0,0,0,0.14)]
+          ring-1 ring-black/10
+          overflow-hidden
+        "
+      >
+        {/* Top bar: close */}
+        <div className="flex items-center justify-end px-3 pt-3">
+          <button
+            onClick={onClose}
+            className="rounded-full p-1 text-[#7fb57c] hover:bg-black/5 transition"
+            aria-label="Close calendar"
+          >
+            <HiXMark size={18} />
+          </button>
         </div>
 
-        {/* 년도/월 + 양옆 화살표 */}
-        <div className="flex justify-between items-center p-2 border-b">
-            <button onClick={prevMonth} className="text-[#98c195] hover:text-[#649566] text-lg cursor-pointer">
-                &lt;
+        {/* Month row */}
+        <div className="px-5 pb-3">
+          <div className="flex items-center justify-between">
+            <button
+              onClick={prevMonth}
+              className="rounded-full p-2 text-[#7fb57c] hover:bg-black/5 transition"
+              aria-label="Previous month"
+            >
+              <HiChevronLeft size={18} />
             </button>
-        <span className="text-[#98c195] font-semibold text-center">
-            {monthNames[month]} {year}
-        </span>
-        <button onClick={nextMonth} className="text-[#98c195] hover:text-[#649566] text-lg cursor-pointer">
-            &gt;
-        </button>
-    </div>
 
-      {/* 캘린더 본문 */}
-      <div className="grid grid-cols-7 gap-y-2 gap-x-1 p-2 text-xs">
-        {days.map(day => (
-          <div key={day} className="text-center font-bold text-[#98c195] flex items-center justify-center h-6">
-            {day}
+            <div className="text-center text-[16px] tracking-tight text-[#7fb57c]">
+              {MONTH_NAMES[month]} {year}
+            </div>
+
+            <button
+              onClick={nextMonth}
+              className="rounded-full p-2 text-[#7fb57c] hover:bg-black/5 transition"
+              aria-label="Next month"
+            >
+              <HiChevronRight size={18} />
+            </button>
           </div>
-        ))}
-        {calendarCells.map((cell, index) => (
-          <div key={index} className="flex items-center justify-center h-6">
-            {cell}
+        </div>
+
+        {/* Days header */}
+        <div className="px-5">
+          <div className="grid grid-cols-7 gap-2 pb-2">
+            {DAYS.map((d) => (
+              <div key={d} className="text-center text-[12px] text-slate-700/80">
+                {d}
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
+
+        {/* Grid */}
+        <div className="px-5 pb-5">
+          <div className="grid grid-cols-7 gap-2">
+            {cells.map((c) => {
+              const d = c.day;
+
+              // 빈칸(-)
+              if (!d) {
+                return (
+                  <div
+                    key={c.key}
+                    className="
+                      h-9 w-9 rounded-lg
+                      bg-slate-50
+                      ring-1 ring-black/5
+                      flex items-center justify-center
+                      text-slate-300
+                      text-sm
+                    "
+                  >
+                    -
+                  </div>
+                );
+              }
+
+              const sel: Selected = { day: d, month, year };
+              const active = isSameDate(selected, sel);
+              const todayMark = isToday(d);
+              const future = isFuture(d);
+
+              return (
+                <button
+                  key={c.key}
+                  disabled={future}
+                  onClick={() => {
+                    if (future) return;
+                    setSelected(sel);
+                  }}
+                  className={[
+                    'h-9 w-9 rounded-lg',
+                    'ring-1 ring-black/5',
+                    'flex items-center justify-center',
+                    'text-sm',
+                    'transition',
+                    // ✅ 미래 날짜 스타일
+                    future
+                      ? 'bg-white text-slate-300 cursor-not-allowed'
+                      : active
+                        ? 'bg-[#7fb57c] text-white shadow-[0_10px_25px_rgba(127,181,124,0.35)]'
+                        : 'bg-white text-slate-600 hover:bg-slate-50',
+                    // 오늘 표시(살짝)
+                    !future && !active && todayMark ? 'ring-2 ring-[#7fb57c]/30' : '',
+                  ].join(' ')}
+                  aria-label={
+                    future
+                      ? `Future date disabled: ${MONTH_NAMES[month]} ${d}, ${year}`
+                      : `Select ${MONTH_NAMES[month]} ${d}, ${year}`
+                  }
+                >
+                  {d}
+                </button>
+              );
+            })}
+          </div>
+        </div>
       </div>
-    </div>
+    </aside>
   );
-};
-
-export default SideCalendar;
+}
