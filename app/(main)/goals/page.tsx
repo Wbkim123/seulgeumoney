@@ -1,0 +1,378 @@
+'use client';
+
+import React, { useState, useRef, useEffect } from 'react';
+import { useGoals } from '../GoalsContext'; // ✨ 공용 저장소 불러오기
+
+// ✨ 커스텀 드롭다운 컴포넌트
+const CustomSelect = ({ 
+  placeholder, options, value, onChange, onAddOption, onDeleteOption 
+}: { 
+  placeholder: string; options: string[]; value: string; onChange: (val: string) => void; onAddOption: (val: string) => void; onDeleteOption: (val: string) => void; 
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [newItem, setNewItem] = useState('');
+
+  return (
+    <div className="relative">
+      <div
+        className={`flex w-full cursor-pointer items-center justify-between rounded-2xl bg-white px-5 py-3.5 text-sm shadow-sm outline-none ring-1 transition-all ${
+          value ? 'text-slate-700 ring-black/5' : 'text-slate-300 ring-black/5'
+        } ${isOpen ? 'ring-2 ring-[#98c195]/50' : ''}`}
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <span className="truncate">{value || placeholder}</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`transition-transform duration-300 text-slate-400 ${isOpen ? 'rotate-180' : ''}`}>
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </div>
+
+      {isOpen && (
+        <>
+          <div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)}></div>
+          <div className="absolute z-50 mt-2 w-full overflow-hidden rounded-2xl bg-white shadow-xl ring-1 ring-black/5">
+            <div className="max-h-40 overflow-y-auto">
+              {options.map((opt) => (
+                <div 
+                  key={opt} 
+                  className="group flex cursor-pointer items-center justify-between px-5 py-3 transition-colors hover:bg-slate-50"
+                  onClick={() => { onChange(opt); setIsOpen(false); }}
+                >
+                  <span className={`text-sm ${value === opt ? 'font-bold text-[#649566]' : 'font-medium text-slate-700'}`}>{opt}</span>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); onDeleteOption(opt); }}
+                    className="text-slate-300 opacity-0 transition-all hover:text-red-500 group-hover:opacity-100"
+                    title="Delete category"
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
+              ))}
+              {options.length === 0 && (
+                <div className="px-5 py-3 text-sm text-slate-400">No options added yet.</div>
+              )}
+            </div>
+            
+            <div className="relative z-50 border-t border-slate-100 bg-slate-50 p-3" onClick={(e) => e.stopPropagation()}>
+              <div className="flex items-center gap-2">
+                <input
+                  type="text"
+                  value={newItem}
+                  onChange={(e) => setNewItem(e.target.value)}
+                  placeholder="Add new..."
+                  className="flex-1 rounded-xl bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none ring-1 ring-black/5 focus:ring-2 focus:ring-[#98c195]/50"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && newItem.trim()) {
+                      onAddOption(newItem.trim());
+                      setNewItem('');
+                    }
+                  }}
+                />
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (newItem.trim()) {
+                      onAddOption(newItem.trim());
+                      setNewItem('');
+                    }
+                  }}
+                  className="cursor-pointer rounded-xl bg-[#649566] px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#527a54]"
+                >
+                  Add
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
+
+// 🎨 기둥(Column) 컴포넌트
+const GoalColumn = ({ 
+  title, 
+  goals, 
+  onAddClick, 
+  onEditClick, 
+  onReorder 
+}: { 
+  title: string; 
+  goals: any[]; 
+  onAddClick: () => void; 
+  onEditClick: (goal: any) => void; 
+  onReorder: (newGoals: any[]) => void;
+}) => {
+  const dragItem = useRef<number | null>(null);
+  const dragOverItem = useRef<number | null>(null);
+
+  const handleDragEnd = () => {
+    if (dragItem.current !== null && dragOverItem.current !== null && dragItem.current !== dragOverItem.current) {
+      const newGoals = [...goals];
+      const draggedGoal = newGoals.splice(dragItem.current, 1)[0];
+      newGoals.splice(dragOverItem.current, 0, draggedGoal);
+      onReorder(newGoals);
+    }
+    dragItem.current = null;
+    dragOverItem.current = null;
+  };
+
+  return (
+    <div className="relative flex w-full flex-1 flex-col overflow-hidden rounded-[40px] bg-[#f8f9fc] px-6 pt-8 shadow-[0_8px_30px_rgba(0,0,0,0.03)] ring-1 ring-black/[0.02]">
+      <div className="mb-7 flex items-center justify-between px-3">
+        <h2 className="text-[18px] font-medium text-[#739e75]">{title}</h2>
+        <button onClick={onAddClick} className="flex h-6 w-6 cursor-pointer items-center justify-center text-2xl font-light text-slate-400 transition-colors hover:text-[#649566]">+</button>
+      </div>
+      
+      <div 
+        onDragOver={(e) => e.preventDefault()}
+        className="flex h-[430px] flex-col gap-4 overflow-y-auto pb-24 [&::-webkit-scrollbar]:hidden" 
+        style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}
+      >
+        {goals.map((goal, index) => {
+          const percentage = Math.round((goal.current / goal.target) * 100);
+          const isOverLimit = percentage > 100; 
+          
+          return (
+            <div 
+              key={goal.id} 
+              draggable
+              onDragStart={() => (dragItem.current = index)}
+              onDragEnter={() => (dragOverItem.current = index)}
+              onDragEnd={handleDragEnd}
+              onDragOver={(e) => e.preventDefault()}
+              onClick={() => onEditClick(goal)} 
+              className="flex shrink-0 cursor-grab active:cursor-grabbing flex-col justify-center gap-1.5 rounded-full bg-white px-6 py-4 shadow-[0_5px_15px_rgba(0,0,0,0.04)] ring-1 ring-black/[0.02] transition-transform hover:-translate-y-1 hover:shadow-md"
+            >
+              <div className="flex items-center justify-between gap-4 pointer-events-none">
+                <span className="truncate text-[14px] font-medium text-slate-800">{goal.title}</span>
+                <span className={`shrink-0 text-[10px] font-semibold ${isOverLimit ? 'text-red-500' : 'text-slate-400'}`}>{percentage}%</span>
+              </div>
+              <div className="flex items-center justify-between gap-5 pointer-events-none">
+                <div className="flex-1 overflow-hidden rounded-full bg-slate-100 h-[4px]">
+                  <div className={`h-full rounded-full transition-all duration-500 ease-in-out ${isOverLimit ? 'bg-red-500' : 'bg-[#89b388]'}`} style={{ width: `${Math.min(percentage, 100)}%` }} />
+                </div>
+                <div className="shrink-0 text-right">
+                  <span className={`tracking-tight text-[12px] font-semibold ${isOverLimit ? 'text-red-500' : 'text-slate-800'}`}>
+                    {isOverLimit ? `$-${goal.current - goal.target}` : `$${goal.current}`}
+                    <span className="text-slate-400 text-[10px] font-medium"> / ${goal.target}</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-28 bg-gradient-to-t from-[#f8f9fc] via-[#f8f9fc]/90 to-transparent"></div>
+    </div>
+  );
+};
+
+// 🚀 메인 페이지
+export default function GoalsPage() {
+  const {
+    dailyGoals, setDailyGoals,
+    monthlyGoals, setMonthlyGoals,
+    yearlyGoals, setYearlyGoals
+  } = useGoals();
+
+  const [categoryList, setCategoryList] = useState(['Food', 'Transport', 'Shopping']);
+  const [subCategoryList, setSubCategoryList] = useState(['Coffee', 'Groceries', 'Taxi']);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [activeCategory, setActiveCategory] = useState<'Daily' | 'Monthly' | 'Yearly' | null>(null);
+  const [editingGoalId, setEditingGoalId] = useState<number | null>(null);
+
+  const [goalName, setGoalName] = useState('');
+  const [goalAmount, setGoalAmount] = useState(''); // Target Amount
+  const [goalSpent, setGoalSpent] = useState('');   // ✨ Spent Amount (추가됨!)
+  const [goalCategory, setGoalCategory] = useState('');
+  const [goalSubcategory, setGoalSubcategory] = useState('');
+
+  // ✨ 빈칸 유효성 검사에 goalSpent 추가
+  const isFormValid = goalName.trim() !== '' && goalAmount.trim() !== '' && goalSpent.trim() !== '' && goalCategory !== '' && goalSubcategory !== '';
+
+  const handleOpenAddModal = (category: 'Daily' | 'Monthly' | 'Yearly') => {
+    setActiveCategory(category);
+    setEditingGoalId(null);
+    setGoalName(''); 
+    setGoalAmount(''); 
+    setGoalSpent('0'); // ✨ 새로 추가할 때는 기본적으로 사용한 금액이 0원!
+    setGoalCategory(''); 
+    setGoalSubcategory('');
+    setIsModalOpen(true);
+  };
+
+  const handleOpenEditModal = (category: 'Daily' | 'Monthly' | 'Yearly', goal: any) => {
+    setActiveCategory(category);
+    setEditingGoalId(goal.id);
+    setGoalName(goal.title); 
+    setGoalAmount(goal.target.toString()); 
+    setGoalSpent(goal.current.toString()); // ✨ 기존에 사용한 금액 불러오기!
+    setGoalCategory(goal.category || ''); 
+    setGoalSubcategory(goal.subcategory || '');
+    setIsModalOpen(true);
+  };
+
+  const handleSaveGoal = () => {
+    if (!isFormValid) return;
+    const updateList = (list: any[]) => {
+      if (editingGoalId) {
+        return list.map((g) => g.id === editingGoalId ? { 
+          ...g, 
+          title: goalName, 
+          current: Number(goalSpent), // ✨ 수정한 사용 금액 저장
+          target: Number(goalAmount), 
+          category: goalCategory, 
+          subcategory: goalSubcategory 
+        } : g);
+      }
+      return [...list, { 
+        id: Date.now(), 
+        title: goalName, 
+        current: Number(goalSpent), // ✨ 새로 추가한 사용 금액 저장
+        target: Number(goalAmount), 
+        category: goalCategory, 
+        subcategory: goalSubcategory 
+      }];
+    };
+
+    if (activeCategory === 'Daily') setDailyGoals(updateList(dailyGoals));
+    else if (activeCategory === 'Monthly') setMonthlyGoals(updateList(monthlyGoals));
+    else if (activeCategory === 'Yearly') setYearlyGoals(updateList(yearlyGoals));
+
+    setIsModalOpen(false);
+  };
+
+  const handleDeleteGoal = () => {
+    if (!editingGoalId) return;
+    const filterList = (list: any[]) => list.filter(g => g.id !== editingGoalId);
+    if (activeCategory === 'Daily') setDailyGoals(filterList(dailyGoals));
+    else if (activeCategory === 'Monthly') setMonthlyGoals(filterList(monthlyGoals));
+    else if (activeCategory === 'Yearly') setYearlyGoals(filterList(yearlyGoals));
+    setIsModalOpen(false);
+  };
+
+  // 엔터키 전역 이벤트
+  useEffect(() => {
+    const handleGlobalKeyDown = (e: KeyboardEvent) => {
+      if (!isModalOpen) return;
+      if (e.key === 'Enter') {
+        const target = e.target as HTMLElement;
+        if (target?.tagName === 'INPUT' && (target as HTMLInputElement).placeholder === 'Add new...') return;
+        if (target?.tagName === 'BUTTON') return;
+        if (isFormValid) {
+          e.preventDefault();
+          handleSaveGoal();
+        }
+      }
+    };
+    window.addEventListener('keydown', handleGlobalKeyDown);
+    return () => window.removeEventListener('keydown', handleGlobalKeyDown);
+  });
+
+  return (
+    <>
+      <div className="mx-auto flex w-full max-w-[1200px] items-stretch justify-center gap-8 pb-20 pt-10">
+        <GoalColumn title="Daily" goals={dailyGoals} onAddClick={() => handleOpenAddModal('Daily')} onEditClick={(goal) => handleOpenEditModal('Daily', goal)} onReorder={setDailyGoals} />
+        <GoalColumn title="Monthly" goals={monthlyGoals} onAddClick={() => handleOpenAddModal('Monthly')} onEditClick={(goal) => handleOpenEditModal('Monthly', goal)} onReorder={setMonthlyGoals} />
+        <GoalColumn title="Yearly" goals={yearlyGoals} onAddClick={() => handleOpenAddModal('Yearly')} onEditClick={(goal) => handleOpenEditModal('Yearly', goal)} onReorder={setYearlyGoals} />
+      </div>
+
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm" onClick={() => setIsModalOpen(false)}>
+          <div className="relative w-full max-w-[420px] rounded-3xl bg-[#f4f5f7] px-8 py-10 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+            <button 
+              onClick={() => setIsModalOpen(false)}
+              className="absolute right-5 top-5 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-slate-200 hover:text-slate-700"
+              aria-label="Close"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+
+            <h2 className="mb-8 text-center text-[22px] font-semibold text-[#649566]">
+              {editingGoalId ? 'Edit Your Goal' : 'Add Your Goals'}
+            </h2>
+
+            <div className="flex flex-col gap-5">
+              <div className="flex flex-col gap-1.5">
+                <label className="text-sm font-medium text-[#649566]">Name</label>
+                <input 
+                  type="text" value={goalName} onChange={(e) => setGoalName(e.target.value)} placeholder="Enter the name" 
+                  className="w-full rounded-2xl bg-white px-5 py-3.5 text-sm text-slate-700 placeholder:text-slate-300 shadow-sm outline-none ring-1 ring-black/5 focus:ring-2 focus:ring-[#98c195]/50"
+                />
+              </div>
+
+              {/* ✨ 2칸으로 나눈 Amount 입력창 영역 (Target / Spent) */}
+              <div className="grid grid-cols-2 gap-4">
+                {/* 1. 사용한 금액 (Spent Amount) */}
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-sm font-medium text-[#649566]">Spent</label>
+                  <div className="relative">
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-medium text-slate-400">$</span>
+                    <input 
+                      type="number" value={goalSpent} onChange={(e) => setGoalSpent(e.target.value)} placeholder="0" 
+                      className="w-full rounded-2xl bg-white py-3.5 pl-7 pr-3 text-sm text-slate-700 placeholder:text-slate-300 shadow-sm outline-none ring-1 ring-black/5 focus:ring-2 focus:ring-[#98c195]/50 [&::-webkit-inner-spin-button]:cursor-pointer [&::-webkit-outer-spin-button]:cursor-pointer"
+                    />
+                  </div>
+                </div>
+
+                {/* 2. 목표 금액 (Target Amount) */}
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-sm font-medium text-[#649566]">Target</label>
+                  <div className="relative">
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-medium text-slate-400">$</span>
+                    <input 
+                      type="number" value={goalAmount} onChange={(e) => setGoalAmount(e.target.value)} placeholder="0" 
+                      className="w-full rounded-2xl bg-white py-3.5 pl-7 pr-3 text-sm text-slate-700 placeholder:text-slate-300 shadow-sm outline-none ring-1 ring-black/5 focus:ring-2 focus:ring-[#98c195]/50 [&::-webkit-inner-spin-button]:cursor-pointer [&::-webkit-outer-spin-button]:cursor-pointer"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-sm font-medium text-[#649566]">Categories</label>
+                <CustomSelect
+                  placeholder="Select the category" options={categoryList} value={goalCategory} onChange={setGoalCategory}
+                  onAddOption={(newVal) => { if (!categoryList.includes(newVal)) setCategoryList([...categoryList, newVal]); }}
+                  onDeleteOption={(delVal) => { setCategoryList(categoryList.filter(c => c !== delVal)); if (goalCategory === delVal) setGoalCategory(''); }}
+                />
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-sm font-medium text-[#649566]">Subcategories</label>
+                <CustomSelect
+                  placeholder="Select the subcategory" options={subCategoryList} value={goalSubcategory} onChange={setGoalSubcategory}
+                  onAddOption={(newVal) => { if (!subCategoryList.includes(newVal)) setSubCategoryList([...subCategoryList, newVal]); }}
+                  onDeleteOption={(delVal) => { setSubCategoryList(subCategoryList.filter(c => c !== delVal)); if (goalSubcategory === delVal) setGoalSubcategory(''); }}
+                />
+              </div>
+
+              <div className="mt-4 flex gap-3">
+                {editingGoalId && (
+                  <button onClick={handleDeleteGoal} className="flex-1 cursor-pointer rounded-2xl bg-red-50 py-4 text-[15px] font-semibold text-red-500 shadow-sm transition-all hover:-translate-y-1 hover:bg-red-100">
+                    Delete
+                  </button>
+                )}
+                <button 
+                  onClick={handleSaveGoal} disabled={!isFormValid}
+                  className={`flex-[2] rounded-2xl py-4 text-[15px] font-semibold text-white transition-all ${
+                    isFormValid ? 'cursor-pointer bg-[#649566] shadow-lg hover:-translate-y-1 hover:bg-[#527a54]' : 'cursor-not-allowed bg-slate-300 opacity-70'
+                  }`}
+                >
+                  {editingGoalId ? 'Save Changes' : 'Add Goal'}
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
