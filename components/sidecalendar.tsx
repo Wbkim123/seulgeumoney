@@ -95,7 +95,7 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
         <div className="flex items-center justify-end px-3 pt-3">
           <button
             onClick={onClose}
-            className="rounded-full p-1 text-[#7fb57c] hover:bg-black/5 transition"
+            className="rounded-full p-1 text-[#649566] hover:bg-black/5 transition cursor-pointer"
             aria-label="Close calendar"
           >
             <HiXMark size={18} />
@@ -107,19 +107,19 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
           <div className="flex items-center justify-between">
             <button
               onClick={prevMonth}
-              className="rounded-full p-2 text-[#7fb57c] hover:bg-black/5 transition"
+              className="rounded-full p-2 text-[#649566] hover:bg-black/5 transition cursor-pointer"
               aria-label="Previous month"
             >
               <HiChevronLeft size={18} />
             </button>
 
-            <div className="text-center text-[16px] tracking-tight text-[#7fb57c]">
+            <div className="text-center text-[16px] tracking-tight text-[#649566]">
               {MONTH_NAMES[month]} {year}
             </div>
 
             <button
               onClick={nextMonth}
-              className="rounded-full p-2 text-[#7fb57c] hover:bg-black/5 transition"
+              className="rounded-full p-2 text-[#649566] hover:bg-black/5 transition cursor-pointer"
               aria-label="Next month"
             >
               <HiChevronRight size={18} />
@@ -181,15 +181,16 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
                     'ring-1 ring-black/5',
                     'flex items-center justify-center',
                     'text-sm',
+                    'cursor-pointer',
                     'transition',
                     // ✅ 미래 날짜 스타일
                     future
                       ? 'bg-white text-slate-300 cursor-not-allowed'
                       : active
-                        ? 'bg-[#7fb57c] text-white shadow-[0_10px_25px_rgba(127,181,124,0.35)]'
+                        ? 'bg-[#649566] text-white shadow-[0_10px_25px_rgba(127,181,124,0.35)]'
                         : 'bg-white text-slate-600 hover:bg-slate-50',
                     // 오늘 표시(살짝)
-                    !future && !active && todayMark ? 'ring-2 ring-[#7fb57c]/30' : '',
+                    !future && !active && todayMark ? 'ring-2 ring-[#649566]/30' : '',
                   ].join(' ')}
                   aria-label={
                     future
