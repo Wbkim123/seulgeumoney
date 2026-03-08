@@ -50,7 +50,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
 
           <button
             onClick={onClose}
-            className="rounded-full p-2 text-[#7fb57c] hover:bg-black/5"
+            className="rounded-full p-2 text-[#649566] hover:bg-black/5 cursor-pointer"
             aria-label="Close sidebar"
           >
             <HiXMark size={20} />
@@ -75,12 +75,12 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                     className="
                       flex items-center gap-3
                       rounded-xl px-4 py-4
-                      text-[#7fb57c]
+                      text-[#649566]
                       hover:bg-black/5
                       transition
                     "
                   >
-                    <Icon size={18} className="text-[#7fb57c]" />
+                    <Icon size={18} className="text-[#649566]" />
                     <span className="text-[14px] tracking-tight">{item.label}</span>
                   </Link>
 
@@ -100,9 +100,10 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
             className="
               inline-flex items-center justify-center
               rounded-full p-2
-              text-[#7fb57c]
+              text-[#649566]
               hover:bg-black/5
               transition
+              cursor-pointer
             "
             aria-label="Settings"
           >
