@@ -35,7 +35,6 @@ export default function SpendingPage() {
 
   // 다음 달로 이동 (미래로는 갈 수 없도록 막음!)
   const handleNextMonth = () => {
-    // 현재 보는 달이 실제 '이번 달'이라면 다음 달로 넘어가는 함수 종료
     if (currentYear === realYear && currentMonthIndex === realMonth) return;
 
     if (currentMonthIndex === 11) {
@@ -46,32 +45,26 @@ export default function SpendingPage() {
     }
   };
 
-  // 미래 달로 이동하는 버튼을 회색으로 비활성화하기 위한 조건
   const isNextDisabled = currentYear === realYear && currentMonthIndex === realMonth;
 
-  // 📝 임시 데이터 (오늘 날짜 기준으로 바로 보이게 최신 데이터 추가)
+  // 📝 임시 데이터
   const allTransactions = [
-    // (테스트용) 현재 시점에 맞춘 최신 데이터
     { id: 9, date: `${months[realMonth]} ${realDate}, ${realYear}`, name: 'Coffee', time: '08:30 AM', amount: '$ 4.50', type: 'expense', icon: '☕' },
     { id: 10, date: `${months[realMonth]} ${realDate - 1 > 0 ? realDate - 1 : 1}, ${realYear}`, name: 'Uber Eats', time: '07:15 PM', amount: '$ 25.00', type: 'expense', icon: '🍔' },
     { id: 11, date: `${months[realMonth]} 1, ${realYear}`, name: 'Monthly Salary', time: '09:00 AM', amount: '$ 3,200.00', type: 'income', icon: '💰' },
-    // 과거 데이터 유지
     { id: 1, date: 'July 22, 2024', name: 'OpenAI', time: '10:30 AM', amount: '$ 20.00', type: 'expense', icon: '🤖' },
     { id: 2, date: 'July 22, 2024', name: 'Apple', time: '09:15 AM', amount: '$ 1.99', type: 'expense', icon: '🍎' },
     { id: 3, date: 'July 22, 2024', name: 'Zelle Payment From Wonbeom...', time: '08:00 AM', amount: '$ 20.00', type: 'income', icon: '💸' },
   ];
 
-  // 동적 리스트 생성 로직
   const dynamicGroupedTransactions = useMemo(() => {
     const jsMonth = currentMonthIndex; 
-    const daysInMonth = new Date(currentYear, jsMonth + 1, 0).getDate(); // 선택한 달의 마지막 날짜
+    const daysInMonth = new Date(currentYear, jsMonth + 1, 0).getDate(); 
     
-    // ✅ 3. 선택한 달이 '이번 달'이면 말일이 아니라 '오늘'까지만 생성하도록 제한!
     let startDay = daysInMonth;
     if (currentYear === realYear && currentMonthIndex === realMonth) {
       startDay = Math.min(daysInMonth, realDate); 
     } else if (currentYear > realYear || (currentYear === realYear && currentMonthIndex > realMonth)) {
-      // (혹시 모를 버그 방지) 미래의 달이면 아예 생성하지 않음
       startDay = 0;
     }
     
@@ -89,82 +82,88 @@ export default function SpendingPage() {
     return grouped;
   }, [currentMonthIndex, currentYear, realYear, realMonth, realDate, months, allTransactions]);
 
+  // 버튼 생성을 위한 배열 맵핑
+  const accountOptions = [
+    { label: 'Checking Account', value: 'checking' },
+    { label: 'Savings Account', value: 'savings' },
+    { label: 'Credit Balance', value: 'credit' }
+  ];
+
   return (
     <>
-      <div className="flex w-full max-w-[1000px] mx-auto justify-center items-center gap-10 pt-10">
+      {/* 화면 중앙 정렬 및 가로 스크롤 방지 (Report Page와 동일) */}
+      <div className="flex min-h-[80vh] w-full items-center justify-center overflow-hidden pb-20 pt-10">
         
-        {/* 🟢 왼쪽 1단계 카드 (Type of Account) */}
-        <div className="relative w-full max-w-[420px] transition-all duration-500">
-          {!selectedType && (
-            <div className="absolute -top-[45px] left-1/2 -translate-x-1/2 z-10 transition-opacity duration-300">
-              <Image src="/seuljeossi.png" alt="슬저씨" width={80} height={80} unoptimized />
-            </div>
-          )}
+        {/* 🟢 애니메이션을 위한 최상단 래퍼 (Report Page와 동일) */}
+        <div className="relative flex items-center justify-center transition-all duration-500 ease-in-out">
+          
+          {/* 🟢 1단계: 왼쪽 박스 (항상 고정된 너비 420px 유지) */}
+          <div className="relative w-[420px] shrink-0 rounded-[32px] border border-white bg-white px-10 py-12 shadow-[0_18px_50px_rgba(0,0,0,0.12)]">
+            
+            {/* ✨ 아무것도 선택되지 않았을 때만 왼쪽에 슬저씨 표시 */}
+            {!selectedType && (
+              <div className="absolute -top-[45px] left-1/2 -translate-x-1/2 z-10 transition-opacity duration-300">
+                <Image src="/seuljeossi.png" alt="슬저씨" width={80} height={80} unoptimized />
+              </div>
+            )}
 
-          <div className="relative z-20 rounded-[32px] bg-white px-10 py-12 shadow-[0_18px_50px_rgba(0,0,0,0.12)]">
             <h2 className="mb-10 text-center text-[22px] font-semibold text-[#649566]">
               Type of Account
             </h2>
 
             <div className="flex flex-col gap-5">
-              <button
-                onClick={() => setSelectedType('checking')}
-                className={`w-full cursor-pointer rounded-2xl bg-white px-6 py-4 text-left text-[15px] font-semibold transition-all hover:-translate-y-1 hover:shadow-lg ${
-                  selectedType === 'checking'
-                    ? 'text-[#649566] ring-2 ring-[#649566] shadow-md'
-                    : 'text-slate-400 ring-1 ring-black/5 hover:text-[#649566]'
-                }`}
-              >
-                Checking Account
-              </button>
-              <button
-                onClick={() => setSelectedType('savings')}
-                className={`w-full cursor-pointer rounded-2xl bg-white px-6 py-4 text-left text-[15px] font-semibold transition-all hover:-translate-y-1 hover:shadow-lg ${
-                  selectedType === 'savings'
-                    ? 'text-[#649566] ring-2 ring-[#649566] shadow-md'
-                    : 'text-slate-400 ring-1 ring-black/5 hover:text-[#649566]'
-                }`}
-              >
-                Savings Account
-              </button>
-              <button
-                onClick={() => setSelectedType('credit')}
-                className={`w-full cursor-pointer rounded-2xl bg-white px-6 py-4 text-left text-[15px] font-semibold transition-all hover:-translate-y-1 hover:shadow-lg ${
-                  selectedType === 'credit'
-                    ? 'text-[#649566] ring-2 ring-[#649566] shadow-md'
-                    : 'text-slate-400 ring-1 ring-black/5 hover:text-[#649566]'
-                }`}
-              >
-                Credit Balance
-              </button>
+              {accountOptions.map((account) => {
+                const isSelected = selectedType === account.value;
+                return (
+                  <button
+                    key={account.value}
+                    onClick={() => setSelectedType(account.value)}
+                    // ✨ Report Page와 완벽히 동일한 버튼 스타일 (선택 시 초록색 테두리/텍스트)
+                    className={`w-full cursor-pointer rounded-2xl px-6 py-4 text-left text-[15px] font-semibold transition-all duration-300 ${
+                      isSelected 
+                        ? 'shadow-md ring-[1.5px] ring-[#98c195] text-[#649566]' 
+                        : 'text-slate-400 ring-1 ring-black/5 hover:-translate-y-1 hover:shadow-lg hover:text-[#649566]'
+                    }`}
+                  >
+                    {account.label}
+                  </button>
+                );
+              })}
             </div>
           </div>
-        </div>
 
-        {/* 🟢 오른쪽 2단계 카드 */}
-        {selectedType && (
-          <div className="relative w-full max-w-[420px] animate-[fadeIn_0.5s_ease-in-out]">
-            <div className="absolute -top-[45px] left-1/2 -translate-x-1/2 z-10 transition-opacity duration-300">
-              <Image src="/seuljeossi.png" alt="슬저씨" width={80} height={80} unoptimized />
-            </div>
+          {/* 🟢 2단계: 오른쪽 상세 박스 애니메이션 래퍼 (Report Page와 동일 - 서랍이 열리듯 펼쳐짐) */}
+          <div 
+            className={`overflow-visible transition-all duration-500 ease-in-out ${
+              selectedType ? 'ml-10 w-[420px] opacity-100' : 'ml-0 w-0 opacity-0'
+            }`}
+          >
+            {/* ✨ 안쪽 컨텐츠 (relative 속성을 추가하여 슬저씨가 정중앙에 올라가도록 설정) */}
+            <div className="relative w-[420px] rounded-[32px] border border-white bg-white px-10 py-12 shadow-[0_18px_50px_rgba(0,0,0,0.12)]">
+              
+              {/* ✨ 선택되었을 때만 오른쪽에 슬저씨 표시 */}
+              {selectedType && (
+                <div className="absolute -top-[45px] left-1/2 -translate-x-1/2 z-10 transition-opacity duration-300">
+                  <Image src="/seuljeossi.png" alt="슬저씨" width={80} height={80} unoptimized />
+                </div>
+              )}
 
-            <div className="relative z-20 rounded-[32px] bg-white px-10 py-12 shadow-[0_18px_50px_rgba(0,0,0,0.12)]">
               <h2 className="mb-10 text-center text-[22px] font-semibold text-[#649566]">
                 {selectedType === 'checking' && 'Checking Account'}
                 {selectedType === 'savings' && 'Savings Account'}
                 {selectedType === 'credit' && 'Credit Balance'}
               </h2>
 
+              {/* 선택된 계좌별 내용 */}
               {selectedType === 'checking' && (
                 <div className="flex flex-col gap-6">
                   <div className="flex flex-col items-center gap-2">
                     <button 
-                      // ✨ 클릭 시 모달도 열고, 은행 이름도 저장합니다!
                       onClick={() => {
                         setSelectedBank('Bank of America');
                         setIsModalOpen(true);
                       }}
-                      className="w-full cursor-pointer rounded-2xl bg-white px-6 py-4 text-left text-[15px] font-semibold text-slate-400 shadow-[0_4px_20px_rgba(0,0,0,0.06)] ring-1 ring-black/5 transition-all hover:-translate-y-1 hover:text-[#649566] hover:shadow-lg"
+                      className="w-full cursor-pointer rounded-2xl bg-white px-6 py-4 text-left text-[15px] font-semibold text-slate-400 ring-1 ring-black/5 transition-all hover:-translate-y-1 hover:shadow-lg hover:text-[#649566]"
                     >
                       Bank of America
                     </button>
@@ -175,12 +174,11 @@ export default function SpendingPage() {
 
                   <div className="flex flex-col items-center gap-2">
                     <button 
-                      // ✨ Chase 버튼에도 똑같이 추가해 줍니다!
                       onClick={() => {
                         setSelectedBank('Chase');
                         setIsModalOpen(true);
                       }}
-                      className="w-full cursor-pointer rounded-2xl bg-white px-6 py-4 text-left text-[15px] font-semibold text-slate-400 shadow-[0_4px_20px_rgba(0,0,0,0.06)] ring-1 ring-black/5 transition-all hover:-translate-y-1 hover:text-[#649566] hover:shadow-lg"
+                      className="w-full cursor-pointer rounded-2xl bg-white px-6 py-4 text-left text-[15px] font-semibold text-slate-400 ring-1 ring-black/5 transition-all hover:-translate-y-1 hover:shadow-lg hover:text-[#649566]"
                     >
                       Chase
                     </button>
@@ -198,34 +196,32 @@ export default function SpendingPage() {
               )}
             </div>
           </div>
-        )}
+
+        </div>
       </div>
 
-      {/* 🟢 3. 오버레이(모달) 영역 */}
+      {/* 🟢 3. 오버레이(모달) 영역 - 원본 코드 100% 유지 */}
       {isModalOpen && (
         <div 
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
           onClick={() => setIsModalOpen(false)}
         >
           <div 
-          // ✨ 기존 클래스 맨 앞에 'relative'를 꼭 추가해 주세요!
-          className="relative w-full max-w-[500px] rounded-3xl bg-[#f4f5f7] px-8 py-10 shadow-2xl"
-          onClick={(e) => e.stopPropagation()} 
-        >
-          {/* ✨ 왼쪽 위 닫기(X) 버튼 */}
-          <button
-            onClick={() => setIsModalOpen(false)}
-            className="absolute right-6 top-6 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-slate-200 hover:text-slate-600"
-            aria-label="Close modal"
+            className="relative w-full max-w-[500px] rounded-3xl bg-[#f4f5f7] px-8 py-10 shadow-2xl"
+            onClick={(e) => e.stopPropagation()} 
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
-          </button>
+            <button
+              onClick={() => setIsModalOpen(false)}
+              className="absolute right-6 top-6 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-slate-200 hover:text-slate-600"
+              aria-label="Close modal"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
 
-          {/* 제목 영역 */}
-          <div className="mb-6 text-center">
+            <div className="mb-6 text-center">
               <h2 className="text-2xl font-semibold text-[#649566]">
                 Transaction
               </h2>
@@ -236,7 +232,6 @@ export default function SpendingPage() {
               )}
             </div>
 
-            {/* 검색창 */}
             <div className="relative mb-6">
               <input 
                 type="text" 
@@ -255,10 +250,8 @@ export default function SpendingPage() {
               </button>
             </div>
 
-            {/* 거래 내역 리스트 */}
             <div className="flex flex-col bg-white rounded-2xl overflow-hidden shadow-sm ring-1 ring-black/5">
               
-              {/* ✨ 상단 월 표시 바 & 이동 버튼 */}
               <div className="flex items-center justify-between bg-[#b3b3b3] px-6 py-1.5 text-sm font-bold text-white z-20">
                 <button 
                   onClick={handlePrevMonth}

@@ -44,9 +44,16 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
       <div className="flex h-full flex-col">
         {/* Top: Logo + Close */}
         <div className="flex items-start justify-between px-5 py-4">
-          <div className="relative h-14 w-14">
+          
+          {/* ✨ 로고를 클릭하면 메인 페이지('/')로 이동하고 사이드바를 닫도록 Link로 감쌌습니다! */}
+          <Link 
+            href="/" 
+            onClick={onClose} 
+            className="relative block h-14 w-14 cursor-pointer transition-transform hover:scale-105"
+            aria-label="Go to Main Page"
+          >
             <Image src="/logo.png" alt="Logo" fill className="object-contain" priority />
-          </div>
+          </Link>
 
           <button
             onClick={onClose}
