@@ -21,7 +21,7 @@ const navItems = [
   { label: 'Spending', href: '/spending', icon: HiCurrencyDollar },
   { label: 'Report', href: '/report', icon: HiChartBarSquare },
   { label: 'Goals', href: '/goals', icon: HiFlag },
-  { label: 'Calender', href: '/calendar', icon: HiCalendarDays }, // (사진 표기 그대로 Calender)
+  { label: 'Calendar', href: '/calendar', icon: HiCalendarDays },
 ];
 
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
@@ -32,7 +32,6 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         'fixed z-50',
         'left-6 top-6 bottom-6 w-[260px]',
         'rounded-2xl',
-        // ✅ 투명도: 너무 비치면 /95 또는 그냥 bg-white 추천
         'bg-white/95 backdrop-blur-md',
         'shadow-[0_18px_50px_rgba(0,0,0,0.14)]',
         'ring-1 ring-black/10',
@@ -43,16 +42,21 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
     >
       <div className="flex h-full flex-col">
         {/* Top: Logo + Close */}
-        <div className="flex items-start justify-between px-5 py-4">
+        <div className="flex items-center justify-between px-5 py-4">
           
-          {/* ✨ 로고를 클릭하면 메인 페이지('/')로 이동하고 사이드바를 닫도록 Link로 감쌌습니다! */}
           <Link 
             href="/" 
             onClick={onClose} 
-            className="relative block h-14 w-14 cursor-pointer transition-transform hover:scale-105"
+            className="relative block h-10 w-32 cursor-pointer transition-transform hover:scale-105"
             aria-label="Go to Main Page"
           >
-            <Image src="/logo.png" alt="Logo" fill className="object-contain" priority />
+            <Image 
+              src="/logo.png" 
+              alt="Logo" 
+              fill 
+              className="object-contain object-left" 
+              priority 
+            />
           </Link>
 
           <button
