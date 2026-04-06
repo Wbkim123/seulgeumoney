@@ -47,15 +47,13 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           <Link 
             href="/" 
             onClick={onClose} 
-            className="relative block h-10 w-32 cursor-pointer transition-transform hover:scale-105"
+            className="block h-10 w-32 cursor-pointer transition-transform hover:scale-105"
             aria-label="Go to Main Page"
           >
-            <Image 
+            <img 
               src="/logo.png" 
               alt="Logo" 
-              fill 
-              className="object-contain object-left" 
-              priority 
+              className="h-full w-full object-contain object-left" 
             />
           </Link>
 
