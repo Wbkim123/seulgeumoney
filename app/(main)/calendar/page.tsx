@@ -14,39 +14,15 @@ const dotColors = {
 };
 
 // 기본 초기 데이터
-const initialCalendarData: Record<number, any> = {
-  3: {
-    hasEdit: false,
-    income: 0,
-    expense: 15.00,
-    transactions: [
-      { id: 101, icon: '☕', color: dotColors.yellow, name: 'Starbucks', amount: '$ 15.00', type: 'expense' },
-    ]
-  },
-  12: {
-    hasEdit: true,
-    income: 0,
-    expense: 120.50,
-    transactions: [
-      { id: 102, icon: '🛒', color: dotColors.blue, name: 'Walmart', amount: '$ 120.50', type: 'expense' },
-      { id: 103, icon: '🎬', color: dotColors.purple, name: 'Netflix', amount: '$ 15.00', type: 'expense' },
-    ]
-  },
-  23: { 
-    hasEdit: true,
-    income: 3000.00,
-    expense: 338.17,
-    transactions: [
-      { id: 1, icon: '👍', color: dotColors.green, name: 'Salary', amount: '$ 3000.00', type: 'income' },
-      { id: 2, icon: '🚐', color: dotColors.blue, name: 'Gas', amount: '$ 100.99', type: 'expense' },
-      { id: 3, icon: '😀', color: dotColors.red, name: "McDonald's", desc: '맥스파이시 상하이 버거 라지세트', amount: '$ 60.00', type: 'expense' },
-      { id: 4, icon: '🛒', color: dotColors.green, name: 'GS25', desc: '라면, 햇반, water, beers, 과자', amount: '$ 15.09', type: 'expense' },
-      { id: 5, icon: '😀', color: dotColors.red, name: 'FIVE GUYS', desc: '버거 세트, 감자튀김, 콜라, 얼음많이, 통치즈스틱, 화이어링, 치킨너겟', amount: '$ 50.00', type: 'expense' },
-      { id: 6, icon: '🛒', color: dotColors.blue, name: 'emart', tag: 'Grocery', amount: '$ 82.09', type: 'expense' },
-      { id: 7, icon: '🤍', color: dotColors.orange, name: '아이센스 PC', amount: '$ 30.00', type: 'expense' },
-    ],
-    memo: "d\nd\nd\nd\nd\nd\nd\nd"
-  },
+const getInitialCalendarData = (): Record<string, any> => {
+  const today = new Date();
+  const y = today.getFullYear();
+  const m = today.getMonth(); // 0-indexed (3월이면 2)
+  return {
+    [`${y}-${m}-3`]:  { id: 101, icon: '☕', color: dotColors.yellow, name: 'Starbucks', amount: '$ 15.00', type: 'expense' },
+    [`${y}-${m}-12`]: { id: 102, icon: '🛒', color: dotColors.blue, name: 'Walmart', amount: '$ 120.50', type: 'expense' },
+    [`${y}-${m}-23`]: { id: 1, icon: '👍', color: dotColors.green, name: 'Salary', amount: '$ 3000.00', type: 'income' },
+  };
 };
 
 export default function CalendarPage() {
@@ -63,14 +39,21 @@ export default function CalendarPage() {
   
   const [currentMemo, setCurrentMemo] = useState("");
 
-  const [calendarData, setCalendarData] = useState<Record<number, any>>(initialCalendarData);
+  const [calendarData, setCalendarData] = useState<Record<string, any>>(getInitialCalendarData);
   const [isLoaded, setIsLoaded] = useState(false); 
 
   useEffect(() => {
     const savedData = localStorage.getItem('seulgeumoney_calendar_data');
     if (savedData) {
       try {
-        setCalendarData(JSON.parse(savedData));
+        const parsed = JSON.parse(savedData);
+        const hasOldFormat = Object.keys(parsed).some(k => !isNaN(Number(k)));
+        if (hasOldFormat) {
+          // 구형 데이터 삭제, 새 초기 데이터로 시작
+          localStorage.removeItem('seulgeumoney_calendar_data');
+        } else {
+          setCalendarData(parsed);
+        }
       } catch (error) {
         console.error("Failed to load calendar data:", error);
       }
@@ -86,6 +69,7 @@ export default function CalendarPage() {
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
+  const dayKey = (d: number) => `${year}-${month}-${d}`;
 
   const monthNames = [
     'January', 'February', 'March', 'April', 'May', 'June',
@@ -112,7 +96,7 @@ export default function CalendarPage() {
 
   const handleDayClick = (day: number) => {
     setSelectedDay(day);
-    const dayMemo = calendarData[day]?.memo || "";
+    const dayMemo = calendarData[dayKey(day)]?.memo || "";
     setCurrentMemo(dayMemo);
     setIsModalOpen(true); 
   };
@@ -123,10 +107,11 @@ export default function CalendarPage() {
 
     if (selectedDay !== null) {
       setCalendarData((prev) => {
+        const key = dayKey(selectedDay);
         const currentDayData = prev[selectedDay] || { transactions: [], hasEdit: false, income: 0, expense: 0 };
         return {
           ...prev,
-          [selectedDay]: {
+          [key]: {
             ...currentDayData,
             memo: newMemo 
           }
@@ -146,7 +131,7 @@ export default function CalendarPage() {
   const daysCells = Array.from({ length: daysInMonth }).map((_, i) => {
     const day = i + 1;
     const isSelected = selectedDay === day;
-    const dayData = calendarData[day] || { transactions: [], hasEdit: false };
+    const dayData = calendarData[dayKey(day)] || { transactions: [] };
     const transactions = dayData.transactions || [];
 
     const uniqueDots = Array.from(new Set(transactions.map((tx: any) => tx.color))).slice(0, 4);
@@ -180,7 +165,7 @@ export default function CalendarPage() {
           </div>
         )}
 
-        {!isFuture && dayData.hasEdit && (
+        {!isFuture && dayData.memo && dayData.memo.trim() !== '' && (
           <div className="absolute right-1.5 top-1.5 sm:right-2 sm:top-2 text-slate-300">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
@@ -200,8 +185,8 @@ export default function CalendarPage() {
     </div>
   ));
 
-  const activeData = selectedDay && calendarData[selectedDay] 
-    ? calendarData[selectedDay] 
+  const activeData = selectedDay && calendarData[dayKey(selectedDay)]
+    ? calendarData[dayKey(selectedDay)]
     : { income: 0, expense: 0, transactions: [] };
 
   return (
