@@ -3,13 +3,15 @@
 import { useState } from 'react';
 import Sidebar from '../../components/sidebar';
 import CalendarSidebar from '../../components/sidecalendar';
+import AccountSetting from '../../components/AccountSetting';
 import Image from 'next/image';
-import { HiOutlineBars3, HiUser } from 'react-icons/hi2';
+import { HiOutlineBars3, HiUser, HiChevronLeft } from 'react-icons/hi2';
 import { GoalsProvider } from './GoalsContext';
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [isCalendarOpen, setCalendarOpen] = useState(false);
+  const [isAccountOpen, setIsAccountOpen] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
   const [isCalendarHovering, setCalendarHovering] = useState(false);
   const [isCalendarButtonVisible, setCalendarButtonVisible] = useState(true);
@@ -18,6 +20,11 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     setCalendarOpen(false);
     setCalendarButtonVisible(false);
     setTimeout(() => setCalendarButtonVisible(true), 200);
+  };
+
+  const handleCloseSidebar = () => {
+    setSidebarOpen(false);
+    setIsAccountOpen(false); // 사이드바 메뉴 클릭 시 어카운트 세팅 닫기
   };
 
   return (
@@ -67,12 +74,17 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
             </div>
           </div>
 
-          {/* Profile */}
+          {/* Profile / Back button */}
           <button
+            onClick={() => setIsAccountOpen(!isAccountOpen)}
             className="flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-[0_8px_20px_rgba(0,0,0,0.08)] hover:scale-105 transition-all duration-200 cursor-pointer"
-            aria-label="Account"
+            aria-label={isAccountOpen ? "Back to page" : "Account Settings"}
           >
-            <HiUser size={30} className="text-[#98c195]" />
+            {isAccountOpen ? (
+              <HiChevronLeft size={30} className="text-[#98c195]" />
+            ) : (
+              <HiUser size={30} className="text-[#98c195]" />
+            )}
           </button>
         </header>
 
@@ -90,7 +102,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
               <button
               onClick={() => {
                   setCalendarOpen(true);
-                  setCalendarHovering(false); // ✨ 클릭 시 호버 상태 강제 초기화!
+                  setCalendarHovering(false); 
               }}
               className="relative z-10 h-[500px] w-[25px] cusrsor-pointer border-none bg-transparent p-0 pointer-events-none"
               aria-label="Open calendar"
@@ -112,15 +124,15 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
         )}
 
         {/* Sidebars */}
-        {isSidebarOpen && <div className="fixed inset-0 z-40" onClick={() => setSidebarOpen(false)} />}
-        <Sidebar isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} />
+        {isSidebarOpen && <div className="fixed inset-0 z-40" onClick={handleCloseSidebar} />}
+        <Sidebar isOpen={isSidebarOpen} onClose={handleCloseSidebar} />
         {isCalendarOpen && <div className="fixed inset-0 z-40" onClick={handleCloseCalendar} />}
         <CalendarSidebar isOpen={isCalendarOpen} onClose={handleCloseCalendar} />
 
         {/* Main content */}
         <main className="flex-1 flex items-center justify-center px-6 pb-10">
           <div className="w-full max-w-[1100px]">
-            {children}
+            {isAccountOpen ? <AccountSetting /> : children}
           </div>
         </main>
       </div>
