@@ -1,107 +1,132 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { HiCamera, HiPencilSquare } from 'react-icons/hi2';
+import React, { useState } from 'react';
+import { HiOutlinePencilSquare, HiOutlineTrash } from 'react-icons/hi2';
+import Image from 'next/image';
 
-interface AccountData {
+// ✨ 데이터 인터페이스 정의 (아이콘/도트/로고 데이터를 위한 필드 추가)
+interface AccountItem {
+  id: number;
   name: string;
-  dob: string;
-  phone: string;
-  address: string;
-  email: string;
-  profilePic: string;
+  amount: string; // 이미지처럼 포맷팅된 문자열로 저장
+  dotColor?: string; // Income/Outcome용 캘린더 도트 색상
+  emoji?: string; // Goals용 이모지
+  bankLogo?: string; // Bank용 (이미지 경로)
 }
 
+// ✨ 이미지와 동일하게 Mock 데이터 업데이트
+const initialIncome: AccountItem[] = [
+  { id: 1, name: '슬금 통장', amount: '$ 1,200,000', dotColor: 'bg-[#649566]' }, // 초록 도트
+];
+
+const initialOutcome: AccountItem[] = [
+  { id: 1, name: '신한 카드', amount: '$ 800,000', dotColor: 'bg-[#ee5253]' }, // 빨강 도트
+  { id: 2, name: '현대 카드', amount: '$ 1,500,000', dotColor: 'bg-[#ee5253]' }, // 빨강 도트
+  { id: 3, name: '삼성 카드', amount: '$ 500,000', dotColor: 'bg-[#ee5253]' }, // 빨강 도트
+];
+
+const initialGoals: AccountItem[] = [
+  { id: 1, name: '저축', amount: '$ 5,000,000', emoji: '🐷' }, // 돼지 저금통 이모지
+  { id: 2, name: '주식', amount: '$ 2,000,000', emoji: '📈' }, // 차트 이모지
+];
+
+const initialBank: AccountItem[] = [
+  // ✨ 실제 카드사 로고 이미지 파일이 public/logos 폴더에 있어야 합니다.
+  { id: 1, name: '슬금 통장', amount: '$ 1,200,000', bankLogo: '/logos/shinhan.png' }, 
+  { id: 2, name: '세금 통장', amount: '$ 6,000,000', bankLogo: '/logos/hyundai.png' }, 
+  { id: 3, name: '사업 통장', amount: '$ 80,000,000', bankLogo: '/logos/samsung.png' }, 
+];
+
 export default function AccountSetting() {
-  const [data, setData] = useState<AccountData>({
-    name: 'User Name',
-    dob: '1995-01-01',
-    phone: '010-1234-5678',
-    address: 'Seoul, South Korea',
-    email: 'user@example.com',
-    profilePic: '/logo.png', // 기본값
-  });
+  const [incomeItems, setIncomeItems] = useState<AccountItem[]>(initialIncome);
+  const [outcomeItems, setOutcomeItems] = useState<AccountItem[]>(initialOutcome);
+  const [goalsItems, setGoalsItems] = useState<AccountItem[]>(initialGoals);
+  const [bankItems, setBankItems] = useState<AccountItem[]>(initialBank);
 
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  useEffect(() => {
-    const saved = localStorage.getItem('seulgeumoney_account_data');
-    if (saved) {
-      try {
-        setData(JSON.parse(saved));
-      } catch (e) {
-        console.error('Failed to parse account data', e);
-      }
-    }
-    setIsLoaded(true);
-  }, []);
-
-  const handleChange = (field: keyof AccountData, value: string) => {
-    const newData = { ...data, [field]: value };
-    setData(newData);
-    localStorage.setItem('seulgeumoney_account_data', JSON.stringify(newData));
-  };
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        handleChange('profilePic', reader.result as string);
-      };
-      reader.readAsDataURL(file);
+  const handleDelete = (category: string, id: number) => {
+    if (!confirm('정말 삭제하시겠습니까?')) return;
+    switch (category) {
+      case 'Income': setIncomeItems(prev => prev.filter(item => item.id !== id)); break;
+      case 'Outcome': setOutcomeItems(prev => prev.filter(item => item.id !== id)); break;
+      case 'Goals': setGoalsItems(prev => prev.filter(item => item.id !== id)); break;
+      case 'Bank': setBankItems(prev => prev.filter(item => item.id !== id)); break;
     }
   };
 
-  if (!isLoaded) return null;
+  // ✨ 섹션 렌더링 함수 수정
+  const renderSectionItems = (category: string, items: AccountItem[]) => (
+    <section className="mb-8">
+      {/* ✨ 섹션 타이틀 스타일 수정: 회색 볼드 작은 글씨 */}
+      <h2 className="mb-4 text-xs font-bold uppercase tracking-wider text-slate-400">
+        {category}
+      </h2>
+      <div className="flex flex-col gap-3">
+        {items.map((item) => (
+          /* ✨ 항목 카드 스타일 전면 수정: 흰색 둥근 테두리, 내부 패딩 충분히 */
+          <article
+            key={item.id}
+            className="flex items-center justify-between rounded-full bg-white p-5 shadow-sm transition hover:shadow-md"
+          >
+            {/* 왼쪽: 아이콘 + 이름 영역 (플렉스 배치) */}
+            <div className="flex items-center gap-4">
+              
+              {/* ✨ 아이콘 렌더링 로직 (Bank, Goals, Dot 분기) */}
+              {category === 'Bank' && item.bankLogo && (
+                <div className="relative h-8 w-8 overflow-hidden rounded-full border ring-1 ring-black/5 shrink-0">
+                  <Image src={item.bankLogo} alt={item.name} fill className="object-cover" />
+                </div>
+              )}
+              {category === 'Goals' && item.emoji && (
+                <span className="text-2xl shrink-0">{item.emoji}</span>
+              )}
+              {(category === 'Income' || category === 'Outcome') && item.dotColor && (
+                <div className={`h-2.5 w-2.5 rounded-full ${item.dotColor} shrink-0`} />
+              )}
+              
+              {/* ✨ 이름 스타일 수정: 볼드체 어두운 회색 */}
+              <span className="text-[15px] font-bold text-slate-800">
+                {item.name}
+              </span>
+            </div>
 
-  return (
-    <div className="flex flex-col items-center w-full max-w-[600px] mx-auto animate-fade-in py-10 px-6">
-      <h1 className="text-[32px] font-bold text-[#649566] mb-12">Account Setting</h1>
-
-      {/* Profile Picture Section */}
-      <div className="relative mb-12 group">
-        <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-lg ring-2 ring-[#649566]/20 bg-slate-50 flex items-center justify-center">
-          <img 
-            src={data.profilePic} 
-            alt="Profile" 
-            className="w-full h-full object-cover"
-          />
-        </div>
-        <label className="absolute bottom-0 right-0 p-2 bg-[#649566] text-white rounded-full shadow-md cursor-pointer hover:bg-[#527a54] transition-colors">
-          <HiCamera size={20} />
-          <input type="file" className="hidden" accept="image/*" onChange={handleImageChange} />
-        </label>
-      </div>
-
-      {/* Input Fields */}
-      <div className="w-full space-y-6">
-        {[
-          { label: 'Name', key: 'name', type: 'text' },
-          { label: 'Date of Birth (BOD)', key: 'dob', type: 'date' },
-          { label: 'Phone Num', key: 'phone', type: 'tel' },
-          { label: 'Home Address', key: 'address', type: 'text' },
-          { label: 'Email', key: 'email', type: 'email' },
-        ].map((item) => (
-          <div key={item.key} className="flex flex-col space-y-2">
-            <label className="text-[14px] font-bold text-slate-500 ml-1">{item.label}</label>
-            <div className="relative">
-              <input
-                type={item.type}
-                value={data[item.key as keyof AccountData]}
-                onChange={(e) => handleChange(item.key as keyof AccountData, e.target.value)}
-                className="w-full bg-white rounded-2xl px-5 py-4 text-[15px] font-medium text-slate-700 shadow-sm ring-1 ring-black/5 outline-none focus:ring-2 focus:ring-[#649566]/30 transition-all"
-              />
-              <div className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-300">
-                <HiPencilSquare size={18} />
+            {/* 오른쪽: 금액 + 버튼 영역 (플렉스 배치) */}
+            <div className="flex items-center gap-4">
+              {/* ✨ 금액 스타일 수정: 볼드체 어두운 회색 */}
+              <span className="text-[15px] font-bold text-slate-800">
+                {item.amount}
+              </span>
+              
+              {/* ✨ 버튼 영역 및 아이콘 색상 수정: 연한 회색 아이콘 */}
+              <div className="flex items-center gap-1 text-slate-300">
+                <button className="rounded-full p-2 hover:bg-slate-100 hover:text-[#649566] cursor-pointer transition">
+                  <HiOutlinePencilSquare size={18} />
+                </button>
+                <button 
+                  onClick={() => handleDelete(category, item.id)}
+                  className="rounded-full p-2 hover:bg-slate-100 hover:text-[#ee5253] cursor-pointer transition"
+                >
+                  <HiOutlineTrash size={18} />
+                </button>
               </div>
             </div>
-          </div>
+          </article>
         ))}
       </div>
-      
-      <div className="mt-12 text-center text-slate-400 text-[13px] font-medium">
-        All changes are automatically saved to your local storage.
+    </section>
+  );
+
+  return (
+    // ✨ 전체 배경색 (`f8f9fc`) 및 레이아웃 수정
+    <div className="min-h-screen w-full bg-[#f8f9fc] p-6 sm:p-10">
+      <div className="max-w-4xl mx-auto">
+        {/* ✨ 사용자 이름 타이틀 추가: 볼드체 큰 글씨 */}
+        <h1 className="mb-10 text-[24px] font-bold text-slate-900">슬금</h1>
+
+        {/* ✨ 섹션 렌더링 호출 */}
+        {renderSectionItems('Income', incomeItems)}
+        {renderSectionItems('Outcome', outcomeItems)}
+        {renderSectionItems('Goals', goalsItems)}
+        {renderSectionItems('Bank', bankItems)}
       </div>
     </div>
   );
