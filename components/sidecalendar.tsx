@@ -59,18 +59,33 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
   const [isLoaded, setIsLoaded] = useState(false); 
 
   useEffect(() => {
-    const savedData = localStorage.getItem('seulgeumoney_calendar_data');
-    if (savedData) {
-      try {
-        setCalendarData(JSON.parse(savedData));
-      } catch (error) {
-        console.error("Failed to load calendar data:", error);
+    const loadData = () => {
+      const savedData = localStorage.getItem('seulgeumoney_calendar_data');
+      if (savedData) {
+        try {
+          const parsed = JSON.parse(savedData);
+          setCalendarData(parsed);
+          
+          // 현재 선택된 날짜의 메모도 즉시 갱신
+          const key = `${selected.year}-${selected.month}-${selected.day}`;
+          if (parsed[key]) {
+            setCurrentMemo(parsed[key].memo || "");
+          }
+        } catch (error) {
+          console.error("Failed to load calendar data:", error);
+        }
+      } else {
+        setCalendarData(getInitialCalendarData());
       }
-    } else {
-      setCalendarData(getInitialCalendarData());
-    }
+    };
+
+    loadData();
     setIsLoaded(true);
-  }, []);
+
+    // 이벤트 리스너 등록: CalendarPage 등에서 데이터가 변경되었을 때 호출됨
+    window.addEventListener('calendarDataUpdated', loadData);
+    return () => window.removeEventListener('calendarDataUpdated', loadData);
+  }, [selected.year, selected.month, selected.day]);
 
   useEffect(() => {
     if (isLoaded) {

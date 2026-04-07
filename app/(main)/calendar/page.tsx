@@ -64,6 +64,8 @@ export default function CalendarPage() {
   useEffect(() => {
     if (isLoaded) {
       localStorage.setItem('seulgeumoney_calendar_data', JSON.stringify(calendarData));
+      // 알림: 데이터가 변경되었음을 다른 컴포넌트(SideCalendar 등)에 알림
+      window.dispatchEvent(new Event('calendarDataUpdated'));
     }
   }, [calendarData, isLoaded]);
 
