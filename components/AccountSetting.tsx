@@ -1,77 +1,95 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
-import { HiPencil } from 'react-icons/hi2';
+import React, { useState, useEffect, useRef } from 'react';
+import { HiCamera } from 'react-icons/hi2';
+import Image from 'next/image';
 
-// ✨ 왼쪽 카테고리 메뉴 목록
-const settingNavItems = [
-  { label: 'Account Settings', id: 'account' },
-  { label: 'Security', id: 'security' },
-  { label: 'Payment Methods', id: 'payment' },
-  { label: 'Notification Setting', id: 'notification' },
-];
-
-// ✨ Personal Info 입력 필드 데이터
-const personalInfoFields = [
-  { label: 'Name', id: 'name', value: 'Seulgee-jjeossi', type: 'text' },
-  { label: 'Date of Birth', id: 'dob', value: '1987-05-15', type: 'date' },
-  { label: 'Phone Number', id: 'phone', value: '+82 10-1234-5678', type: 'tel' },
-  { label: 'Home Address', id: 'address', value: 'Seoul, Republic of Korea', type: 'text' },
-  { label: 'Email', id: 'email', value: 'money.uncle@email.com', type: 'email' },
-];
+interface AccountData {
+  name: string;
+  dob: string;
+  phone: string;
+  address: string;
+  email: string;
+  profilePic: string;
+}
 
 export default function AccountSetting() {
-  const [activeSection, setActiveSection] = useState('account');
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [profileImage, setProfileImage] = useState('/seuljeossi.png'); 
+  // 1. 기존에 작성하신 데이터 관리 로직 유지
+  const [data, setData] = useState<AccountData>({
+    name: 'username_87',
+    dob: '1987-05-15',
+    phone: '010-1234-5678',
+    address: 'Seoul, Republic of Korea',
+    email: 'money.uncle@email.com',
+    profilePic: '/logo.png', // 기본값
+  });
 
-  // 프로필 사진 변경 핸들러
-  const handleEditPicClick = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
+  const [isLoaded, setIsLoaded] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  
+  // 왼쪽 사이드바 활성화 탭 상태 관리
+  const [activeTab, setActiveTab] = useState('account');
+
+  useEffect(() => {
+    const saved = localStorage.getItem('seulgeumoney_account_data');
+    if (saved) {
+      try {
+        setData(JSON.parse(saved));
+      } catch (e) {
+        console.error('Failed to parse account data', e);
+      }
     }
+    setIsLoaded(true);
+  }, []);
+
+  const handleChange = (field: keyof AccountData, value: string) => {
+    const newData = { ...data, [field]: value };
+    setData(newData);
+    localStorage.setItem('seulgeumoney_account_data', JSON.stringify(newData));
   };
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setProfileImage(reader.result as string);
+        handleChange('profilePic', reader.result as string);
       };
       reader.readAsDataURL(file);
     }
   };
 
+  if (!isLoaded) return null;
+
   return (
-    // 전체 레이아웃 (헤더 아래 전체 영역 차지)
-    <div className="flex h-[calc(100vh-140px)] w-full gap-8 p-10 pb-0 animate-fade-in">
+    // 사진과 동일한 전체 페이지 레이아웃 (좌측 메뉴, 우측 상세 정보)
+    <div className="flex h-full w-full gap-8 p-8 md:p-10 pb-0">
       
-      {/* 🟢 1. 왼쪽: 설정 카테고리 목록 박스 */}
-      <aside className="relative w-[300px] shrink-0 overflow-hidden rounded-[32px] border border-white bg-white/95 px-5 py-12 shadow-[0_18px_50px_rgba(0,0,0,0.12)]">
-        <h2 className="mb-10 px-5 text-[15px] font-extrabold text-[#649566] tracking-wider">
+      {/* 🟢 왼쪽: 설정 카테고리 사이드바 */}
+      <aside className="w-[280px] shrink-0 rounded-[32px] bg-white px-6 py-10 shadow-[0_18px_50px_rgba(0,0,0,0.06)]">
+        <h2 className="mb-8 px-4 text-[13px] font-extrabold text-[#649566] tracking-wider">
           ACCOUNT SETTING
         </h2>
         
-        <nav className="flex flex-col gap-1">
-          {settingNavItems.map((item) => {
-            const isActive = activeSection === item.id;
+        <nav className="flex flex-col gap-2">
+          {[
+            { id: 'account', label: 'Account Settings' },
+            { id: 'security', label: 'Security' },
+            { id: 'payment', label: 'Payment Methods' },
+            { id: 'notification', label: 'Notification Setting' },
+          ].map((item) => {
+            const isActive = activeTab === item.id;
             return (
               <button
                 key={item.id}
-                onClick={() => setActiveSection(item.id)}
-                className={`
-                  flex items-center gap-3
-                  rounded-2xl px-5 py-4
-                  text-left text-[14px] font-semibold
-                  transition duration-200
-                  ${isActive 
-                    ? 'text-[#649566] bg-black/5 shadow-inner' 
-                    : 'text-slate-400 hover:bg-black/5 hover:text-[#649566]'
-                  }
-                `}
+                onClick={() => setActiveTab(item.id)}
+                className={`flex items-center gap-3 rounded-2xl px-4 py-3.5 text-left text-[14px] font-bold transition-colors ${
+                  isActive 
+                    ? 'bg-slate-50 text-[#649566]' 
+                    : 'text-slate-400 hover:bg-slate-50 hover:text-slate-600'
+                }`}
               >
-                <div className={`h-1.5 w-1.5 rounded-full ${isActive ? 'bg-[#649566]' : 'bg-transparent'}`}/>
+                <div className={`h-1.5 w-1.5 rounded-full ${isActive ? 'bg-[#649566]' : 'bg-transparent'}`} />
                 <span>{item.label}</span>
               </button>
             );
@@ -79,77 +97,113 @@ export default function AccountSetting() {
         </nav>
       </aside>
 
-      {/* 🟢 2. 오른쪽: 실제 Personal Info 상세 화면 박스 */}
-      <main className="flex-1 overflow-y-auto rounded-[32px] border border-white bg-white p-12 shadow-[0_18px_50px_rgba(0,0,0,0.12)] [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-200">
+      {/* 🟢 오른쪽: Personal Info 상세 영역 */}
+      <main className="flex-1 rounded-[32px] bg-white p-10 md:p-12 shadow-[0_18px_50px_rgba(0,0,0,0.06)] overflow-y-auto [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-200">
         
-        {/* Title Area */}
-        <div className="mb-10 flex flex-col gap-1">
-          <h1 className="text-[24px] font-bold text-slate-800">
-            Personal Info
-          </h1>
-          <p className="text-[14px] font-medium text-slate-400">
+        {/* 상단 타이틀 */}
+        <div className="mb-10">
+          <h1 className="text-[28px] font-bold text-slate-800">Personal Info</h1>
+          <p className="mt-1 text-[14px] font-medium text-slate-400">
             View and update your personal details
           </p>
         </div>
 
-        <div className="flex flex-col gap-10">
-          {/* Profile Picture */}
-          <div className="flex items-center gap-6">
-            <div className="relative overflow-hidden rounded-full h-24 w-24 ring-4 ring-[#f0f5f0]">
-              <img 
-                src={profileImage} 
-                alt="Profile" 
-                className="h-full w-full object-cover"
-              />
-            </div>
-            <div className="flex flex-col gap-1">
-              <h3 className="text-[16px] font-bold text-slate-800">Profile Picture</h3>
-              <button 
-                onClick={handleEditPicClick}
-                className="flex items-center gap-2 text-[13px] font-extrabold text-[#649566] hover:text-[#527a54] transition-colors cursor-pointer"
-              >
-                <HiPencil size={14} />
-                Edit Picture
-              </button>
-              <input 
-                type="file" 
-                ref={fileInputRef} 
-                className="hidden" 
-                accept="image/*" 
-                onChange={handleFileChange} 
-              />
+        {/* 프로필 사진 및 이름 영역 (기존 사진 변경 로직 결합) */}
+        <div className="mb-10 flex items-center gap-6">
+          <div 
+            className="group relative h-24 w-24 cursor-pointer overflow-hidden rounded-full border-4 border-slate-50 shadow-sm"
+            onClick={() => fileInputRef.current?.click()}
+          >
+            <Image 
+              src={data.profilePic} 
+              alt="Profile" 
+              fill 
+              className="object-cover" 
+              unoptimized 
+            />
+            {/* 호버 시 연필/카메라 아이콘 표시 */}
+            <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
+              <HiCamera size={26} className="text-white" />
             </div>
           </div>
+          <input 
+            type="file" 
+            ref={fileInputRef} 
+            onChange={handleImageChange} 
+            accept="image/*" 
+            className="hidden" 
+          />
 
-          {/* Input Fields Grid */}
-          <div className="grid grid-cols-2 gap-x-10 gap-y-8">
-            {personalInfoFields.map((field) => (
-              <div key={field.id} className="flex flex-col gap-2">
-                <label className="text-[13px] font-bold text-slate-400 ml-1">
-                  {field.label}
-                </label>
-                <div className="relative group">
-                  <input
-                    type={field.type}
-                    defaultValue={field.value}
-                    className="w-full rounded-2xl bg-[#f8fafb] px-5 py-4 text-[14px] font-semibold text-slate-700 outline-none ring-1 ring-black/5 focus:ring-2 focus:ring-[#649566]/20 focus:bg-white transition-all"
-                  />
-                  <HiPencil size={14} className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-[#649566] transition-colors" />
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Action Buttons */}
-          <div className="mt-6 flex justify-end gap-4 border-t border-slate-50 pt-8">
-             <button className="rounded-2xl px-6 py-3 text-[14px] font-bold text-slate-400 hover:bg-black/5 transition-colors cursor-pointer">
-               Discard
-             </button>
-             <button className="rounded-2xl bg-[#649566] px-10 py-3 text-[14px] font-bold text-white shadow-xl shadow-[#649566]/20 hover:bg-[#527a54] hover:-translate-y-0.5 transition-all cursor-pointer">
-               Save Changes
-             </button>
+          <div className="flex flex-col">
+            <h3 className="text-[20px] font-bold text-slate-800">{data.name || 'User Name'}</h3>
+            <p className="text-[14px] font-semibold text-[#649566]">Level: Master Savor</p>
           </div>
         </div>
+
+        {/* 폼 입력 영역 (사진 레이아웃 반영: Name, DOB는 한 줄에 배치) */}
+        <div className="flex max-w-[600px] flex-col gap-6">
+          
+          {/* 첫 번째 줄: Name & DOB */}
+          <div className="flex gap-6">
+            <div className="flex flex-1 flex-col gap-2">
+              <label className="text-[13px] font-bold text-slate-500">Name</label>
+              <input
+                type="text"
+                value={data.name}
+                onChange={(e) => handleChange('name', e.target.value)}
+                placeholder="Name"
+                className="w-full rounded-2xl border border-slate-100 bg-slate-50/50 px-5 py-4 text-[14px] font-medium text-slate-700 outline-none transition-all focus:border-[#649566] focus:bg-white focus:ring-1 focus:ring-[#649566]"
+              />
+            </div>
+            <div className="flex flex-1 flex-col gap-2">
+              <label className="text-[13px] font-bold text-slate-500">Date of Birth</label>
+              <input
+                type="date"
+                value={data.dob}
+                onChange={(e) => handleChange('dob', e.target.value)}
+                className="w-full rounded-2xl border border-slate-100 bg-slate-50/50 px-5 py-4 text-[14px] font-medium text-slate-700 outline-none transition-all focus:border-[#649566] focus:bg-white focus:ring-1 focus:ring-[#649566]"
+              />
+            </div>
+          </div>
+
+          {/* 두 번째 줄: Phone Number */}
+          <div className="flex flex-col gap-2">
+            <label className="text-[13px] font-bold text-slate-500">Phone Number</label>
+            <input
+              type="tel"
+              value={data.phone}
+              onChange={(e) => handleChange('phone', e.target.value)}
+              placeholder="Phone Number"
+              className="w-full rounded-2xl border border-slate-100 bg-slate-50/50 px-5 py-4 text-[14px] font-medium text-slate-700 outline-none transition-all focus:border-[#649566] focus:bg-white focus:ring-1 focus:ring-[#649566]"
+            />
+          </div>
+
+          {/* 세 번째 줄: Home Address */}
+          <div className="flex flex-col gap-2">
+            <label className="text-[13px] font-bold text-slate-500">Home Address</label>
+            <input
+              type="text"
+              value={data.address}
+              onChange={(e) => handleChange('address', e.target.value)}
+              placeholder="Home Address"
+              className="w-full rounded-2xl border border-slate-100 bg-slate-50/50 px-5 py-4 text-[14px] font-medium text-slate-700 outline-none transition-all focus:border-[#649566] focus:bg-white focus:ring-1 focus:ring-[#649566]"
+            />
+          </div>
+
+          {/* 네 번째 줄: Email */}
+          <div className="flex flex-col gap-2">
+            <label className="text-[13px] font-bold text-slate-500">Email</label>
+            <input
+              type="email"
+              value={data.email}
+              onChange={(e) => handleChange('email', e.target.value)}
+              placeholder="Email"
+              className="w-full rounded-2xl border border-slate-100 bg-slate-50/50 px-5 py-4 text-[14px] font-medium text-slate-700 outline-none transition-all focus:border-[#649566] focus:bg-white focus:ring-1 focus:ring-[#649566]"
+            />
+          </div>
+
+        </div>ㄴ
+
       </main>
     </div>
   );
