@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { HiPlus, HiChevronRight } from 'react-icons/hi2';
+import { HiCamera } from 'react-icons/hi2';
 
 interface AccountData {
   name: string;
@@ -14,20 +14,19 @@ interface AccountData {
 }
 
 export default function AccountSetting() {
-  // 사진에 있는 초기 데이터 형식 반영
   const [data, setData] = useState<AccountData>({
-    name: 'Hayden',
-    dob: '2002.02.09',
-    phone: 'Hayden',
-    address: '4169 38TH ST, Sandi...',
-    email: 'hwk004@ucsd.edu',
-    profilePic: '/logo.png', 
+    name: 'User Name',
+    dob: '1995-01-01',
+    phone: '010-1234-5678',
+    address: 'Seoul, Republic of Korea',
+    email: 'user@example.com',
+    profilePic: '/logo.png', // 기본 슬저씨/돈뭉치 이미지
   });
 
   const [isLoaded, setIsLoaded] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // 로컬 스토리지에서 데이터 불러오기
+  // 로컬 스토리지에서 기존 데이터 불러오기
   useEffect(() => {
     const saved = localStorage.getItem('seulgeumoney_account_data');
     if (saved) {
@@ -40,13 +39,11 @@ export default function AccountSetting() {
     setIsLoaded(true);
   }, []);
 
+  // 값이 입력될 때마다 State 업데이트 및 로컬 스토리지에 자동 저장
   const handleChange = (field: keyof AccountData, value: string) => {
-    setData((prev) => ({ ...prev, [field]: value }));
-  };
-
-  // Save 버튼 클릭 시 로컬 스토리지에 저장
-  const handleSave = () => {
-    localStorage.setItem('seulgeumoney_account_data', JSON.stringify(data));
+    const newData = { ...data, [field]: value };
+    setData(newData);
+    localStorage.setItem('seulgeumoney_account_data', JSON.stringify(newData));
   };
 
   // 프로필 사진 변경 로직
@@ -64,21 +61,24 @@ export default function AccountSetting() {
   if (!isLoaded) return null;
 
   return (
-    // ✨ 부모 컨테이너: flex와 h-full을 사용하여 화면 중앙에 배치하고 스크롤(overflow-hidden)을 막았습니다.
+    // ✨ 화면 중앙 고정 및 전체 스크롤 방지
     <div className="flex h-[calc(100vh-120px)] w-full items-center justify-center overflow-hidden">
       
-      {/* 🟢 중앙 단일 박스 (사진과 동일한 레이아웃) */}
-      <div className="w-full max-w-[650px] rounded-[24px] bg-white px-10 py-12 shadow-[0_8px_30px_rgba(0,0,0,0.04)]">
+      {/* 🟢 사진과 완벽히 동일한 메인 박스 레이아웃 */}
+      <div className="w-full max-w-[700px] rounded-[32px] bg-white p-10 md:p-12 shadow-[0_18px_50px_rgba(0,0,0,0.06)]">
         
-        {/* 타이틀 */}
-        <h2 className="mb-10 text-center text-[18px] font-medium text-[#649566]">
-          Account Setting
-        </h2>
+        {/* 상단 타이틀 영역 */}
+        <div className="mb-8">
+          <h1 className="text-[28px] font-bold text-[#2d3748]">Personal Info</h1>
+          <p className="mt-1 text-[14px] font-medium text-[#718096]">
+            View and update your personal details
+          </p>
+        </div>
 
-        {/* 프로필 사진 영역 */}
-        <div className="relative mx-auto mb-10 h-[90px] w-[90px]">
+        {/* 프로필 사진 및 닉네임/레벨 영역 */}
+        <div className="mb-10 flex items-center gap-6">
           <div 
-            className="h-full w-full cursor-pointer overflow-hidden rounded-full border border-slate-100 bg-slate-50"
+            className="group relative h-20 w-20 cursor-pointer overflow-hidden rounded-full border-2 border-slate-50 shadow-sm ring-4 ring-slate-50/50 transition-all hover:ring-slate-100"
             onClick={() => fileInputRef.current?.click()}
           >
             <Image 
@@ -88,16 +88,11 @@ export default function AccountSetting() {
               className="object-cover" 
               unoptimized 
             />
+            {/* 사진 변경을 위한 호버 오버레이 */}
+            <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
+              <HiCamera size={24} className="text-white" />
+            </div>
           </div>
-          
-          {/* 사진 속 우측 하단 플러스(+) 아이콘 */}
-          <button 
-            onClick={() => fileInputRef.current?.click()}
-            className="absolute bottom-0 right-0 flex h-6 w-6 translate-x-1 translate-y-1 items-center justify-center rounded-full border border-slate-200 bg-white text-[#649566] transition-colors hover:bg-slate-50 cursor-pointer"
-          >
-            <HiPlus size={14} strokeWidth={1} />
-          </button>
-          
           <input 
             type="file" 
             ref={fileInputRef} 
@@ -105,44 +100,75 @@ export default function AccountSetting() {
             accept="image/*" 
             className="hidden" 
           />
+
+          <div className="flex flex-col gap-0.5">
+            <h3 className="text-[20px] font-bold text-[#2d3748]">{data.name || 'User Name'}</h3>
+            <p className="text-[14px] font-bold text-[#649566]">Level: Master Savor</p>
+          </div>
         </div>
 
-        {/* 개인 정보 목록 (사진 속 글자색상과 화살표 디자인 완벽 복제) */}
-        <div className="mb-10 flex flex-col gap-5 px-4">
-          {[
-            { label: 'Name:', key: 'name', type: 'text' },
-            { label: 'Birth of Date:', key: 'dob', type: 'text' },
-            { label: 'Phone:', key: 'phone', type: 'text' },
-            { label: 'Home Address:', key: 'address', type: 'text' },
-            { label: 'Email:', key: 'email', type: 'text' },
-          ].map((item) => (
-            <div key={item.key} className="flex items-center justify-between text-[15px] text-[#649566]">
-              <span>{item.label}</span>
-              
-              <div className="flex items-center gap-2">
-                {/* ✨ 입력창이지만 테두리를 없애고 투명하게 만들어서 
-                  사진 속 정적인 텍스트처럼 보이게 하면서도 클릭해서 수정이 가능하도록 구현했습니다. 
-                */}
-                <input
-                  type={item.type}
-                  value={data[item.key as keyof AccountData]}
-                  onChange={(e) => handleChange(item.key as keyof AccountData, e.target.value)}
-                  className="w-[220px] bg-transparent text-right outline-none placeholder-[#649566]/50"
-                />
-                <HiChevronRight size={16} strokeWidth={1} className="text-[#649566]" />
-              </div>
+        {/* 폼 입력 영역 */}
+        <div className="flex flex-col gap-6">
+          
+          {/* 첫 번째 줄: Name & Date of Birth (2단 구성) */}
+          <div className="flex gap-6">
+            <div className="flex flex-1 flex-col gap-2.5">
+              <label className="text-[13px] font-bold text-[#718096]">Name</label>
+              <input
+                type="text"
+                value={data.name}
+                onChange={(e) => handleChange('name', e.target.value)}
+                placeholder="User Name"
+                className="w-full rounded-2xl border border-transparent bg-[#f7fafc] px-5 py-4 text-[14px] font-medium text-[#2d3748] outline-none transition-all focus:border-[#649566] focus:bg-white focus:ring-1 focus:ring-[#649566]"
+              />
             </div>
-          ))}
-        </div>
+            <div className="flex flex-1 flex-col gap-2.5">
+              <label className="text-[13px] font-bold text-[#718096]">Date of Birth</label>
+              <input
+                type="date"
+                value={data.dob}
+                onChange={(e) => handleChange('dob', e.target.value)}
+                className="w-full rounded-2xl border border-transparent bg-[#f7fafc] px-5 py-4 text-[14px] font-medium text-[#2d3748] outline-none transition-all focus:border-[#649566] focus:bg-white focus:ring-1 focus:ring-[#649566]"
+              />
+            </div>
+          </div>
 
-        {/* 중앙 하단 Save 버튼 */}
-        <div className="flex justify-center">
-          <button
-            onClick={handleSave}
-            className="rounded-lg bg-[#649566] px-8 py-1.5 text-[14px] font-medium text-white transition-colors hover:bg-[#527a54] active:scale-95 cursor-pointer"
-          >
-            Save
-          </button>
+          {/* 두 번째 줄: Phone Number */}
+          <div className="flex flex-col gap-2.5">
+            <label className="text-[13px] font-bold text-[#718096]">Phone Number</label>
+            <input
+              type="tel"
+              value={data.phone}
+              onChange={(e) => handleChange('phone', e.target.value)}
+              placeholder="Phone Number"
+              className="w-full rounded-2xl border border-transparent bg-[#f7fafc] px-5 py-4 text-[14px] font-medium text-[#2d3748] outline-none transition-all focus:border-[#649566] focus:bg-white focus:ring-1 focus:ring-[#649566]"
+            />
+          </div>
+
+          {/* 세 번째 줄: Home Address */}
+          <div className="flex flex-col gap-2.5">
+            <label className="text-[13px] font-bold text-[#718096]">Home Address</label>
+            <input
+              type="text"
+              value={data.address}
+              onChange={(e) => handleChange('address', e.target.value)}
+              placeholder="Home Address"
+              className="w-full rounded-2xl border border-transparent bg-[#f7fafc] px-5 py-4 text-[14px] font-medium text-[#2d3748] outline-none transition-all focus:border-[#649566] focus:bg-white focus:ring-1 focus:ring-[#649566]"
+            />
+          </div>
+
+          {/* 네 번째 줄: Email */}
+          <div className="flex flex-col gap-2.5">
+            <label className="text-[13px] font-bold text-[#718096]">Email</label>
+            <input
+              type="email"
+              value={data.email}
+              onChange={(e) => handleChange('email', e.target.value)}
+              placeholder="user@example.com"
+              className="w-full rounded-2xl border border-transparent bg-[#f7fafc] px-5 py-4 text-[14px] font-medium text-[#2d3748] outline-none transition-all focus:border-[#649566] focus:bg-white focus:ring-1 focus:ring-[#649566]"
+            />
+          </div>
+
         </div>
 
       </div>
