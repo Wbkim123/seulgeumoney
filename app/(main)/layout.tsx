@@ -54,26 +54,6 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
             </div>
           </div>
 
-          {/* Search */}
-          <div className="flex w-[520px] max-w-[55vw] items-center">
-            <div className="relative w-full">
-              <input
-                className="w-full rounded-full bg-white px-5 py-3 pr-12 text-sm text-slate-700 placeholder:text-slate-400 shadow-[0_10px_25px_rgba(0,0,0,0.10)] outline-none ring-1 ring-black/5 focus:ring-2 focus:ring-[#98c195]/50"
-                placeholder="Search"
-              />
-              <button
-                type="button"
-                className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-2 text-slate-400 hover:text-[#649566] hover:bg-black/5 transition cursor-pointer"
-                aria-label="Search"
-              >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                  <path d="M10.5 18.5a8 8 0 1 1 0-16 8 8 0 0 1 0 16Z" stroke="currentColor" strokeWidth="2" />
-                  <path d="M16.5 16.5 21 21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                </svg>
-              </button>
-            </div>
-          </div>
-
           {/* Profile / Back button */}
           <button
             onClick={() => setIsAccountOpen(!isAccountOpen)}
