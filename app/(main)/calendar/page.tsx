@@ -193,10 +193,8 @@ export default function CalendarPage() {
 
   return (
     <>
-      <div className="flex w-full items-center justify-center overflow-hidden">
-        <div className="relative w-full max-w-[760px] rounded-[32px] border border-white bg-white px-6 py-10 sm:px-12 sm:py-12 shadow-[0_18px_50px_rgba(0,0,0,0.14)] animate-fade-in">
-          
-          <div className="mb-10 flex items-center justify-center gap-4 sm:gap-8 text-[#649566]">
+      <div className="relative w-full max-w-[760px] mx-auto rounded-[32px] border border-white bg-white px-6 py-10 sm:px-12 sm:py-12 shadow-[0_18px_50px_rgba(0,0,0,0.14)] animate-fade-in">
+        <div className="mb-10 flex items-center justify-center gap-4 sm:gap-8 text-[#649566]">
             <button 
               onClick={handlePrevMonth}
               className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full transition-colors hover:bg-slate-100"
