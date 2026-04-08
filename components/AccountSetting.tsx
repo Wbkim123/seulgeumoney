@@ -78,11 +78,11 @@ export default function AccountSetting() {
   if (!isLoaded) return null;
 
   return (
-    // ✨ 박스 크기를 다시 적절히 키우고 화면 중앙에 가깝게 배치
-    <div className="flex h-[calc(100vh-140px)] w-full items-center justify-center overflow-hidden">
+    // ✨ 컨테이너의 overflow-hidden을 제거하고 높이를 유연하게 조정하여 그림자 잘림 방지
+    <div className="flex min-h-[calc(100vh-140px)] w-full items-center justify-center py-10 px-6">
       
-      {/* 박스 너비와 패딩을 다시 키움 (max-w-660 -> 700, p-6 -> p-10) */}
-      <div className="w-full max-w-[700px] rounded-[40px] border border-white bg-white/95 p-10 shadow-[0_20px_60px_rgba(0,0,0,0.12)] animate-fade-in flex flex-col">
+      {/* 박스 그림자가 잘리지 않도록 충분한 여백 확보 */}
+      <div className="w-full max-w-[700px] rounded-[40px] border border-white bg-white/95 p-10 shadow-[0_20px_60px_rgba(0,0,0,0.12)] animate-fade-in flex flex-col relative z-10">
         
         {/* Title Area */}
         <div className="mb-8">
