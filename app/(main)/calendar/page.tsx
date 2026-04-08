@@ -301,7 +301,6 @@ export default function CalendarPage() {
             {emptyCellsEnd}
           </div>
         </div>
-      </div>
 
       {/* 🟢 모달 영역 */}
       {isModalOpen && selectedDay !== null && (
