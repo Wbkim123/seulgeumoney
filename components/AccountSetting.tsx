@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { HiCamera } from 'react-icons/hi2';
+import { HiCamera, HiCalendarDays } from 'react-icons/hi2';
 
 interface AccountData {
   name: string;
@@ -15,18 +15,18 @@ interface AccountData {
 
 export default function AccountSetting() {
   const [data, setData] = useState<AccountData>({
-    name: 'User Name',
-    dob: '1995-01-01',
-    phone: '010-1234-5678',
+    name: 'Seulgee-jjeossi',
+    dob: '1987-05-15',
+    phone: '+82 10-1234-5678',
     address: 'Seoul, Republic of Korea',
-    email: 'user@example.com',
-    profilePic: '/logo.png', // 기본 슬저씨/돈뭉치 이미지
+    email: 'money.uncle@email.com',
+    profilePic: '/seuljeossi.png',
   });
 
   const [isLoaded, setIsLoaded] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const dateInputRef = useRef<HTMLInputElement>(null);
 
-  // 로컬 스토리지에서 기존 데이터 불러오기
   useEffect(() => {
     const saved = localStorage.getItem('seulgeumoney_account_data');
     if (saved) {
@@ -39,14 +39,21 @@ export default function AccountSetting() {
     setIsLoaded(true);
   }, []);
 
-  // 값이 입력될 때마다 State 업데이트 및 로컬 스토리지에 자동 저장
   const handleChange = (field: keyof AccountData, value: string) => {
-    const newData = { ...data, [field]: value };
-    setData(newData);
-    localStorage.setItem('seulgeumoney_account_data', JSON.stringify(newData));
+    setData((prev) => ({ ...prev, [field]: value }));
   };
 
-  // 프로필 사진 변경 로직
+  const handleSave = () => {
+    localStorage.setItem('seulgeumoney_account_data', JSON.stringify(data));
+    alert('Changes saved successfully!');
+  };
+
+  const handleCancel = () => {
+    const saved = localStorage.getItem('seulgeumoney_account_data');
+    if (saved) setData(JSON.parse(saved));
+    alert('Changes discarded.');
+  };
+
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -58,27 +65,36 @@ export default function AccountSetting() {
     }
   };
 
+  const openDatePicker = () => {
+    if (dateInputRef.current) {
+      try {
+        dateInputRef.current.showPicker();
+      } catch (e) {
+        dateInputRef.current.focus();
+      }
+    }
+  };
+
   if (!isLoaded) return null;
 
   return (
-    // ✨ 화면 중앙 고정 및 전체 스크롤 방지
-    <div className="flex h-[calc(100vh-120px)] w-full items-center justify-center overflow-hidden">
+    // ✨ 박스 위치를 위로 올리고 스크롤 방지
+    <div className="flex h-[calc(100vh-100px)] w-full items-start justify-center overflow-hidden pt-4 sm:pt-6">
       
-      {/* 🟢 사진과 완벽히 동일한 메인 박스 레이아웃 */}
-      <div className="w-full max-w-[700px] rounded-[32px] bg-white p-10 md:p-12 shadow-[0_18px_50px_rgba(0,0,0,0.06)]">
+      <div className="w-full max-w-[720px] rounded-[40px] border border-white bg-white/95 p-10 shadow-[0_20px_60px_rgba(0,0,0,0.12)] animate-fade-in flex flex-col">
         
-        {/* 상단 타이틀 영역 */}
+        {/* Title Area */}
         <div className="mb-8">
-          <h1 className="text-[28px] font-bold text-[#2d3748]">Personal Info</h1>
-          <p className="mt-1 text-[14px] font-medium text-[#718096]">
+          <h1 className="text-[26px] font-bold text-slate-800">Personal Info</h1>
+          <p className="text-[14px] font-medium text-slate-400">
             View and update your personal details
           </p>
         </div>
 
-        {/* 프로필 사진 및 닉네임/레벨 영역 */}
+        {/* Profile Section */}
         <div className="mb-10 flex items-center gap-6">
           <div 
-            className="group relative h-20 w-20 cursor-pointer overflow-hidden rounded-full border-2 border-slate-50 shadow-sm ring-4 ring-slate-50/50 transition-all hover:ring-slate-100"
+            className="group relative h-22 w-22 cursor-pointer overflow-hidden rounded-full border-2 border-white shadow-md ring-4 ring-slate-50 transition-all hover:ring-[#649566]/20"
             onClick={() => fileInputRef.current?.click()}
           >
             <Image 
@@ -88,9 +104,8 @@ export default function AccountSetting() {
               className="object-cover" 
               unoptimized 
             />
-            {/* 사진 변경을 위한 호버 오버레이 */}
             <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
-              <HiCamera size={24} className="text-white" />
+              <HiCamera size={26} className="text-white" />
             </div>
           </div>
           <input 
@@ -100,75 +115,84 @@ export default function AccountSetting() {
             accept="image/*" 
             className="hidden" 
           />
-
-          <div className="flex flex-col gap-0.5">
-            <h3 className="text-[20px] font-bold text-[#2d3748]">{data.name || 'User Name'}</h3>
-            <p className="text-[14px] font-bold text-[#649566]">Level: Master Savor</p>
+          <div className="flex flex-col">
+            <h3 className="text-[22px] font-bold text-slate-800">{data.name}</h3>
+            <span className="text-[14px] font-extrabold text-[#649566]">Verified Profile</span>
           </div>
         </div>
 
-        {/* 폼 입력 영역 */}
-        <div className="flex flex-col gap-6">
-          
-          {/* 첫 번째 줄: Name & Date of Birth (2단 구성) */}
-          <div className="flex gap-6">
-            <div className="flex flex-1 flex-col gap-2.5">
-              <label className="text-[13px] font-bold text-[#718096]">Name</label>
-              <input
-                type="text"
-                value={data.name}
-                onChange={(e) => handleChange('name', e.target.value)}
-                placeholder="User Name"
-                className="w-full rounded-2xl border border-transparent bg-[#f7fafc] px-5 py-4 text-[14px] font-medium text-[#2d3748] outline-none transition-all focus:border-[#649566] focus:bg-white focus:ring-1 focus:ring-[#649566]"
-              />
-            </div>
-            <div className="flex flex-1 flex-col gap-2.5">
-              <label className="text-[13px] font-bold text-[#718096]">Date of Birth</label>
+        {/* Form Fields */}
+        <div className="grid grid-cols-2 gap-x-8 gap-y-6">
+          <div className="flex flex-col gap-2.5">
+            <label className="text-[13px] font-bold text-slate-500 ml-1">Name</label>
+            <input
+              type="text"
+              value={data.name}
+              onChange={(e) => handleChange('name', e.target.value)}
+              className="w-full rounded-2xl bg-[#f8fafb] px-5 py-4 text-[14px] font-semibold text-slate-700 outline-none ring-1 ring-black/5 focus:ring-2 focus:ring-[#649566]/20 focus:bg-white transition-all"
+            />
+          </div>
+
+          <div className="flex flex-col gap-2.5">
+            <label className="text-[13px] font-bold text-slate-500 ml-1">Date of Birth</label>
+            <div className="relative group cursor-pointer" onClick={openDatePicker}>
               <input
                 type="date"
+                ref={dateInputRef}
                 value={data.dob}
+                readOnly // 수기 입력 차단
                 onChange={(e) => handleChange('dob', e.target.value)}
-                className="w-full rounded-2xl border border-transparent bg-[#f7fafc] px-5 py-4 text-[14px] font-medium text-[#2d3748] outline-none transition-all focus:border-[#649566] focus:bg-white focus:ring-1 focus:ring-[#649566]"
+                className="w-full cursor-pointer rounded-2xl bg-[#f8fafb] px-5 py-4 text-[14px] font-semibold text-slate-700 outline-none ring-1 ring-black/5 focus:ring-2 focus:ring-[#649566]/20 focus:bg-white transition-all"
               />
+              <HiCalendarDays size={20} className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 group-hover:text-[#649566] transition-colors" />
             </div>
           </div>
 
-          {/* 두 번째 줄: Phone Number */}
-          <div className="flex flex-col gap-2.5">
-            <label className="text-[13px] font-bold text-[#718096]">Phone Number</label>
+          <div className="col-span-2 flex flex-col gap-2.5">
+            <label className="text-[13px] font-bold text-slate-500 ml-1">Phone Number</label>
             <input
               type="tel"
               value={data.phone}
               onChange={(e) => handleChange('phone', e.target.value)}
-              placeholder="Phone Number"
-              className="w-full rounded-2xl border border-transparent bg-[#f7fafc] px-5 py-4 text-[14px] font-medium text-[#2d3748] outline-none transition-all focus:border-[#649566] focus:bg-white focus:ring-1 focus:ring-[#649566]"
+              className="w-full rounded-2xl bg-[#f8fafb] px-5 py-4 text-[14px] font-semibold text-slate-700 outline-none ring-1 ring-black/5 focus:ring-2 focus:ring-[#649566]/20 focus:bg-white transition-all"
             />
           </div>
 
-          {/* 세 번째 줄: Home Address */}
-          <div className="flex flex-col gap-2.5">
-            <label className="text-[13px] font-bold text-[#718096]">Home Address</label>
+          <div className="col-span-2 flex flex-col gap-2.5">
+            <label className="text-[13px] font-bold text-slate-500 ml-1">Home Address</label>
             <input
               type="text"
               value={data.address}
               onChange={(e) => handleChange('address', e.target.value)}
-              placeholder="Home Address"
-              className="w-full rounded-2xl border border-transparent bg-[#f7fafc] px-5 py-4 text-[14px] font-medium text-[#2d3748] outline-none transition-all focus:border-[#649566] focus:bg-white focus:ring-1 focus:ring-[#649566]"
+              className="w-full rounded-2xl bg-[#f8fafb] px-5 py-4 text-[14px] font-semibold text-slate-700 outline-none ring-1 ring-black/5 focus:ring-2 focus:ring-[#649566]/20 focus:bg-white transition-all"
             />
           </div>
 
-          {/* 네 번째 줄: Email */}
-          <div className="flex flex-col gap-2.5">
-            <label className="text-[13px] font-bold text-[#718096]">Email</label>
+          <div className="col-span-2 flex flex-col gap-2.5">
+            <label className="text-[13px] font-bold text-slate-500 ml-1">Email</label>
             <input
               type="email"
               value={data.email}
               onChange={(e) => handleChange('email', e.target.value)}
-              placeholder="user@example.com"
-              className="w-full rounded-2xl border border-transparent bg-[#f7fafc] px-5 py-4 text-[14px] font-medium text-[#2d3748] outline-none transition-all focus:border-[#649566] focus:bg-white focus:ring-1 focus:ring-[#649566]"
+              className="w-full rounded-2xl bg-[#f8fafb] px-5 py-4 text-[14px] font-semibold text-slate-700 outline-none ring-1 ring-black/5 focus:ring-2 focus:ring-[#649566]/20 focus:bg-white transition-all"
             />
           </div>
+        </div>
 
+        {/* Buttons Section */}
+        <div className="mt-10 flex justify-end gap-4 border-t border-slate-50 pt-8">
+          <button 
+            onClick={handleCancel}
+            className="rounded-2xl px-8 py-4 text-[14px] font-bold text-slate-400 hover:bg-black/5 transition-colors cursor-pointer"
+          >
+            Cancel
+          </button>
+          <button 
+            onClick={handleSave}
+            className="rounded-2xl bg-[#649566] px-12 py-4 text-[14px] font-bold text-white shadow-xl shadow-[#649566]/20 hover:bg-[#527a54] hover:-translate-y-0.5 transition-all cursor-pointer"
+          >
+            Save Changes
+          </button>
         </div>
 
       </div>
