@@ -78,24 +78,24 @@ export default function AccountSetting() {
   if (!isLoaded) return null;
 
   return (
-    // ✨ 박스를 화면 상단으로 올리고 높이를 유연하게 조정 (items-center -> items-start)
-    <div className="flex min-h-[calc(100vh-140px)] w-full items-start justify-center pt-6 pb-10 px-6">
+    // ✨ 박스를 상단으로 더 바짝 붙이고 전체 높이를 미세하게 축소
+    <div className="flex min-h-[calc(100vh-140px)] w-full items-start justify-center pt-2 pb-8 px-6">
       
-      {/* 박스 그림자가 잘리지 않도록 충분한 여백 확보 */}
-      <div className="w-full max-w-[700px] rounded-[40px] border border-white bg-white/95 p-10 shadow-[0_20px_60px_rgba(0,0,0,0.12)] animate-fade-in flex flex-col relative z-10">
+      {/* 박스 패딩을 살짝 줄임 (p-10 -> p-8) */}
+      <div className="w-full max-w-[680px] rounded-[32px] border border-white bg-white/95 p-8 shadow-[0_18px_50px_rgba(0,0,0,0.12)] animate-fade-in flex flex-col relative z-10">
         
-        {/* Title Area */}
-        <div className="mb-8">
-          <h1 className="text-[26px] font-bold text-slate-800 tracking-tight">Personal Info</h1>
-          <p className="mt-1 text-[14px] font-medium text-slate-400">
+        {/* Title Area (마진 축소) */}
+        <div className="mb-6">
+          <h1 className="text-[24px] font-bold text-slate-800 tracking-tight leading-tight">Personal Info</h1>
+          <p className="text-[13px] font-medium text-slate-400">
             View and update your personal details
           </p>
         </div>
 
-        {/* Profile Section */}
-        <div className="mb-10 flex items-center gap-6">
+        {/* Profile Section (콤팩트화) */}
+        <div className="mb-8 flex items-center gap-5">
           <div 
-            className="group relative h-18 w-18 cursor-pointer overflow-hidden rounded-full border-2 border-white shadow-md ring-4 ring-slate-50 transition-all hover:ring-[#649566]/20"
+            className="group relative h-16 w-16 cursor-pointer overflow-hidden rounded-full border-2 border-white shadow-sm ring-4 ring-slate-50 transition-all hover:ring-[#649566]/20"
             onClick={() => fileInputRef.current?.click()}
           >
             <Image 
@@ -106,7 +106,7 @@ export default function AccountSetting() {
               unoptimized 
             />
             <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
-              <HiCamera size={22} className="text-white" />
+              <HiCamera size={20} className="text-white" />
             </div>
           </div>
           <input 
@@ -117,80 +117,79 @@ export default function AccountSetting() {
             className="hidden" 
           />
           <div className="flex flex-col">
-            <h3 className="text-[20px] font-bold text-slate-800 leading-tight">{data.name}</h3>
-            <span className="text-[13px] font-extrabold text-[#649566]">Verified Profile</span>
+            <h3 className="text-[18px] font-bold text-slate-800 leading-tight">{data.name}</h3>
+            <span className="text-[12px] font-extrabold text-[#649566]">Verified Profile</span>
           </div>
         </div>
 
-        {/* Form Fields (gap-y-5로 적절히 배치) */}
-        <div className="grid grid-cols-2 gap-x-8 gap-y-5">
-          <div className="flex flex-col gap-2">
-            <label className="text-[13px] font-bold text-slate-500 ml-1">Name</label>
+        {/* Form Fields (gap-y-4로 축소) */}
+        <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+          <div className="flex flex-col gap-1.5">
+            <label className="text-[12px] font-bold text-slate-500 ml-1">Name</label>
             <input
               type="text"
               value={data.name}
               onChange={(e) => handleChange('name', e.target.value)}
-              className="w-full rounded-2xl bg-[#f8fafb] px-5 py-3.5 text-[14px] font-semibold text-slate-700 outline-none ring-1 ring-black/5 focus:ring-2 focus:ring-[#649566]/20 focus:bg-white transition-all"
+              className="w-full rounded-2xl bg-[#f8fafb] px-5 py-3 text-[13px] font-semibold text-slate-700 outline-none ring-1 ring-black/5 focus:ring-2 focus:ring-[#649566]/20 focus:bg-white transition-all"
             />
           </div>
 
-          <div className="flex flex-col gap-2">
-            <label className="text-[13px] font-bold text-slate-500 ml-1">Date of Birth</label>
+          <div className="flex flex-col gap-1.5">
+            <label className="text-[12px] font-bold text-slate-500 ml-1">Date of Birth</label>
             <div className="relative group" onClick={openDatePicker}>
               <input
                 type="date"
                 ref={dateInputRef}
                 value={data.dob}
                 onChange={(e) => handleChange('dob', e.target.value)}
-                // ✨ 기본 달력 아이콘과 디자인 요소를 완전히 숨기고 깔끔하게 텍스트만 표시
-                className="w-full cursor-pointer rounded-2xl bg-[#f8fafb] px-5 py-3.5 text-[14px] font-semibold text-slate-700 outline-none ring-1 ring-black/5 focus:ring-2 focus:ring-[#649566]/20 focus:bg-white transition-all [appearance:none] [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-inner-spin-button]:hidden"
+                className="w-full cursor-pointer rounded-2xl bg-[#f8fafb] px-5 py-3 text-[13px] font-semibold text-slate-700 outline-none ring-1 ring-black/5 focus:ring-2 focus:ring-[#649566]/20 focus:bg-white transition-all [appearance:none] [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-inner-spin-button]:hidden"
               />
-              <HiCalendarDays size={20} className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 group-hover:text-[#649566] pointer-events-none transition-colors" />
+              <HiCalendarDays size={18} className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 group-hover:text-[#649566] pointer-events-none transition-colors" />
             </div>
           </div>
 
-          <div className="col-span-2 flex flex-col gap-2">
-            <label className="text-[13px] font-bold text-slate-500 ml-1">Phone Number</label>
+          <div className="col-span-2 flex flex-col gap-1.5">
+            <label className="text-[12px] font-bold text-slate-500 ml-1">Phone Number</label>
             <input
               type="tel"
               value={data.phone}
               onChange={(e) => handleChange('phone', e.target.value)}
-              className="w-full rounded-2xl bg-[#f8fafb] px-5 py-3.5 text-[14px] font-semibold text-slate-700 outline-none ring-1 ring-black/5 focus:ring-2 focus:ring-[#649566]/20 focus:bg-white transition-all"
+              className="w-full rounded-2xl bg-[#f8fafb] px-5 py-3 text-[13px] font-semibold text-slate-700 outline-none ring-1 ring-black/5 focus:ring-2 focus:ring-[#649566]/20 focus:bg-white transition-all"
             />
           </div>
 
-          <div className="col-span-2 flex flex-col gap-2">
-            <label className="text-[13px] font-bold text-slate-500 ml-1">Home Address</label>
+          <div className="col-span-2 flex flex-col gap-1.5">
+            <label className="text-[12px] font-bold text-slate-500 ml-1">Home Address</label>
             <input
               type="text"
               value={data.address}
               onChange={(e) => handleChange('address', e.target.value)}
-              className="w-full rounded-2xl bg-[#f8fafb] px-5 py-3.5 text-[14px] font-semibold text-slate-700 outline-none ring-1 ring-black/5 focus:ring-2 focus:ring-[#649566]/20 focus:bg-white transition-all"
+              className="w-full rounded-2xl bg-[#f8fafb] px-5 py-3 text-[13px] font-semibold text-slate-700 outline-none ring-1 ring-black/5 focus:ring-2 focus:ring-[#649566]/20 focus:bg-white transition-all"
             />
           </div>
 
-          <div className="col-span-2 flex flex-col gap-2">
-            <label className="text-[13px] font-bold text-slate-500 ml-1">Email</label>
+          <div className="col-span-2 flex flex-col gap-1.5">
+            <label className="text-[12px] font-bold text-slate-500 ml-1">Email</label>
             <input
               type="email"
               value={data.email}
               onChange={(e) => handleChange('email', e.target.value)}
-              className="w-full rounded-2xl bg-[#f8fafb] px-5 py-3.5 text-[14px] font-semibold text-slate-700 outline-none ring-1 ring-black/5 focus:ring-2 focus:ring-[#649566]/20 focus:bg-white transition-all"
+              className="w-full rounded-2xl bg-[#f8fafb] px-5 py-3 text-[13px] font-semibold text-slate-700 outline-none ring-1 ring-black/5 focus:ring-2 focus:ring-[#649566]/20 focus:bg-white transition-all"
             />
           </div>
         </div>
 
-        {/* Buttons Section */}
-        <div className="mt-8 flex justify-end gap-4 border-t border-slate-50 pt-8">
+        {/* Buttons Section (간격 축소) */}
+        <div className="mt-6 flex justify-end gap-3 border-t border-slate-50 pt-6">
           <button 
             onClick={handleCancel}
-            className="rounded-2xl px-8 py-3.5 text-[14px] font-bold text-slate-400 hover:bg-black/5 transition-colors cursor-pointer"
+            className="rounded-xl px-6 py-2.5 text-[13px] font-bold text-slate-400 hover:bg-black/5 transition-colors cursor-pointer"
           >
             Cancel
           </button>
           <button 
             onClick={handleSave}
-            className="rounded-2xl bg-[#649566] px-12 py-3.5 text-[14px] font-bold text-white shadow-xl shadow-[#649566]/20 hover:bg-[#527a54] hover:-translate-y-0.5 transition-all cursor-pointer"
+            className="rounded-xl bg-[#649566] px-10 py-2.5 text-[13px] font-bold text-white shadow-xl shadow-[#649566]/20 hover:bg-[#527a54] hover:-translate-y-0.5 transition-all cursor-pointer"
           >
             Save Changes
           </button>
