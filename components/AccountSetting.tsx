@@ -143,7 +143,8 @@ export default function AccountSetting({ onClose }: AccountSettingProps) {
   const inputStyles = "w-full rounded-2xl bg-[#f8fafb] px-5 py-3 text-[14px] font-semibold text-slate-700 outline-none ring-1 ring-black/5 border border-transparent focus:border-[#649566] focus:bg-white transition-all";
 
   return (
-    <div className="flex h-[calc(100vh-140px)] w-full items-start justify-center overflow-hidden pt-2 pb-6 px-6">
+    // ✨ 부모의 overflow-hidden을 제거하고 min-h와 충분한 py를 주어 그림자 잘림 해결
+    <div className="flex min-h-[calc(100vh-140px)] w-full items-start justify-center py-10 px-6">
       <div className="w-full max-w-[720px] rounded-[40px] border border-white bg-white/95 p-10 shadow-[0_20px_60px_rgba(0,0,0,0.12)] animate-fade-in flex flex-col relative z-10">
         
         <div className="mb-6 flex flex-col gap-1">
