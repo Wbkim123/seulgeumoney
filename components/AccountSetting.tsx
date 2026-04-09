@@ -33,7 +33,6 @@ export default function AccountSetting({ onClose }: AccountSettingProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const datePickerRef = useRef<HTMLDivElement>(null);
 
-  // 로컬 데이터 불러오기 및 초기화
   useEffect(() => {
     const saved = localStorage.getItem('seulgeumoney_account_data');
     let baseData = data;
@@ -49,7 +48,6 @@ export default function AccountSetting({ onClose }: AccountSettingProps) {
     setIsLoaded(true);
   }, []);
 
-  // 외부 클릭 시 달력 닫기 로직
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (datePickerRef.current && !datePickerRef.current.contains(event.target as Node)) {
@@ -68,7 +66,6 @@ export default function AccountSetting({ onClose }: AccountSettingProps) {
     setData((prev) => ({ ...prev, [field]: value }));
   };
 
-  // 변경 사항이 있는지 확인 (Dirty check)
   const isDirty = initialData ? JSON.stringify(initialData) !== JSON.stringify(data) : false;
 
   const handleCloseAttempt = () => {
@@ -82,7 +79,6 @@ export default function AccountSetting({ onClose }: AccountSettingProps) {
     }
   };
 
-  // 레이아웃의 뒤로가기 버튼 클릭 이벤트를 수신
   useEffect(() => {
     const handleEvent = () => handleCloseAttempt();
     window.addEventListener('accountSettingCloseAttempt', handleEvent);
@@ -111,7 +107,6 @@ export default function AccountSetting({ onClose }: AccountSettingProps) {
     }
   };
 
-  // --- 커스텀 달력 로직 ---
   const [viewDate, setViewDate] = useState(new Date(data.dob || '1987-05-15'));
   const daysInMonth = (y: number, m: number) => new Date(y, m + 1, 0).getDate();
   const firstDayOfMonth = (y: number, m: number) => new Date(y, m, 1).getDay();
@@ -140,19 +135,22 @@ export default function AccountSetting({ onClose }: AccountSettingProps) {
 
   if (!isLoaded) return null;
 
-  const inputStyles = "w-full rounded-2xl bg-[#f8fafb] px-5 py-3 text-[14px] font-semibold text-slate-700 outline-none ring-1 ring-black/5 border border-transparent focus:border-[#649566] focus:bg-white transition-all";
+  // 💡 [수정 포인트 1] 입력창 내부 위아래 여백(Padding)을 py-3에서 py-2.5로 살짝 줄임
+  const inputStyles = "w-full rounded-2xl bg-[#f8fafb] px-5 py-2.5 text-[14px] font-semibold text-slate-700 outline-none ring-1 ring-black/5 border border-transparent focus:border-[#649566] focus:bg-white transition-all";
 
   return (
-    // ✨ 박스가 잘리지 않도록 overflow-hidden을 제거하고 상단 패딩을 조절하여 위치 조정
     <div className="flex min-h-[calc(100vh-140px)] w-full items-start justify-center px-6 pt-2 pb-10">
-      <div className="w-full max-w-[600px] rounded-[40px] border border-white bg-white/95 p-10 shadow-[0_20px_60px_rgba(0,0,0,0.12)] animate-fade-in flex flex-col relative z-10">
+      {/* 💡 [수정 포인트 2] 박스의 상하 여백을 p-10에서 px-10 py-7 로 변경하여 위아래 길이를 줄임 */}
+      <div className="w-full max-w-[720px] rounded-[40px] border border-white bg-white/95 px-10 py-7 shadow-[0_20px_60px_rgba(0,0,0,0.12)] animate-fade-in flex flex-col relative z-10">
         
-        <div className="mb-6 flex flex-col gap-1">
+        {/* 💡 [수정 포인트 3] 타이틀과 프로필 사진 사이 여백(mb-6)을 mb-4로 줄임 */}
+        <div className="mb-4 flex flex-col gap-1">
           <h1 className="text-[26px] font-bold text-slate-800 tracking-tight">Personal Info</h1>
           <p className="text-[13px] font-medium text-slate-400">View and update your personal details</p>
         </div>
 
-        <div className="mb-8 flex items-center gap-8">
+        {/* 💡 [수정 포인트 4] 프로필 사진과 폼 사이의 여백(mb-8)을 mb-5로 줄임 */}
+        <div className="mb-5 flex items-center gap-8">
           <div 
             className="group relative h-24 w-24 cursor-pointer overflow-hidden rounded-full border-4 border-white shadow-md ring-4 ring-slate-50 transition-all hover:ring-[#649566]/20"
             onClick={() => fileInputRef.current?.click()}
@@ -169,7 +167,8 @@ export default function AccountSetting({ onClose }: AccountSettingProps) {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-x-8 gap-y-4">
+        {/* 💡 [수정 포인트 5] 인풋 박스들 사이의 상하 간격(gap-y-4)을 gap-y-3으로 줄임 */}
+        <div className="grid grid-cols-2 gap-x-8 gap-y-3">
           <div className="group flex flex-col gap-1.5">
             <label className="text-[12px] font-bold text-slate-500 ml-1 group-focus-within:text-[#649566] transition-colors">Name</label>
             <input
@@ -267,7 +266,8 @@ export default function AccountSetting({ onClose }: AccountSettingProps) {
           </div>
         </div>
 
-        <div className="mt-8 flex justify-end gap-3 border-t border-slate-50 pt-6">
+        {/* 💡 [수정 포인트 6] 하단 버튼 영역의 위쪽 여백(mt-8)과 선 안쪽 패딩(pt-6)을 mt-5, pt-4로 대폭 줄임 */}
+        <div className="mt-5 flex justify-end gap-3 border-t border-slate-50 pt-4">
           <button onClick={handleCancel} className="rounded-xl px-6 py-2.5 text-[13px] font-bold text-slate-400 hover:bg-black/5 transition-colors cursor-pointer">Cancel</button>
           <button onClick={handleSave} className="rounded-xl bg-[#649566] px-10 py-2.5 text-[13px] font-bold text-white shadow-xl shadow-[#649566]/20 hover:bg-[#527a54] hover:-translate-y-0.5 transition-all cursor-pointer">Save Changes</button>
         </div>
