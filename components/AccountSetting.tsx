@@ -170,8 +170,8 @@ export default function AccountSetting({ onClose }: AccountSettingProps) {
         </div>
 
         <div className="grid grid-cols-2 gap-x-8 gap-y-4">
-          <div className="flex flex-col gap-1.5">
-            <label className="text-[12px] font-bold text-slate-500 ml-1">Name</label>
+          <div className="group flex flex-col gap-1.5">
+            <label className="text-[12px] font-bold text-slate-500 ml-1 group-focus-within:text-[#649566] transition-colors">Name</label>
             <input
               type="text"
               value={data.name}
@@ -180,16 +180,18 @@ export default function AccountSetting({ onClose }: AccountSettingProps) {
             />
           </div>
 
-          <div className="flex flex-col gap-1.5 relative">
-            <label className="text-[12px] font-bold text-slate-500 ml-1">Date of Birth</label>
+          <div className="group flex flex-col gap-1.5 relative">
+            <label className={`text-[12px] font-bold ml-1 transition-colors ${showDatePicker ? 'text-[#649566]' : 'text-slate-500 group-focus-within:text-[#649566]'}`}>
+              Date of Birth
+            </label>
             <div 
               className="relative group cursor-pointer"
               onClick={() => setShowDatePicker(!showDatePicker)}
             >
-              <div className={`${inputStyles} flex items-center ${showDatePicker ? 'border-[#649566] bg-white' : ''}`}>
+              <div className={`${inputStyles} flex items-center ${showDatePicker ? 'border-[#649566] bg-white ring-1 ring-[#649566]' : ''}`}>
                 {data.dob || "Select Date"}
               </div>
-              <HiCalendarDays size={20} className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 group-hover:text-[#649566] transition-colors" />
+              <HiCalendarDays size={20} className={`absolute right-5 top-1/2 -translate-y-1/2 transition-colors ${showDatePicker ? 'text-[#649566]' : 'text-slate-400 group-hover:text-[#649566]'}`} />
             </div>
 
             {showDatePicker && (
@@ -234,8 +236,8 @@ export default function AccountSetting({ onClose }: AccountSettingProps) {
             )}
           </div>
 
-          <div className="col-span-2 flex flex-col gap-1.5">
-            <label className="text-[12px] font-bold text-slate-500 ml-1">Phone Number</label>
+          <div className="group col-span-2 flex flex-col gap-1.5">
+            <label className="text-[12px] font-bold text-slate-500 ml-1 group-focus-within:text-[#649566] transition-colors">Phone Number</label>
             <input
               type="tel"
               value={data.phone}
@@ -244,8 +246,8 @@ export default function AccountSetting({ onClose }: AccountSettingProps) {
             />
           </div>
 
-          <div className="col-span-2 flex flex-col gap-1.5">
-            <label className="text-[12px] font-bold text-slate-500 ml-1">Home Address</label>
+          <div className="group col-span-2 flex flex-col gap-1.5">
+            <label className="text-[12px] font-bold text-slate-500 ml-1 group-focus-within:text-[#649566] transition-colors">Home Address</label>
             <input
               type="text"
               value={data.address}
@@ -254,8 +256,8 @@ export default function AccountSetting({ onClose }: AccountSettingProps) {
             />
           </div>
 
-          <div className="col-span-2 flex flex-col gap-1.5">
-            <label className="text-[12px] font-bold text-slate-500 ml-1">Email</label>
+          <div className="group col-span-2 flex flex-col gap-1.5">
+            <label className="text-[12px] font-bold text-slate-500 ml-1 group-focus-within:text-[#649566] transition-colors">Email</label>
             <input
               type="email"
               value={data.email}
