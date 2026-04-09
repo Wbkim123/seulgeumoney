@@ -145,7 +145,7 @@ export default function AccountSetting({ onClose }: AccountSettingProps) {
   return (
     // ✨ 박스가 잘리지 않도록 overflow-hidden을 제거하고 상단 패딩을 조절하여 위치 조정
     <div className="flex min-h-[calc(100vh-140px)] w-full items-start justify-center px-6 pt-2 pb-10">
-      <div className="w-full max-w-[720px] rounded-[40px] border border-white bg-white/95 p-10 shadow-[0_20px_60px_rgba(0,0,0,0.12)] animate-fade-in flex flex-col relative z-10">
+      <div className="w-full max-w-[680px] rounded-[40px] border border-white bg-white/95 p-10 shadow-[0_20px_60px_rgba(0,0,0,0.12)] animate-fade-in flex flex-col relative z-10">
         
         <div className="mb-6 flex flex-col gap-1">
           <h1 className="text-[26px] font-bold text-slate-800 tracking-tight">Personal Info</h1>
