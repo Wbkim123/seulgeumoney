@@ -24,7 +24,6 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
   const handleCloseSidebar = () => {
     setSidebarOpen(false);
-    setIsAccountOpen(false); // 사이드바 메뉴 클릭 시 어카운트 세팅 닫기
   };
 
   return (
