@@ -48,6 +48,10 @@ export default function AccountSetting({ onClose }: AccountSettingProps) {
     setIsLoaded(true);
   }, []);
 
+  const handleChange = (field: keyof AccountData, value: string) => {
+    setData((prev) => ({ ...prev, [field]: value }));
+  };
+
   // 변경 사항이 있는지 확인 (Dirty check)
   const isDirty = initialData ? JSON.stringify(initialData) !== JSON.stringify(data) : false;
 
