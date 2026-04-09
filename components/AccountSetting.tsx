@@ -33,6 +33,7 @@ export default function AccountSetting({ onClose }: AccountSettingProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const datePickerRef = useRef<HTMLDivElement>(null);
 
+  // 로컬 데이터 불러오기 및 초기화
   useEffect(() => {
     const saved = localStorage.getItem('seulgeumoney_account_data');
     let baseData = data;
@@ -44,38 +45,36 @@ export default function AccountSetting({ onClose }: AccountSettingProps) {
         console.error('Failed to parse account data', e);
       }
     }
-    setInitialData(baseData); // 초기 상태 저장
-    useEffect(() => {
-      setIsLoaded(true);
-    }, []);
+    setInitialData(baseData);
+    setIsLoaded(true);
+  }, []);
 
-    // ✨ 외부 클릭 시 달력 닫기 로직
-    useEffect(() => {
-      function handleClickOutside(event: MouseEvent) {
-        if (datePickerRef.current && !datePickerRef.current.contains(event.target as Node)) {
-          setShowDatePicker(false);
-        }
+  // 외부 클릭 시 달력 닫기 로직
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (datePickerRef.current && !datePickerRef.current.contains(event.target as Node)) {
+        setShowDatePicker(false);
       }
-      if (showDatePicker) {
-        document.addEventListener("mousedown", handleClickOutside);
-      }
-      return () => {
-        document.removeEventListener("mousedown", handleClickOutside);
-      };
-    }, [showDatePicker]);
-
-    const handleChange = (field: keyof AccountData, value: string) => {
-      setData((prev) => ({ ...prev, [field]: value }));
+    }
+    if (showDatePicker) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
     };
+  }, [showDatePicker]);
+
+  const handleChange = (field: keyof AccountData, value: string) => {
+    setData((prev) => ({ ...prev, [field]: value }));
+  };
 
   // 변경 사항이 있는지 확인 (Dirty check)
   const isDirty = initialData ? JSON.stringify(initialData) !== JSON.stringify(data) : false;
 
   const handleCloseAttempt = () => {
     if (!isDirty) {
-      onClose(); // 변경 사항 없으면 바로 닫기
+      onClose();
     } else {
-      // 변경 사항 있으면 물어보기
       const leave = window.confirm(
         "You have unsaved changes. Do you want to leave without saving? \n\nClick 'OK' to Discard, or 'Cancel' to Keep Editing."
       );
@@ -88,13 +87,13 @@ export default function AccountSetting({ onClose }: AccountSettingProps) {
     const handleEvent = () => handleCloseAttempt();
     window.addEventListener('accountSettingCloseAttempt', handleEvent);
     return () => window.removeEventListener('accountSettingCloseAttempt', handleEvent);
-  }, [isDirty, initialData, data]); // 상태가 바뀔 때마다 리스너 갱신
+  }, [isDirty, initialData, data]);
 
   const handleSave = () => {
     localStorage.setItem('seulgeumoney_account_data', JSON.stringify(data));
-    setInitialData(data); // 저장 후 초기 데이터 업데이트
+    setInitialData(data);
     alert('Changes saved successfully!');
-    onClose(); // 저장 완료 후 닫기
+    onClose();
   };
 
   const handleCancel = () => {
