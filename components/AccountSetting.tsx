@@ -45,12 +45,28 @@ export default function AccountSetting({ onClose }: AccountSettingProps) {
       }
     }
     setInitialData(baseData); // 초기 상태 저장
-    setIsLoaded(true);
-  }, []);
+    useEffect(() => {
+      setIsLoaded(true);
+    }, []);
 
-  const handleChange = (field: keyof AccountData, value: string) => {
-    setData((prev) => ({ ...prev, [field]: value }));
-  };
+    // ✨ 외부 클릭 시 달력 닫기 로직
+    useEffect(() => {
+      function handleClickOutside(event: MouseEvent) {
+        if (datePickerRef.current && !datePickerRef.current.contains(event.target as Node)) {
+          setShowDatePicker(false);
+        }
+      }
+      if (showDatePicker) {
+        document.addEventListener("mousedown", handleClickOutside);
+      }
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, [showDatePicker]);
+
+    const handleChange = (field: keyof AccountData, value: string) => {
+      setData((prev) => ({ ...prev, [field]: value }));
+    };
 
   // 변경 사항이 있는지 확인 (Dirty check)
   const isDirty = initialData ? JSON.stringify(initialData) !== JSON.stringify(data) : false;
