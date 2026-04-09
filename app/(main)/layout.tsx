@@ -26,6 +26,14 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     setSidebarOpen(false);
   };
 
+  const handleAccountToggle = () => {
+    if (isAccountOpen) {
+      window.dispatchEvent(new Event('accountSettingCloseAttempt'));
+    } else {
+      setIsAccountOpen(true);
+    }
+  };
+
   return (
     <GoalsProvider>
       <div className="relative min-h-screen bg-[#eef0f3] flex flex-col">
@@ -55,7 +63,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
           {/* Profile / Back button */}
           <button
-            onClick={() => setIsAccountOpen(!isAccountOpen)}
+            onClick={handleAccountToggle}
             className="flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-[0_8px_20px_rgba(0,0,0,0.08)] hover:scale-105 transition-all duration-200 cursor-pointer"
             aria-label={isAccountOpen ? "Back to page" : "Account Settings"}
           >
@@ -111,7 +119,11 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
         {/* Main content */}
         <main className="flex-1 flex items-center justify-center px-6 pb-10">
           <div className="w-full max-w-[1100px]">
-            {isAccountOpen ? <AccountSetting /> : children}
+            {isAccountOpen ? (
+              <AccountSetting onClose={() => setIsAccountOpen(false)} />
+            ) : (
+              children
+            )}
           </div>
         </main>
       </div>

@@ -13,7 +13,12 @@ interface AccountData {
   profilePic: string;
 }
 
-export default function AccountSetting() {
+interface AccountSettingProps {
+  onClose: () => void;
+}
+
+export default function AccountSetting({ onClose }: AccountSettingProps) {
+  const [initialData, setInitialData] = useState<AccountData | null>(null);
   const [data, setData] = useState<AccountData>({
     name: 'Seulgee-jjeossi',
     dob: '1987-05-15',
@@ -30,39 +35,50 @@ export default function AccountSetting() {
 
   useEffect(() => {
     const saved = localStorage.getItem('seulgeumoney_account_data');
+    let baseData = data;
     if (saved) {
       try {
-        setData(JSON.parse(saved));
+        baseData = JSON.parse(saved);
+        setData(baseData);
       } catch (e) {
         console.error('Failed to parse account data', e);
       }
     }
+    setInitialData(baseData); // 초기 상태 저장
     setIsLoaded(true);
   }, []);
 
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (datePickerRef.current && !datePickerRef.current.contains(event.target as Node)) {
-        setShowDatePicker(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  // 변경 사항이 있는지 확인 (Dirty check)
+  const isDirty = initialData ? JSON.stringify(initialData) !== JSON.stringify(data) : false;
 
-  const handleChange = (field: keyof AccountData, value: string) => {
-    setData((prev) => ({ ...prev, [field]: value }));
+  const handleCloseAttempt = () => {
+    if (!isDirty) {
+      onClose(); // 변경 사항 없으면 바로 닫기
+    } else {
+      // 변경 사항 있으면 물어보기
+      const leave = window.confirm(
+        "You have unsaved changes. Do you want to leave without saving? \n\nClick 'OK' to Discard, or 'Cancel' to Keep Editing."
+      );
+      if (leave) onClose();
+    }
   };
+
+  // 레이아웃의 뒤로가기 버튼 클릭 이벤트를 수신
+  useEffect(() => {
+    const handleEvent = () => handleCloseAttempt();
+    window.addEventListener('accountSettingCloseAttempt', handleEvent);
+    return () => window.removeEventListener('accountSettingCloseAttempt', handleEvent);
+  }, [isDirty, initialData, data]); // 상태가 바뀔 때마다 리스너 갱신
 
   const handleSave = () => {
     localStorage.setItem('seulgeumoney_account_data', JSON.stringify(data));
+    setInitialData(data); // 저장 후 초기 데이터 업데이트
     alert('Changes saved successfully!');
+    onClose(); // 저장 완료 후 닫기
   };
 
   const handleCancel = () => {
-    const saved = localStorage.getItem('seulgeumoney_account_data');
-    if (saved) setData(JSON.parse(saved));
-    alert('Changes discarded.');
+    handleCloseAttempt();
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
