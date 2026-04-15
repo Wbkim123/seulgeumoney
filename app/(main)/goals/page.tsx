@@ -219,12 +219,15 @@ export default function GoalsPage() {
   const handleSaveGoal = () => {
     if (!isFormValid) return;
     const updateList = (list: any[]) => {
+      const sanitizedSpent = Number(Number(goalSpent).toFixed(2));
+      const sanitizedAmount = Math.round(Number(goalAmount));
+
       if (editingGoalId) {
         return list.map((g) => g.id === editingGoalId ? { 
           ...g, 
           title: goalName, 
-          current: Number(goalSpent), // ✨ 수정한 사용 금액 저장
-          target: Number(goalAmount), 
+          current: sanitizedSpent, // ✨ 수정한 사용 금액 저장
+          target: sanitizedAmount, 
           category: goalCategory, 
           subcategory: goalSubcategory 
         } : g);
@@ -232,8 +235,8 @@ export default function GoalsPage() {
       return [...list, { 
         id: Date.now(), 
         title: goalName, 
-        current: Number(goalSpent), // ✨ 새로 추가한 사용 금액 저장
-        target: Number(goalAmount), 
+        current: sanitizedSpent, // ✨ 새로 추가한 사용 금액 저장
+        target: sanitizedAmount, 
         category: goalCategory, 
         subcategory: goalSubcategory 
       }];
@@ -316,7 +319,16 @@ export default function GoalsPage() {
                   <div className="relative">
                     <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-medium text-slate-400">$</span>
                     <input 
-                      type="number" value={goalSpent} onChange={(e) => setGoalSpent(e.target.value)} placeholder="0" 
+                      type="number" 
+                      step="0.01"
+                      value={goalSpent} 
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        if (val === "" || /^\d*\.?\d{0,2}$/.test(val)) {
+                          setGoalSpent(val);
+                        }
+                      }} 
+                      placeholder="0" 
                       className="w-full rounded-2xl bg-white py-3.5 pl-7 pr-3 text-sm text-slate-700 placeholder:text-slate-300 shadow-sm outline-none ring-1 ring-black/5 focus:ring-2 focus:ring-[#98c195]/50 [&::-webkit-inner-spin-button]:cursor-pointer [&::-webkit-outer-spin-button]:cursor-pointer"
                     />
                   </div>
@@ -328,7 +340,24 @@ export default function GoalsPage() {
                   <div className="relative">
                     <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-medium text-slate-400">$</span>
                     <input 
-                      type="number" value={goalAmount} onChange={(e) => setGoalAmount(e.target.value)} placeholder="0" 
+                      type="number" 
+                      step="1"
+                      value={goalAmount} 
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        if (val === "" || /^\d+$/.test(val)) {
+                          setGoalAmount(val);
+                        } else {
+                          const rounded = Math.round(Number(val));
+                          if (!isNaN(rounded)) setGoalAmount(rounded.toString());
+                        }
+                      }} 
+                      onBlur={() => {
+                        if (goalAmount !== "") {
+                          setGoalAmount(Math.round(Number(goalAmount)).toString());
+                        }
+                      }}
+                      placeholder="0" 
                       className="w-full rounded-2xl bg-white py-3.5 pl-7 pr-3 text-sm text-slate-700 placeholder:text-slate-300 shadow-sm outline-none ring-1 ring-black/5 focus:ring-2 focus:ring-[#98c195]/50 [&::-webkit-inner-spin-button]:cursor-pointer [&::-webkit-outer-spin-button]:cursor-pointer"
                     />
                   </div>
