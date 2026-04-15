@@ -282,8 +282,8 @@ export default function GoalsPage() {
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm" onClick={() => setIsModalOpen(false)}>
-          <div className="relative w-full max-w-[420px] rounded-3xl bg-[#f4f5f7] px-8 py-10 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="relative w-full max-w-[420px] rounded-3xl bg-[#f4f5f7] px-8 py-10 shadow-2xl">
             <button 
               onClick={() => setIsModalOpen(false)}
               className="absolute right-5 top-5 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-slate-200 hover:text-slate-700"
