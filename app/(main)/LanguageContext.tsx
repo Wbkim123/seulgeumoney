@@ -96,6 +96,19 @@ const translations = {
     'Memo': '메모',
     'No memo available.': '메모가 없습니다.',
     'Add memo..': '메모 추가..',
+
+    // Account Setting / Personal Info
+    'Personal Info': '개인 정보',
+    'View and update your personal details': '개인 정보를 확인하고 수정하세요',
+    'Verified Account': '인증된 계정',
+    'Date of Birth': '생년월일',
+    'Select Date': '날짜 선택',
+    'Phone Number': '전화번호',
+    'Home Address': '집 주소',
+    'Email': '이메일',
+    'Cancel': '취소',
+    'Changes saved successfully!': '변경 사항이 저장되었습니다!',
+    'Unsaved Changes Warning': "저장되지 않은 변경 사항이 있습니다. 저장하지 않고 나가시겠습니까? \n\n'확인'을 누르면 취소되고, '취소'를 누르면 계속 수정할 수 있습니다."
   },
   en: {
     // App Setting
@@ -182,6 +195,19 @@ const translations = {
     'Memo': 'Memo',
     'No memo available.': 'No memo available.',
     'Add memo..': 'Add memo..',
+
+    // Account Setting / Personal Info
+    'Personal Info': 'Personal Info',
+    'View and update your personal details': 'View and update your personal details',
+    'Verified Account': 'Verified Account',
+    'Date of Birth': 'Date of Birth',
+    'Select Date': 'Select Date',
+    'Phone Number': 'Phone Number',
+    'Home Address': 'Home Address',
+    'Email': 'Email',
+    'Cancel': 'Cancel',
+    'Changes saved successfully!': 'Changes saved successfully!',
+    'Unsaved Changes Warning': "You have unsaved changes. Do you want to leave without saving? \n\nClick 'OK' to Discard, or 'Cancel' to Keep Editing."
   }
 };
 
