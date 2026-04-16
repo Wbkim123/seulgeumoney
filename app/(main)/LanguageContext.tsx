@@ -40,7 +40,7 @@ const translations = {
     'Jan': '1월', 'Feb': '2월', 'Mar': '3월', 'Apr': '4월', 'Jun': '6월', 'Jul': '7월', 'Aug': '8월', 'Sep': '9월', 'Oct': '10월', 'Nov': '11월', 'Dec': '12월',
     
     // Dashboard Page
-    'Daily': '일간',
+    'Daily': '일일',
     'Monthly': '월간',
     'Yearly': '연간',
     'Total Spending': '총 지출',
@@ -57,7 +57,7 @@ const translations = {
 
     // Spending Page
     'Type of Account': '계좌 유형',
-    'Checking Account': '체킹 계좌',
+    'Checking Account': '입출금 계좌',
     'Savings Account': '저축 계좌',
     'Credit Balance': '신용 잔액',
     'No account details': '계좌 상세 정보가 없습니다',
@@ -66,9 +66,9 @@ const translations = {
     'No transactions': '거래 내역이 없습니다',
 
     // Report Page
-    'Select a Report Period': '보고서 기간 선택',
+    'Select a Report Period': '리포트 기간 선택',
     'Weekly': '주간',
-    'Monthly Report': '월간 보고서',
+    'Monthly Report': '월간 리포트',
     'Key Summary & Insights': '주요 요약 및 인사이트',
     'Total Spent': '총 지출액',
     'Your Budget': '나의 예산',
@@ -232,8 +232,16 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     return translations[language][key as keyof typeof translations['en']] || key;
   };
 
+  const formatYear = (year: number | string) => {
+    return language === 'ko' ? `${year}년` : `${year}`;
+  };
+
+  const formatDay = (day: number | string) => {
+    return language === 'ko' ? `${day}일` : `${day}`;
+  };
+
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+    <LanguageContext.Provider value={{ language, setLanguage, t, formatYear, formatDay }}>
       {children}
     </LanguageContext.Provider>
   );

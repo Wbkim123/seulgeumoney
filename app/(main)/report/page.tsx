@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useLanguage } from '../LanguageContext';
 
 export default function ReportPeriodPage() {
-  const { t } = useLanguage();
+  const { t, formatYear, formatDay, language } = useLanguage();
   const periods = ['Daily', 'Weekly', 'Monthly', 'Yearly'];
 
   // ✨ 실제 달력 기준으로 일요일마다 리셋되고 주/월 단위로 쌓이는 날짜 계산 로직
@@ -22,7 +22,9 @@ export default function ReportPeriodPage() {
       d.setDate(today.getDate() - i);
       daily.push({
         raw: `${shortMonths[d.getMonth()]} ${d.getDate()}`,
-        translated: `${t(shortMonths[d.getMonth()])} ${d.getDate()}`
+        translated: language === 'ko' 
+          ? `${t(shortMonths[d.getMonth()])} ${formatDay(d.getDate())}` 
+          : `${t(shortMonths[d.getMonth()])} ${d.getDate()}`
       });
     }
 
@@ -37,12 +39,16 @@ export default function ReportPeriodPage() {
       if (startOfPastWeek.getMonth() === endOfPastWeek.getMonth()) {
         weekly.push({
           raw: `${shortMonths[startOfPastWeek.getMonth()]} ${startOfPastWeek.getDate()} - ${endOfPastWeek.getDate()}`,
-          translated: `${t(shortMonths[startOfPastWeek.getMonth()])} ${startOfPastWeek.getDate()} - ${endOfPastWeek.getDate()}`
+          translated: language === 'ko'
+            ? `${t(shortMonths[startOfPastWeek.getMonth()])} ${formatDay(startOfPastWeek.getDate())} - ${formatDay(endOfPastWeek.getDate())}`
+            : `${t(shortMonths[startOfPastWeek.getMonth()])} ${startOfPastWeek.getDate()} - ${endOfPastWeek.getDate()}`
         });
       } else {
         weekly.push({
           raw: `${shortMonths[startOfPastWeek.getMonth()]} ${startOfPastWeek.getDate()} - ${shortMonths[endOfPastWeek.getMonth()]} ${endOfPastWeek.getDate()}`,
-          translated: `${t(shortMonths[startOfPastWeek.getMonth()])} ${startOfPastWeek.getDate()} - ${t(shortMonths[endOfPastWeek.getMonth()])} ${endOfPastWeek.getDate()}`
+          translated: language === 'ko'
+            ? `${t(shortMonths[startOfPastWeek.getMonth()])} ${formatDay(startOfPastWeek.getDate())} - ${t(shortMonths[endOfPastWeek.getMonth()])} ${formatDay(endOfPastWeek.getDate())}`
+            : `${t(shortMonths[startOfPastWeek.getMonth()])} ${startOfPastWeek.getDate()} - ${t(shortMonths[endOfPastWeek.getMonth()])} ${endOfPastWeek.getDate()}`
         });
       }
     }
@@ -53,18 +59,20 @@ export default function ReportPeriodPage() {
       const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
       monthly.push({
         raw: `${longMonths[d.getMonth()]} ${d.getFullYear()}`,
-        translated: `${t(longMonths[d.getMonth()])} ${d.getFullYear()}`
+        translated: language === 'ko'
+          ? `${formatYear(d.getFullYear())} ${t(longMonths[d.getMonth()])}`
+          : `${t(longMonths[d.getMonth()])} ${d.getFullYear()}`
       });
     }
 
     // 4. Yearly
     const currentYear = today.getFullYear();
     const yearly = [
-      { raw: `${currentYear}`, translated: `${currentYear}` }, 
-      { raw: `${currentYear - 1}`, translated: `${currentYear - 1}` }, 
-      { raw: `${currentYear - 2}`, translated: `${currentYear - 2}` }, 
-      { raw: `${currentYear - 3}`, translated: `${currentYear - 3}` }, 
-      { raw: `${currentYear - 4}`, translated: `${currentYear - 4}` }
+      { raw: `${currentYear}`, translated: formatYear(currentYear) }, 
+      { raw: `${currentYear - 1}`, translated: formatYear(currentYear - 1) }, 
+      { raw: `${currentYear - 2}`, translated: formatYear(currentYear - 2) }, 
+      { raw: `${currentYear - 3}`, translated: formatYear(currentYear - 3) }, 
+      { raw: `${currentYear - 4}`, translated: formatYear(currentYear - 4) }
     ];
 
     return {
@@ -73,7 +81,7 @@ export default function ReportPeriodPage() {
       Monthly: monthly,
       Yearly: yearly,
     };
-  }, [t]);
+  }, [t, language, formatYear, formatDay]);
 
   const [selectedPeriod, setSelectedPeriod] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -210,7 +218,7 @@ export default function ReportPeriodPage() {
                     <h3 className="text-[15px] font-bold text-[#649566]">{t('Insight')}</h3>
                   </div>
                   <p className="text-[14px] font-medium leading-relaxed text-[#527a54]">
-                    {t('language') === 'ko' ? (
+                    {language === 'ko' ? (
                       <>잘하셨어요! 평균 예산보다 <span className="font-bold text-[#649566]">27% 적게</span> 지출하셨습니다. 가장 큰 지출 항목은 <span className="font-bold">식비</span>였지만, 불필요한 쇼핑은 성공적으로 피하셨네요.</>
                     ) : (
                       <>Great job! You spent <span className="font-bold text-[#649566]">27% less</span> than your average budget. Your biggest expense was <span className="font-bold">Food</span>, but you successfully avoided unnecessary shopping.</>

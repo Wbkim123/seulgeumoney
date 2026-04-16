@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useLanguage } from '../LanguageContext';
 
 export default function SpendingPage() {
-  const { t } = useLanguage();
+  const { t, formatYear, formatDay, language } = useLanguage();
   const [selectedType, setSelectedType] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedBank, setSelectedBank] = useState<string | null>(null);
@@ -78,12 +78,14 @@ export default function SpendingPage() {
       grouped.push({
         date: dateString,
         items: itemsForDay,
-        translatedDate: `${t(months[currentMonthIndex])} ${day}, ${currentYear}`
+        translatedDate: language === 'ko' 
+          ? `${formatYear(currentYear)} ${t(months[currentMonthIndex])} ${formatDay(day)}` 
+          : `${t(months[currentMonthIndex])} ${day}, ${currentYear}`
       });
     }
     
     return grouped;
-  }, [currentMonthIndex, currentYear, realYear, realMonth, realDate, months, allTransactions, t]);
+  }, [currentMonthIndex, currentYear, realYear, realMonth, realDate, months, allTransactions, t, language, formatYear, formatDay]);
 
   // 버튼 생성을 위한 배열 맵핑
   const accountOptions = [
@@ -265,7 +267,7 @@ export default function SpendingPage() {
                   </svg>
                 </button>
                 
-                <span>{t(months[currentMonthIndex])} {currentYear}</span>
+                <span>{language === 'ko' ? `${formatYear(currentYear)} ${t(months[currentMonthIndex])}` : `${t(months[currentMonthIndex])} ${formatYear(currentYear)}`}</span>
                 
                 <button 
                   onClick={handleNextMonth}

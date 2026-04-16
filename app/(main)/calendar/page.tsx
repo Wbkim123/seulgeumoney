@@ -318,7 +318,7 @@ export default function CalendarPage() {
             <div className="mb-6 flex items-start justify-between shrink-0">
               <div className="text-[26px] font-bold text-[#649566] flex gap-2">
                 <span>{t(monthNames[month])}</span>
-                <span>{selectedDay}</span>
+                <span>{formatDay(selectedDay)}</span>
               </div>
               
               <div className="flex items-start gap-4">
@@ -390,6 +390,15 @@ export default function CalendarPage() {
                 className="mt-3 w-full min-h-[100px] resize-none bg-transparent text-[14px] font-medium leading-relaxed text-slate-600 outline-none placeholder:text-slate-300"
               />
             </div>
+
+          </div>
+        </div>
+      )}
+
+    </>
+  );
+}
+ </div>
 
           </div>
         </div>

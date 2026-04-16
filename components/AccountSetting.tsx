@@ -188,7 +188,11 @@ export default function AccountSetting({ onClose }: AccountSettingProps) {
               onClick={() => setShowDatePicker(!showDatePicker)}
             >
               <div className={`${inputStyles} flex items-center ${showDatePicker ? 'border-[#649566] bg-white ring-1 ring-[#649566]' : ''}`}>
-                {data.dob || t("Select Date")}
+                {data.dob ? (
+                  language === 'ko' 
+                    ? `${data.dob.split('-')[0]}년 ${parseInt(data.dob.split('-')[1])}월 ${parseInt(data.dob.split('-')[2])}일`
+                    : data.dob
+                ) : t("Select Date")}
               </div>
               <HiCalendarDays size={20} className={`absolute right-5 top-1/2 -translate-y-1/2 transition-colors ${showDatePicker ? 'text-[#649566]' : 'text-slate-400 group-hover:text-[#649566]'}`} />
             </div>

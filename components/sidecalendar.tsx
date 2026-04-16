@@ -159,8 +159,9 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
           <div className="mb-6 flex items-start justify-between shrink-0">
             <div className="text-[24px] font-bold text-[#649566] flex gap-2">
               <span>{t(MONTH_NAMES[selected.month])}</span>
-              <span>{selected.day}</span>
+              <span>{formatDay(selected.day)}</span>
             </div>
+
             
             <div className="flex items-start gap-3">
               <div className="flex flex-col items-end text-right">
