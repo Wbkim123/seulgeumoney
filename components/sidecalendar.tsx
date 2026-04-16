@@ -247,7 +247,7 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
               <HiChevronLeft size={18} />
             </button>
             <div className="text-center text-[16px] tracking-tight text-[#649566] font-bold">
-              {t(MONTH_NAMES[month])} {year}
+              {t(MONTH_NAMES[month])} {formatYear(year)}
             </div>
             <button onClick={nextMonth} className="rounded-full p-2 text-[#649566] hover:bg-black/5 transition cursor-pointer">
               <HiChevronRight size={18} />
