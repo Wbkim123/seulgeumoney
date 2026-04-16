@@ -45,7 +45,7 @@ function isSameDate(a: Selected, b: Selected) {
 }
 
 export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
-  const { t } = useLanguage();
+  const { t, formatYear, formatDay, language } = useLanguage();
   const today = useMemo(() => new Date(), []);
   const [currentDate, setCurrentDate] = useState<Date>(today);
   const [selected, setSelected] = useState<Selected>({
@@ -66,15 +66,22 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
       if (savedData) {
         try {
           const parsed = JSON.parse(savedData);
-          setCalendarData(parsed);
-          
-          // 현재 선택된 날짜의 메모도 즉시 갱신
-          const key = `${selected.year}-${selected.month}-${selected.day}`;
-          if (parsed[key]) {
-            setCurrentMemo(parsed[key].memo || "");
+          if (parsed && typeof parsed === 'object') {
+            const hasOldFormat = Object.keys(parsed).some(k => !isNaN(Number(k)));
+            if (hasOldFormat) {
+              localStorage.removeItem('seulgeumoney_calendar_data');
+              setCalendarData(getInitialCalendarData());
+            } else {
+              setCalendarData(parsed);
+              const key = `${selected.year}-${selected.month}-${selected.day}`;
+              if (parsed[key]) {
+                setCurrentMemo(parsed[key].memo || "");
+              }
+            }
           }
         } catch (error) {
           console.error("Failed to load calendar data:", error);
+          setCalendarData(getInitialCalendarData());
         }
       } else {
         setCalendarData(getInitialCalendarData());
@@ -84,13 +91,12 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
     loadData();
     setIsLoaded(true);
 
-    // 이벤트 리스너 등록: CalendarPage 등에서 데이터가 변경되었을 때 호출됨
     window.addEventListener('calendarDataUpdated', loadData);
     return () => window.removeEventListener('calendarDataUpdated', loadData);
   }, [selected.year, selected.month, selected.day]);
 
   useEffect(() => {
-    if (isLoaded) {
+    if (isLoaded && calendarData && Object.keys(calendarData).length > 0) {
       localStorage.setItem('seulgeumoney_calendar_data', JSON.stringify(calendarData));
     }
   }, [calendarData, isLoaded]);
@@ -138,7 +144,7 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
   while (cells.length % 7 !== 0) cells.push({ key: `blank-end-${cells.length}` });
 
   const activeKey = `${selected.year}-${selected.month}-${selected.day}`;
-  const activeData = calendarData[activeKey] || { income: 0, expense: 0, transactions: [] };
+  const activeData = (calendarData && calendarData[activeKey]) || { income: 0, expense: 0, transactions: [] };
 
   return (
     <aside
@@ -166,10 +172,10 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
             <div className="flex items-start gap-3">
               <div className="flex flex-col items-end text-right">
                 <span className="text-[14px] font-bold text-[#649566]">
-                  $ {activeData.income ? activeData.income.toFixed(2) : '0.00'}
+                  $ {activeData.income ? Number(activeData.income).toFixed(2) : '0.00'}
                 </span>
                 <span className="text-[14px] font-bold text-[#ee5253]">
-                  $ {activeData.expense ? activeData.expense.toFixed(2) : '0.00'}
+                  $ {activeData.expense ? Number(activeData.expense).toFixed(2) : '0.00'}
                 </span>
               </div>
               

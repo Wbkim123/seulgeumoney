@@ -8,6 +8,8 @@ interface LanguageContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
   t: (key: string) => string;
+  formatYear: (year: number | string) => string;
+  formatDay: (day: number | string) => string;
 }
 
 const translations = {

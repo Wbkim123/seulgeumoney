@@ -324,10 +324,10 @@ export default function CalendarPage() {
               <div className="flex items-start gap-4">
                 <div className="flex flex-col items-end text-right">
                   <span className="text-[14px] font-bold text-[#649566]">
-                    $ {activeData.income ? activeData.income.toFixed(2) : '0.00'}
+                    $ {activeData.income ? Number(activeData.income).toFixed(2) : '0.00'}
                   </span>
                   <span className="text-[14px] font-bold text-[#ee5253]">
-                    $ {activeData.expense ? activeData.expense.toFixed(2) : '0.00'}
+                    $ {activeData.expense ? Number(activeData.expense).toFixed(2) : '0.00'}
                   </span>
                 </div>
                 
