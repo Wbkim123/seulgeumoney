@@ -55,41 +55,40 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
   });
 
   const [isPanelOpen, setIsPanelOpen] = useState(false);
-  const [currentMemo, setCurrentMemo] = useState("");
   
   const [calendarData, setCalendarData] = useState<Record<string, any>>({});
   const [isLoaded, setIsLoaded] = useState(false); 
 
-  useEffect(() => {
-    const loadData = () => {
-      const savedData = localStorage.getItem('seulgeumoney_calendar_data');
-      if (savedData) {
-        try {
-          const parsed = JSON.parse(savedData);
-          if (parsed && typeof parsed === 'object') {
-            const hasOldFormat = Object.keys(parsed).some(k => !isNaN(Number(k)));
-            if (hasOldFormat) {
-              localStorage.removeItem('seulgeumoney_calendar_data');
-              setCalendarData(getInitialCalendarData());
-            } else {
-              setCalendarData(parsed);
-            }
+  const loadData = () => {
+    const savedData = localStorage.getItem('seulgeumoney_calendar_data');
+    if (savedData) {
+      try {
+        const parsed = JSON.parse(savedData);
+        if (parsed && typeof parsed === 'object') {
+          const hasOldFormat = Object.keys(parsed).some(k => !isNaN(Number(k)));
+          if (hasOldFormat) {
+            localStorage.removeItem('seulgeumoney_calendar_data');
+            setCalendarData(getInitialCalendarData());
+          } else {
+            setCalendarData(parsed);
           }
-        } catch (error) {
-          console.error("Failed to load calendar data:", error);
-          setCalendarData(getInitialCalendarData());
         }
-      } else {
+      } catch (error) {
+        console.error("Failed to load calendar data:", error);
         setCalendarData(getInitialCalendarData());
       }
-    };
+    } else {
+      setCalendarData(getInitialCalendarData());
+    }
+  };
 
+  useEffect(() => {
     loadData();
     setIsLoaded(true);
 
     window.addEventListener('calendarDataUpdated', loadData);
     return () => window.removeEventListener('calendarDataUpdated', loadData);
-  }, []); // Remove selected dependency to prevent redundant reloads
+  }, []);
 
   useEffect(() => {
     if (isLoaded && calendarData && Object.keys(calendarData).length > 0) {
@@ -97,23 +96,19 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
     }
   }, [calendarData, isLoaded]);
 
+  // Sidebar Open/Close Logic
   useEffect(() => {
-    if (!isOpen) {
-      setIsPanelOpen(false);
-    } else {
-      // Open reset logic
+    if (isOpen) {
       const now = new Date();
-      setCurrentDate(new Date(now.getFullYear(), now.getMonth(), 1));
-      const todaySel = { day: now.getDate(), month: now.getMonth(), year: now.getFullYear() };
-      setSelected(todaySel);
+      const y = now.getFullYear();
+      const m = now.getMonth();
+      const d = now.getDate();
       
-      // Load today's memo if exists
-      const key = `${todaySel.year}-${todaySel.month}-${todaySel.day}`;
-      if (calendarData[key]) {
-        setCurrentMemo(calendarData[key].memo || "");
-      } else {
-        setCurrentMemo("");
-      }
+      setCurrentDate(new Date(y, m, 1));
+      setSelected({ day: d, month: m, year: y });
+      setIsPanelOpen(true); // Auto-open panel for today
+    } else {
+      setIsPanelOpen(false);
     }
   }, [isOpen]);
 
@@ -148,7 +143,7 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
   while (cells.length % 7 !== 0) cells.push({ key: `blank-end-${cells.length}` });
 
   const activeKey = `${selected.year}-${selected.month}-${selected.day}`;
-  const activeData = (calendarData && calendarData[activeKey]) || { income: 0, expense: 0, transactions: [] };
+  const activeData = (calendarData && calendarData[activeKey]) || { income: 0, expense: 0, transactions: [], memo: "" };
 
   return (
     <aside
@@ -231,7 +226,7 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
           <div className="mt-4 shrink-0 flex flex-col rounded-[24px] bg-white p-6 shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
             <h3 className="text-[16px] font-extrabold text-slate-900">{t('Memo')}</h3>
             <div className="mt-3 w-full min-h-[80px] sm:min-h-[100px] text-[14px] font-medium leading-relaxed text-slate-600 whitespace-pre-wrap overflow-y-auto">
-              {currentMemo ? currentMemo : <span className="text-slate-300">{t('No memo available.')}</span>}
+              {activeData.memo ? activeData.memo : <span className="text-slate-300">{t('No memo available.')}</span>}
             </div>
           </div>
         </div>
@@ -317,9 +312,6 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
                   onClick={() => {
                     if (future) return;
                     setSelected(sel);
-                    
-                    const key = `${year}-${month}-${d}`;
-                    setCurrentMemo(calendarData[key]?.memo || "");
                     setIsPanelOpen(true);
                   }}
                   className={[
@@ -334,7 +326,7 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
                       : active
                         ? 'bg-[#649566] text-white font-bold shadow-md'
                         : todayMark
-                          ? 'bg-slate-100 text-[#649566] font-bold ring-[1.5px] ring-[#649566]/40'
+                          ? 'bg-white text-[#649566] font-bold ring-[2px] ring-[#649566]/30'
                           : 'bg-white text-slate-600 hover:bg-slate-50',
                   ].join(' ')}
                 >
@@ -346,5 +338,7 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
         </div>
       </div>
     </aside>
+  );
+}
   );
 }
