@@ -19,7 +19,7 @@ interface AccountSettingProps {
 }
 
 export default function AccountSetting({ onClose }: AccountSettingProps) {
-  const { t } = useLanguage();
+  const { t, formatYear, language } = useLanguage();
   const [initialData, setInitialData] = useState<AccountData | null>(null);
   const [data, setData] = useState<AccountData>({
     name: 'Seulgee-jjeossi',
@@ -35,6 +35,9 @@ export default function AccountSetting({ onClose }: AccountSettingProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const datePickerRef = useRef<HTMLDivElement>(null);
 
+  // ✨ viewDate 초기값을 data.dob 기반으로 설정하되, 안전하게 처리
+  const [viewDate, setViewDate] = useState(new Date('1987-05-15'));
+
   useEffect(() => {
     const saved = localStorage.getItem('seulgeumoney_account_data');
     let baseData = data;
@@ -42,6 +45,12 @@ export default function AccountSetting({ onClose }: AccountSettingProps) {
       try {
         baseData = JSON.parse(saved);
         setData(baseData);
+        if (baseData.dob) {
+          const d = new Date(baseData.dob);
+          if (!isNaN(d.getTime())) {
+            setViewDate(d);
+          }
+        }
       } catch (e) {
         console.error('Failed to parse account data', e);
       }
@@ -107,7 +116,6 @@ export default function AccountSetting({ onClose }: AccountSettingProps) {
     }
   };
 
-  const [viewDate, setViewDate] = useState(new Date(data.dob || '1987-05-15'));
   const daysInMonth = (y: number, m: number) => new Date(y, m + 1, 0).getDate();
   const firstDayOfMonth = (y: number, m: number) => new Date(y, m, 1).getDay();
 
@@ -135,21 +143,30 @@ export default function AccountSetting({ onClose }: AccountSettingProps) {
 
   if (!isLoaded) return null;
 
-  // 💡 [수정 포인트 1] 입력창 내부 위아래 여백(Padding)을 py-3에서 py-2.5로 살짝 줄임
   const inputStyles = "w-full rounded-2xl bg-[#f8fafb] px-5 py-2.5 text-[14px] font-semibold text-slate-700 outline-none ring-1 ring-black/5 border border-transparent focus:border-[#649566] focus:bg-white transition-all";
+
+  // ✨ 날짜 표시를 위한 헬퍼 (split 시 오류 방지)
+  const renderDob = () => {
+    if (!data.dob) return t("Select Date");
+    if (language === 'ko') {
+      const parts = data.dob.split('-');
+      if (parts.length === 3) {
+        return `${parts[0]}년 ${parseInt(parts[1])}월 ${parseInt(parts[2])}일`;
+      }
+      return data.dob;
+    }
+    return data.dob;
+  };
 
   return (
     <div className="flex min-h-[calc(100vh-140px)] w-full items-start justify-center px-6 pt-2 pb-10">
-      {/* 💡 [수정 포인트 2] 박스의 상하 여백을 p-10에서 px-10 py-7 로 변경하여 위아래 길이를 줄임 */}
       <div className="w-full max-w-[720px] rounded-[40px] border border-white bg-white/95 px-10 py-7 shadow-[0_20px_60px_rgba(0,0,0,0.12)] animate-fade-in flex flex-col relative z-10">
         
-        {/* 💡 [수정 포인트 3] 타이틀과 프로필 사진 사이 여백(mb-6)을 mb-4로 줄임 */}
         <div className="mb-4 flex flex-col gap-1">
           <h1 className="text-[26px] font-bold text-slate-800 tracking-tight">{t('Personal Info')}</h1>
           <p className="text-[13px] font-medium text-slate-400">{t('View and update your personal details')}</p>
         </div>
 
-        {/* 💡 [수정 포인트 4] 프로필 사진과 폼 사이의 여백(mb-8)을 mb-5로 줄임 */}
         <div className="mb-5 flex items-center gap-8">
           <div 
             className="group relative h-24 w-24 cursor-pointer overflow-hidden rounded-full border-4 border-white shadow-md ring-4 ring-slate-50 transition-all hover:ring-[#649566]/20"
@@ -167,7 +184,6 @@ export default function AccountSetting({ onClose }: AccountSettingProps) {
           </div>
         </div>
 
-        {/* 💡 [수정 포인트 5] 인풋 박스들 사이의 상하 간격(gap-y-4)을 gap-y-3으로 줄임 */}
         <div className="grid grid-cols-2 gap-x-8 gap-y-3">
           <div className="group flex flex-col gap-1.5">
             <label className="text-[12px] font-bold text-slate-500 ml-1 group-focus-within:text-[#649566] transition-colors">{t('Name')}</label>
@@ -188,11 +204,7 @@ export default function AccountSetting({ onClose }: AccountSettingProps) {
               onClick={() => setShowDatePicker(!showDatePicker)}
             >
               <div className={`${inputStyles} flex items-center ${showDatePicker ? 'border-[#649566] bg-white ring-1 ring-[#649566]' : ''}`}>
-                {data.dob ? (
-                  language === 'ko' 
-                    ? `${data.dob.split('-')[0]}년 ${parseInt(data.dob.split('-')[1])}월 ${parseInt(data.dob.split('-')[2])}일`
-                    : data.dob
-                ) : t("Select Date")}
+                {renderDob()}
               </div>
               <HiCalendarDays size={20} className={`absolute right-5 top-1/2 -translate-y-1/2 transition-colors ${showDatePicker ? 'text-[#649566]' : 'text-slate-400 group-hover:text-[#649566]'}`} />
             </div>
@@ -205,13 +217,15 @@ export default function AccountSetting({ onClose }: AccountSettingProps) {
                 <div className="flex items-center justify-between mb-4">
                   <button onClick={() => handleMonthChange(-1)} className="p-1 hover:bg-slate-100 rounded-full transition-colors"><HiChevronLeft size={20} className="text-[#649566]" /></button>
                   <div className="flex flex-col items-center">
-                    <span className="text-[14px] font-bold text-slate-800">{t(monthNames[currentMonth])}</span>
+                    <span className="text-[14px] font-bold text-slate-800">
+                      {language === 'ko' ? `${formatYear(currentYear)} ${t(monthNames[currentMonth])}` : t(monthNames[currentMonth])}
+                    </span>
                     <select 
                       value={currentYear} 
                       onChange={(e) => handleYearChange(parseInt(e.target.value))}
                       className="text-[12px] font-bold text-[#649566] bg-transparent outline-none cursor-pointer"
                     >
-                      {years.map(y => <option key={y} value={y}>{y}</option>)}
+                      {years.map(y => <option key={y} value={y}>{formatYear(y)}</option>)}
                     </select>
                   </div>
                   <button onClick={() => handleMonthChange(1)} className="p-1 hover:bg-slate-100 rounded-full transition-colors"><HiChevronRight size={20} className="text-[#649566]" /></button>
@@ -270,7 +284,6 @@ export default function AccountSetting({ onClose }: AccountSettingProps) {
           </div>
         </div>
 
-        {/* 💡 [수정 포인트 6] 하단 버튼 영역의 위쪽 여백(mt-8)과 선 안쪽 패딩(pt-6)을 mt-5, pt-4로 대폭 줄임 */}
         <div className="mt-5 flex justify-end gap-3 border-t border-slate-50 pt-4">
           <button onClick={handleCancel} className="rounded-xl px-6 py-2.5 text-[13px] font-bold text-slate-400 hover:bg-black/5 transition-colors cursor-pointer">{t('Cancel')}</button>
           <button onClick={handleSave} className="rounded-xl bg-[#649566] px-10 py-2.5 text-[13px] font-bold text-white shadow-xl shadow-[#649566]/20 hover:bg-[#527a54] hover:-translate-y-0.5 transition-all cursor-pointer">{t('Save Changes')}</button>
