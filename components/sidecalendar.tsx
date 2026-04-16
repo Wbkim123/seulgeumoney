@@ -106,7 +106,7 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
       
       setCurrentDate(new Date(y, m, 1));
       setSelected({ day: d, month: m, year: y });
-      setIsPanelOpen(true); // Auto-open panel for today
+      setIsPanelOpen(false); // Only the calendar appears, panel remains closed
     } else {
       setIsPanelOpen(false);
     }
