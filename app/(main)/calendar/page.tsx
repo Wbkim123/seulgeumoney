@@ -27,7 +27,7 @@ const getInitialCalendarData = (): Record<string, any> => {
 };
 
 export default function CalendarPage() {
-  const { t } = useLanguage();
+  const { t, formatYear, formatDay, language } = useLanguage();
   const realToday = new Date();
   const realYear = realToday.getFullYear();
   const realMonth = realToday.getMonth(); 
@@ -112,7 +112,7 @@ export default function CalendarPage() {
     if (selectedDay !== null) {
       setCalendarData((prev) => {
         const key = dayKey(selectedDay);
-        const currentDayData = prev[selectedDay] || { transactions: [], hasEdit: false, income: 0, expense: 0 };
+        const currentDayData = prev[key] || { transactions: [], hasEdit: false, income: 0, expense: 0 };
         return {
           ...prev,
           [key]: {
@@ -210,7 +210,7 @@ export default function CalendarPage() {
                 className="group flex min-w-[200px] cursor-pointer items-center justify-center gap-2 rounded-2xl px-4 py-2 transition-colors hover:bg-slate-50"
               >
                 <h2 className="text-[22px] sm:text-[24px] font-bold whitespace-nowrap group-hover:text-[#527a54] transition-colors">
-                  {t(monthNames[month])} {year}
+                  {language === 'ko' ? `${formatYear(year)} ${t(monthNames[month])}` : `${t(monthNames[month])} ${formatYear(year)}`}
                 </h2>
                 <svg 
                   width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" 
@@ -390,15 +390,6 @@ export default function CalendarPage() {
                 className="mt-3 w-full min-h-[100px] resize-none bg-transparent text-[14px] font-medium leading-relaxed text-slate-600 outline-none placeholder:text-slate-300"
               />
             </div>
-
-          </div>
-        </div>
-      )}
-
-    </>
-  );
-}
- </div>
 
           </div>
         </div>
