@@ -340,5 +340,3 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
     </aside>
   );
 }
-  );
-}
