@@ -55,7 +55,6 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
   });
 
   const [isPanelOpen, setIsPanelOpen] = useState(false);
-  
   const [calendarData, setCalendarData] = useState<Record<string, any>>({});
   const [isLoaded, setIsLoaded] = useState(false); 
 
@@ -85,7 +84,6 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
   useEffect(() => {
     loadData();
     setIsLoaded(true);
-
     window.addEventListener('calendarDataUpdated', loadData);
     return () => window.removeEventListener('calendarDataUpdated', loadData);
   }, []);
@@ -96,7 +94,7 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
     }
   }, [calendarData, isLoaded]);
 
-  // Sidebar Open/Close Logic
+  // Sidebar Open/Close Logic: Reset when opened
   useEffect(() => {
     if (isOpen) {
       const now = new Date();
@@ -106,7 +104,7 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
       
       setCurrentDate(new Date(y, m, 1));
       setSelected({ day: d, month: m, year: y });
-      setIsPanelOpen(false); // Only the calendar appears, panel remains closed
+      setIsPanelOpen(false); // Only calendar shown initially
     } else {
       setIsPanelOpen(false);
     }
@@ -137,13 +135,14 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
   };
 
   const cells: Array<{ key: string; day?: number }> = [];
-
   for (let i = 0; i < firstDayIndex; i++) cells.push({ key: `blank-start-${i}` });
   for (let d = 1; d <= lastDate; d++) cells.push({ key: `day-${d}`, day: d });
   while (cells.length % 7 !== 0) cells.push({ key: `blank-end-${cells.length}` });
 
   const activeKey = `${selected.year}-${selected.month}-${selected.day}`;
   const activeData = (calendarData && calendarData[activeKey]) || { income: 0, expense: 0, transactions: [], memo: "" };
+
+  if (!isLoaded) return null;
 
   return (
     <aside
@@ -167,7 +166,6 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
               <span>{formatDay(selected.day)}</span>
             </div>
 
-            
             <div className="flex items-start gap-3">
               <div className="flex flex-col items-end text-right">
                 <span className="text-[14px] font-bold text-[#649566]">
@@ -222,7 +220,6 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
             )}
           </div>
 
-          {/* ✨ 메모 영역: 읽기 전용으로 수정됨 */}
           <div className="mt-4 shrink-0 flex flex-col rounded-[24px] bg-white p-6 shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
             <h3 className="text-[16px] font-extrabold text-slate-900">{t('Memo')}</h3>
             <div className="mt-3 w-full min-h-[80px] sm:min-h-[100px] text-[14px] font-medium leading-relaxed text-slate-600 whitespace-pre-wrap overflow-y-auto">
@@ -232,16 +229,8 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
         </div>
       )}
 
-      {/* 🟢 2. 오른쪽: 기존 사이드 캘린더 영역 */}
-      <div
-        className="
-          w-[320px] shrink-0 rounded-2xl
-          bg-white
-          shadow-[0_18px_50px_rgba(0,0,0,0.14)]
-          ring-1 ring-black/10
-          overflow-hidden
-        "
-      >
+      {/* 🟢 2. 오른쪽: 사이드 캘린더 영역 */}
+      <div className="w-[320px] shrink-0 rounded-2xl bg-white shadow-[0_18px_50px_rgba(0,0,0,0.14)] ring-1 ring-black/10 overflow-hidden">
         <div className="flex items-center justify-end px-3 pt-3">
           <button
             onClick={onClose}
@@ -254,21 +243,13 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
 
         <div className="px-5 pb-3">
           <div className="flex items-center justify-between">
-            <button
-              onClick={prevMonth}
-              className="rounded-full p-2 text-[#649566] hover:bg-black/5 transition cursor-pointer"
-            >
+            <button onClick={prevMonth} className="rounded-full p-2 text-[#649566] hover:bg-black/5 transition cursor-pointer">
               <HiChevronLeft size={18} />
             </button>
-
             <div className="text-center text-[16px] tracking-tight text-[#649566] font-bold">
               {t(MONTH_NAMES[month])} {year}
             </div>
-
-            <button
-              onClick={nextMonth}
-              className="rounded-full p-2 text-[#649566] hover:bg-black/5 transition cursor-pointer"
-            >
+            <button onClick={nextMonth} className="rounded-full p-2 text-[#649566] hover:bg-black/5 transition cursor-pointer">
               <HiChevronRight size={18} />
             </button>
           </div>
@@ -277,9 +258,7 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
         <div className="px-5">
           <div className="grid grid-cols-7 gap-2 pb-2">
             {DAYS.map((d) => (
-              <div key={d} className="text-center text-[12px] font-bold text-slate-700/80">
-                {t(d)}
-              </div>
+              <div key={d} className="text-center text-[12px] font-bold text-slate-700/80">{t(d)}</div>
             ))}
           </div>
         </div>
@@ -288,17 +267,7 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
           <div className="grid grid-cols-7 gap-2">
             {cells.map((c) => {
               const d = c.day;
-
-              if (!d) {
-                return (
-                  <div
-                    key={c.key}
-                    className="h-9 w-9 rounded-lg bg-slate-50 ring-1 ring-black/5 flex items-center justify-center text-slate-300 text-sm"
-                  >
-                    -
-                  </div>
-                );
-              }
+              if (!d) return <div key={c.key} className="h-9 w-9 rounded-lg bg-slate-50 ring-1 ring-black/5 flex items-center justify-center text-slate-300 text-sm">-</div>;
 
               const sel: Selected = { day: d, month, year };
               const active = isSameDate(selected, sel);
@@ -311,16 +280,11 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
                   disabled={future}
                   onClick={() => {
                     if (future) return;
-                    setSelected(sel);
+                    setSelected({...sel}); // Force update even if same date
                     setIsPanelOpen(true);
                   }}
                   className={[
-                    'h-9 w-9 rounded-lg',
-                    'ring-1 ring-black/5',
-                    'flex items-center justify-center',
-                    'text-[14px] font-medium',
-                    'cursor-pointer',
-                    'transition',
+                    'h-9 w-9 rounded-lg ring-1 ring-black/5 flex items-center justify-center text-[14px] font-medium transition cursor-pointer',
                     future
                       ? 'bg-white text-slate-300 cursor-default'
                       : active
