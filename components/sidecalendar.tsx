@@ -73,10 +73,6 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
               setCalendarData(getInitialCalendarData());
             } else {
               setCalendarData(parsed);
-              const key = `${selected.year}-${selected.month}-${selected.day}`;
-              if (parsed[key]) {
-                setCurrentMemo(parsed[key].memo || "");
-              }
             }
           }
         } catch (error) {
@@ -93,7 +89,7 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
 
     window.addEventListener('calendarDataUpdated', loadData);
     return () => window.removeEventListener('calendarDataUpdated', loadData);
-  }, [selected.year, selected.month, selected.day]);
+  }, []); // Remove selected dependency to prevent redundant reloads
 
   useEffect(() => {
     if (isLoaded && calendarData && Object.keys(calendarData).length > 0) {
@@ -102,15 +98,23 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
   }, [calendarData, isLoaded]);
 
   useEffect(() => {
-    if (!isOpen) setIsPanelOpen(false);
-  }, [isOpen]);
-
-  useEffect(() => {
-    if (!isOpen) return;
-    const now = new Date();
-    setCurrentDate(new Date(now.getFullYear(), now.getMonth(), 1));
-    setSelected({ day: now.getDate(), month: now.getMonth(), year: now.getFullYear() });
-    setIsPanelOpen(false); 
+    if (!isOpen) {
+      setIsPanelOpen(false);
+    } else {
+      // Open reset logic
+      const now = new Date();
+      setCurrentDate(new Date(now.getFullYear(), now.getMonth(), 1));
+      const todaySel = { day: now.getDate(), month: now.getMonth(), year: now.getFullYear() };
+      setSelected(todaySel);
+      
+      // Load today's memo if exists
+      const key = `${todaySel.year}-${todaySel.month}-${todaySel.day}`;
+      if (calendarData[key]) {
+        setCurrentMemo(calendarData[key].memo || "");
+      } else {
+        setCurrentMemo("");
+      }
+    }
   }, [isOpen]);
 
   const year = currentDate.getFullYear();
@@ -132,9 +136,9 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
     d === today.getDate() && month === today.getMonth() && year === today.getFullYear();
 
   const isFuture = (d: number) => {
-    const t = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
-    const cand = new Date(year, month, d).getTime();
-    return cand > t;
+    const todayBase = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
+    const targetDate = new Date(year, month, d).getTime();
+    return targetDate > todayBase;
   };
 
   const cells: Array<{ key: string; day?: number }> = [];
@@ -329,8 +333,9 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
                       ? 'bg-white text-slate-300 cursor-default'
                       : active
                         ? 'bg-[#649566] text-white font-bold shadow-md'
-                        : 'bg-white text-slate-600 hover:bg-slate-50',
-                    !future && !active && todayMark ? 'ring-[1.5px] ring-[#649566]/40 text-[#649566] font-bold' : '',
+                        : todayMark
+                          ? 'bg-slate-100 text-[#649566] font-bold ring-[1.5px] ring-[#649566]/40'
+                          : 'bg-white text-slate-600 hover:bg-slate-50',
                   ].join(' ')}
                 >
                   {d}
