@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { HiXMark } from 'react-icons/hi2';
+import { useLanguage } from '../app/(main)/LanguageContext';
 
 interface AppSettingProps {
   isOpen: boolean;
@@ -19,6 +20,7 @@ const tabs = [
 
 export default function AppSetting({ isOpen, onClose }: AppSettingProps) {
   const [activeTab, setActiveTab] = useState('Language');
+  const { language, setLanguage, t } = useLanguage();
 
   if (!isOpen) return null;
 
@@ -38,7 +40,7 @@ export default function AppSetting({ isOpen, onClose }: AppSettingProps) {
         <div className="mb-6 flex items-center justify-between">
           <div className="flex-1" /> {/* 중앙 정렬을 위한 빈 공간 */}
           <h2 className="text-[22px] font-bold text-[#649566]">
-            App Setting
+            {t('App Setting')}
           </h2>
           <div className="flex-1 flex justify-end">
             <button
@@ -69,7 +71,7 @@ export default function AppSetting({ isOpen, onClose }: AppSettingProps) {
                         : 'text-slate-400 hover:bg-black/5 hover:text-[#649566] rounded-[14px]' // 호버 시 색상 변경 추가
                     }`}
                   >
-                    {tab}
+                    {t(tab)}
                   </button>
                 );
               })}
@@ -79,12 +81,41 @@ export default function AppSetting({ isOpen, onClose }: AppSettingProps) {
           {/* 우측 컨텐츠 영역 (선택된 탭에 따라 내용이 바뀜) */}
           <main className="flex-1 p-8 overflow-y-auto">
             <h3 className="text-[20px] font-bold text-slate-800 mb-6">
-              {activeTab} Settings
+              {t(activeTab)} {t('Settings')}
             </h3>
             
             <div className="text-[14px] text-slate-500">
-              {/* 여기에 나중에 각 탭에 맞는 설정 폼들을 넣어주시면 됩니다. */}
-              {activeTab} related settings will be displayed here.
+              {activeTab === 'Language' ? (
+                <div className="flex flex-col gap-6">
+                   <p className="text-slate-600 font-medium">{t('Select your preferred language')}</p>
+                   <div className="flex gap-4">
+                      <button 
+                        onClick={() => setLanguage('ko')}
+                        className={`flex-1 py-4 px-6 rounded-2xl border-2 transition-all duration-200 font-bold text-[16px] cursor-pointer ${
+                          language === 'ko' 
+                          ? 'border-[#649566] bg-[#649566]/5 text-[#649566]' 
+                          : 'border-slate-100 bg-slate-50 text-slate-400 hover:border-slate-200'
+                        }`}
+                      >
+                        {t('Korean')}
+                      </button>
+                      <button 
+                        onClick={() => setLanguage('en')}
+                        className={`flex-1 py-4 px-6 rounded-2xl border-2 transition-all duration-200 font-bold text-[16px] cursor-pointer ${
+                          language === 'en' 
+                          ? 'border-[#649566] bg-[#649566]/5 text-[#649566]' 
+                          : 'border-slate-100 bg-slate-50 text-slate-400 hover:border-slate-200'
+                        }`}
+                      >
+                        {t('English')}
+                      </button>
+                   </div>
+                </div>
+              ) : (
+                <div>
+                  {t(activeTab)} {t('related settings will be displayed here.')}
+                </div>
+              )}
             </div>
           </main>
           

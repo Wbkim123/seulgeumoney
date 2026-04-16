@@ -2,6 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from 'react';
 import { HiChevronLeft, HiChevronRight, HiXMark } from 'react-icons/hi2';
+import { useLanguage } from '../app/(main)/LanguageContext';
 
 const dotColors = {
   orange: 'bg-[#ff9f43]',
@@ -44,6 +45,7 @@ function isSameDate(a: Selected, b: Selected) {
 }
 
 export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
+  const { t } = useLanguage();
   const today = useMemo(() => new Date(), []);
   const [currentDate, setCurrentDate] = useState<Date>(today);
   const [selected, setSelected] = useState<Selected>({
@@ -156,7 +158,7 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
           
           <div className="mb-6 flex items-start justify-between shrink-0">
             <div className="text-[24px] font-bold text-[#649566] flex gap-2">
-              <span>{MONTH_NAMES[selected.month]}</span>
+              <span>{t(MONTH_NAMES[selected.month])}</span>
               <span>{selected.day}</span>
             </div>
             
@@ -209,16 +211,16 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
               ))
             ) : (
               <div className="flex h-20 items-center justify-center text-sm font-medium text-slate-400">
-                No transactions for this day.
+                {t('No transactions for this day.')}
               </div>
             )}
           </div>
 
           {/* ✨ 메모 영역: 읽기 전용으로 수정됨 */}
           <div className="mt-4 shrink-0 flex flex-col rounded-[24px] bg-white p-6 shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
-            <h3 className="text-[16px] font-extrabold text-slate-900">Memo</h3>
+            <h3 className="text-[16px] font-extrabold text-slate-900">{t('Memo')}</h3>
             <div className="mt-3 w-full min-h-[80px] sm:min-h-[100px] text-[14px] font-medium leading-relaxed text-slate-600 whitespace-pre-wrap overflow-y-auto">
-              {currentMemo ? currentMemo : <span className="text-slate-300">No memo available.</span>}
+              {currentMemo ? currentMemo : <span className="text-slate-300">{t('No memo available.')}</span>}
             </div>
           </div>
         </div>
@@ -254,7 +256,7 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
             </button>
 
             <div className="text-center text-[16px] tracking-tight text-[#649566] font-bold">
-              {MONTH_NAMES[month]} {year}
+              {t(MONTH_NAMES[month])} {year}
             </div>
 
             <button
@@ -270,7 +272,7 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
           <div className="grid grid-cols-7 gap-2 pb-2">
             {DAYS.map((d) => (
               <div key={d} className="text-center text-[12px] font-bold text-slate-700/80">
-                {d}
+                {t(d)}
               </div>
             ))}
           </div>

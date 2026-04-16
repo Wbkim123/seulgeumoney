@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import {
   HiXMark,
@@ -14,6 +13,7 @@ import {
 
 // ✨ 방금 만든 AppSetting 컴포넌트를 불러옵니다.
 import AppSetting from './AppSetting';
+import { useLanguage } from '../app/(main)/LanguageContext';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -30,6 +30,7 @@ const navItems = [
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   // ✨ App Setting 창 상태 관리
   const [isAppSettingOpen, setIsAppSettingOpen] = useState(false);
+  const { t } = useLanguage();
 
   return (
     <>
@@ -96,7 +97,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                       "
                     >
                       <Icon size={18} className="text-[#649566]" />
-                      <span className="text-[14px] tracking-tight">{item.label}</span>
+                      <span className="text-[14px] tracking-tight">{t(item.label)}</span>
                     </Link>
 
                     <div className="mx-4 h-px bg-black/10" />
