@@ -31,7 +31,7 @@ const translations = {
     
     // Sidebar & Navigation
     'Spending': '지출 내역',
-    'Report': '보고서',
+    'Report': '리포트',
     'Goals': '목표',
     'Calendar': '캘린더',
     
