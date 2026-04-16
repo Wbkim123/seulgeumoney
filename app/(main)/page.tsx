@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useGoals } from './GoalsContext';
+import { useLanguage } from './LanguageContext';
 
 type GoalPillProps = {
   label: string;
@@ -38,6 +39,7 @@ function GoalPill({ label, valueText, percent = 0, tone = 'normal', onClick }: G
 }
 
 function Donut({ label, amount }: { label: string; amount: string }) {
+  const { t } = useLanguage();
   return (
     <div className="flex flex-col items-center justify-center">
       <div className="relative h-60 w-60 rounded-full bg-gradient-to-b from-[#cfe6c9] via-[#98c195] to-[#6ea96b] shadow-[0_24px_55px_rgba(0,0,0,0.20)]">
@@ -45,7 +47,7 @@ function Donut({ label, amount }: { label: string; amount: string }) {
         <div className="absolute inset-0 rounded-full shadow-[inset_0_10px_25px_rgba(255,255,255,0.35)]" />
       </div>
       <div className="mt-7 flex items-center gap-3 text-slate-500">
-        <span className="text-[15px] font-semibold">{label}</span>
+        <span className="text-[15px] font-semibold">{t(label)}</span>
         <span className="text-2xl font-extrabold text-slate-600">{amount}</span>
       </div>
     </div>
@@ -54,6 +56,7 @@ function Donut({ label, amount }: { label: string; amount: string }) {
 
 const ColumnHeaderSelector = ({ value, onChange }: { value: string, onChange: (val: string) => void }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const { t } = useLanguage();
   const options = ['Daily', 'Monthly', 'Yearly'];
   
   return (
@@ -62,7 +65,7 @@ const ColumnHeaderSelector = ({ value, onChange }: { value: string, onChange: (v
         className="flex cursor-pointer items-center gap-1.5 transition-opacity hover:opacity-70"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <span className="text-[15px] font-semibold text-slate-400">{value}</span>
+        <span className="text-[15px] font-semibold text-slate-400">{t(value)}</span>
         <svg 
           className={`text-slate-400 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} 
           width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
@@ -86,7 +89,7 @@ const ColumnHeaderSelector = ({ value, onChange }: { value: string, onChange: (v
                   }}
                 >
                   <span className={`text-[14px] ${value === opt ? 'font-bold text-[#649566]' : 'font-medium text-slate-600'}`}>
-                    {opt}
+                    {t(opt)}
                   </span>
                 </div>
               ))}
@@ -100,6 +103,7 @@ const ColumnHeaderSelector = ({ value, onChange }: { value: string, onChange: (v
 
 export default function DashboardPage() {
   const { dailyGoals, monthlyGoals, yearlyGoals } = useGoals();
+  const { t } = useLanguage();
 
   const [leftCategory, setLeftCategory] = useState<'Daily' | 'Monthly' | 'Yearly'>('Daily');
   const [rightCategory, setRightCategory] = useState<'Daily' | 'Monthly' | 'Yearly'>('Monthly');
@@ -122,7 +126,7 @@ export default function DashboardPage() {
         
         {/* 🟢 Goals 섹션 */}
         <section className="flex aspect-[50/51] flex-col rounded-[32px] bg-[#f8f9fc] p-8 shadow-[0_10px_40px_rgba(0,0,0,0.04)] border border-white">
-          <div className="text-[22px] font-semibold text-[#649566]">Goals</div>
+          <div className="text-[22px] font-semibold text-[#649566]">{t('Goals')}</div>
           
           <div className="mt-6 grid grid-cols-2 gap-6 text-center">
             <ColumnHeaderSelector value={leftCategory} onChange={(val: any) => setLeftCategory(val)} />
@@ -150,7 +154,7 @@ export default function DashboardPage() {
                   ))
                 ) : (
                   <div className="mt-10 text-center text-sm font-medium text-slate-300">
-                    No {leftCategory.toLowerCase()} goals
+                    {t(`No ${leftCategory.toLowerCase()} goals`)}
                   </div>
                 )}
               </div>
@@ -173,7 +177,7 @@ export default function DashboardPage() {
                   ))
                 ) : (
                   <div className="mt-10 text-center text-sm font-medium text-slate-300">
-                    No {rightCategory.toLowerCase()} goals
+                    {t(`No ${rightCategory.toLowerCase()} goals`)}
                   </div>
                 )}
               </div>
@@ -187,7 +191,7 @@ export default function DashboardPage() {
         {/* 🟢 Total Spending 섹션 */}
         <section className="flex aspect-[50/51] flex-col rounded-[32px] bg-[#f8f9fc] p-8 shadow-[0_10px_40px_rgba(0,0,0,0.04)] border border-white">
           <div className="flex items-start justify-between">
-            <div className="text-[22px] font-semibold text-[#649566]">Total Spending</div>
+            <div className="text-[22px] font-semibold text-[#649566]">{t('Total Spending')}</div>
             <div className="text-[28px] font-extrabold text-slate-900">$ 1,082</div>
           </div>
           <div className="flex flex-1 items-center justify-center">
@@ -216,7 +220,7 @@ export default function DashboardPage() {
             </button>
 
             <h2 className="mb-8 text-center text-[22px] font-semibold text-[#649566]">
-              Goal Details
+              {t('Goal Details')}
             </h2>
 
             {/* 상세 정보 리스트 (input 대신 div를 사용해 읽기 전용으로 만듦) */}
@@ -224,7 +228,7 @@ export default function DashboardPage() {
               
               {/* Name */}
               <div className="flex flex-col gap-1.5">
-                <label className="text-sm font-medium text-[#649566]">Name</label>
+                <label className="text-sm font-medium text-[#649566]">{t('Name')}</label>
                 <div className="w-full rounded-2xl bg-white px-5 py-3.5 text-sm font-medium text-slate-700 shadow-sm ring-1 ring-black/5">
                   {selectedGoal.title}
                 </div>
@@ -233,13 +237,13 @@ export default function DashboardPage() {
               {/* Spent / Target (나란히 배치) */}
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-sm font-medium text-[#649566]">Spent</label>
+                  <label className="text-sm font-medium text-[#649566]">{t('Spent')}</label>
                   <div className="w-full rounded-2xl bg-white px-5 py-3.5 text-sm font-medium text-slate-700 shadow-sm ring-1 ring-black/5">
                     $ {selectedGoal.current}
                   </div>
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-sm font-medium text-[#649566]">Target</label>
+                  <label className="text-sm font-medium text-[#649566]">{t('Target')}</label>
                   <div className="w-full rounded-2xl bg-white px-5 py-3.5 text-sm font-medium text-slate-700 shadow-sm ring-1 ring-black/5">
                     $ {selectedGoal.target}
                   </div>
@@ -248,7 +252,7 @@ export default function DashboardPage() {
 
               {/* Category */}
               <div className="flex flex-col gap-1.5">
-                <label className="text-sm font-medium text-[#649566]">Categories</label>
+                <label className="text-sm font-medium text-[#649566]">{t('Categories')}</label>
                 <div className="w-full rounded-2xl bg-white px-5 py-3.5 text-sm font-medium text-slate-700 shadow-sm ring-1 ring-black/5">
                   {selectedGoal.category || '-'}
                 </div>
@@ -256,7 +260,7 @@ export default function DashboardPage() {
 
               {/* Subcategory */}
               <div className="flex flex-col gap-1.5">
-                <label className="text-sm font-medium text-[#649566]">Subcategories</label>
+                <label className="text-sm font-medium text-[#649566]">{t('Subcategories')}</label>
                 <div className="w-full rounded-2xl bg-white px-5 py-3.5 text-sm font-medium text-slate-700 shadow-sm ring-1 ring-black/5">
                   {selectedGoal.subcategory || '-'}
                 </div>

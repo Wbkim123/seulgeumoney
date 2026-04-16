@@ -2,8 +2,10 @@
 
 import { useState, useMemo } from 'react';
 import Image from 'next/image';
+import { useLanguage } from '../LanguageContext';
 
 export default function SpendingPage() {
+  const { t } = useLanguage();
   const [selectedType, setSelectedType] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedBank, setSelectedBank] = useState<string | null>(null);
@@ -14,10 +16,10 @@ export default function SpendingPage() {
   const realMonth = today.getMonth(); // 0(1월) ~ 11(12월)
   const realDate = today.getDate();   // 오늘 며칠인지 (예: 4일)
 
-  const months = [
+  const months = useMemo(() => [
     'January', 'February', 'March', 'April', 'May', 'June', 
     'July', 'August', 'September', 'October', 'November', 'December'
-  ];
+  ], []);
   
   // ✅ 2. 처음 띄울 때 '오늘이 속한 연도와 월'을 기본값으로 설정!
   const [currentYear, setCurrentYear] = useState(realYear);
@@ -76,11 +78,12 @@ export default function SpendingPage() {
       grouped.push({
         date: dateString,
         items: itemsForDay,
+        translatedDate: `${t(months[currentMonthIndex])} ${day}, ${currentYear}`
       });
     }
     
     return grouped;
-  }, [currentMonthIndex, currentYear, realYear, realMonth, realDate, months, allTransactions]);
+  }, [currentMonthIndex, currentYear, realYear, realMonth, realDate, months, allTransactions, t]);
 
   // 버튼 생성을 위한 배열 맵핑
   const accountOptions = [
@@ -108,7 +111,7 @@ export default function SpendingPage() {
             )}
 
             <h2 className="mb-10 text-center text-[22px] font-semibold text-[#649566]">
-              Type of Account
+              {t('Type of Account')}
             </h2>
 
             <div className="flex flex-col gap-5">
@@ -125,7 +128,7 @@ export default function SpendingPage() {
                         : 'text-slate-400 ring-1 ring-black/5 hover:-translate-y-1 hover:shadow-lg hover:text-[#649566]'
                     }`}
                   >
-                    {account.label}
+                    {t(account.label)}
                   </button>
                 );
               })}
@@ -149,9 +152,9 @@ export default function SpendingPage() {
               )}
 
               <h2 className="mb-10 text-center text-[22px] font-semibold text-[#649566]">
-                {selectedType === 'checking' && 'Checking Account'}
-                {selectedType === 'savings' && 'Savings Account'}
-                {selectedType === 'credit' && 'Credit Balance'}
+                {selectedType === 'checking' && t('Checking Account')}
+                {selectedType === 'savings' && t('Savings Account')}
+                {selectedType === 'credit' && t('Credit Balance')}
               </h2>
 
               {/* 선택된 계좌별 내용 */}
@@ -191,7 +194,7 @@ export default function SpendingPage() {
 
               {selectedType !== 'checking' && (
                 <div className="flex h-32 items-center justify-center text-sm font-medium text-slate-300">
-                  No account details
+                  {t('No account details')}
                 </div>
               )}
             </div>
@@ -223,7 +226,7 @@ export default function SpendingPage() {
 
             <div className="mb-6 text-center">
               <h2 className="text-2xl font-semibold text-[#649566]">
-                Transaction
+                {t('Transaction')}
               </h2>
               {selectedBank && (
                 <p className="mt-1 text-sm font-medium text-slate-400">
@@ -235,7 +238,7 @@ export default function SpendingPage() {
             <div className="relative mb-6">
               <input 
                 type="text" 
-                placeholder="Search" 
+                placeholder={t('Search')} 
                 className="w-full rounded-full bg-white px-5 py-3 pr-12 text-sm text-slate-700 placeholder:text-slate-400 shadow-[0_10px_25px_rgba(0,0,0,0.10)] outline-none ring-1 ring-black/5 focus:ring-2 focus:ring-[#98c195]/50"
               />
               <button
@@ -262,7 +265,7 @@ export default function SpendingPage() {
                   </svg>
                 </button>
                 
-                <span>{months[currentMonthIndex]} {currentYear}</span>
+                <span>{t(months[currentMonthIndex])} {currentYear}</span>
                 
                 <button 
                   onClick={handleNextMonth}
@@ -282,7 +285,7 @@ export default function SpendingPage() {
                   <div key={groupIdx}>
                     
                     <div className="sticky top-0 z-10 border-b border-t border-slate-100 bg-slate-50/95 backdrop-blur-sm px-5 py-1.5 text-[12px] font-bold text-slate-400">
-                      {group.date}
+                      {group.translatedDate}
                     </div>
 
                     {group.items.length > 0 ? (
@@ -313,7 +316,7 @@ export default function SpendingPage() {
                       </div>
                     ) : (
                       <div className="py-3 text-center text-[12px] font-medium text-slate-300">
-                        No transactions
+                        {t('No transactions')}
                       </div>
                     )}
 

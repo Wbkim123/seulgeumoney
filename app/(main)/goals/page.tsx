@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { useGoals } from '../GoalsContext'; // ✨ 공용 저장소 불러오기
+import { useLanguage } from '../LanguageContext';
 
 // ✨ 커스텀 드롭다운 컴포넌트
 const CustomSelect = ({ 
@@ -11,6 +12,7 @@ const CustomSelect = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [newItem, setNewItem] = useState('');
+  const { t } = useLanguage();
 
   return (
     <div className="relative">
@@ -20,7 +22,7 @@ const CustomSelect = ({
         } ${isOpen ? 'ring-2 ring-[#98c195]/50' : ''}`}
         onClick={() => setIsOpen(!isOpen)}
       >
-        <span className="truncate">{value || placeholder}</span>
+        <span className="truncate">{value || t(placeholder)}</span>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`transition-transform duration-300 text-slate-400 ${isOpen ? 'rotate-180' : ''}`}>
           <polyline points="6 9 12 15 18 9"></polyline>
         </svg>
@@ -37,7 +39,7 @@ const CustomSelect = ({
                   className="group flex cursor-pointer items-center justify-between px-5 py-3 transition-colors hover:bg-slate-50"
                   onClick={() => { onChange(opt); setIsOpen(false); }}
                 >
-                  <span className={`text-sm ${value === opt ? 'font-bold text-[#649566]' : 'font-medium text-slate-700'}`}>{opt}</span>
+                  <span className={`text-sm ${value === opt ? 'font-bold text-[#649566]' : 'font-medium text-slate-700'}`}>{t(opt)}</span>
                   <button
                     onClick={(e) => { e.stopPropagation(); onDeleteOption(opt); }}
                     className="text-slate-300 opacity-0 transition-all hover:text-red-500 group-hover:opacity-100"
@@ -51,7 +53,7 @@ const CustomSelect = ({
                 </div>
               ))}
               {options.length === 0 && (
-                <div className="px-5 py-3 text-sm text-slate-400">No options added yet.</div>
+                <div className="px-5 py-3 text-sm text-slate-400">{t('No options added yet.')}</div>
               )}
             </div>
             
@@ -61,7 +63,7 @@ const CustomSelect = ({
                   type="text"
                   value={newItem}
                   onChange={(e) => setNewItem(e.target.value)}
-                  placeholder="Add new..."
+                  placeholder={t('Add new...')}
                   className="flex-1 rounded-xl bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none ring-1 ring-black/5 focus:ring-2 focus:ring-[#98c195]/50"
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' && newItem.trim()) {
@@ -80,7 +82,7 @@ const CustomSelect = ({
                   }}
                   className="cursor-pointer rounded-xl bg-[#649566] px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#527a54]"
                 >
-                  Add
+                  {t('Add')}
                 </button>
               </div>
             </div>
@@ -105,6 +107,7 @@ const GoalColumn = ({
   onEditClick: (goal: any) => void; 
   onReorder: (newGoals: any[]) => void;
 }) => {
+  const { t } = useLanguage();
   const dragItem = useRef<number | null>(null);
   const dragOverItem = useRef<number | null>(null);
 
@@ -122,7 +125,7 @@ const GoalColumn = ({
   return (
     <div className="relative flex w-full flex-1 flex-col overflow-hidden rounded-[40px] bg-[#f8f9fc] px-6 pt-8 shadow-[0_8px_30px_rgba(0,0,0,0.03)] ring-1 ring-black/[0.02]">
       <div className="mb-7 flex items-center justify-between px-3">
-        <h2 className="text-[18px] font-medium text-[#739e75]">{title}</h2>
+        <h2 className="text-[18px] font-medium text-[#739e75]">{t(title)}</h2>
         <button onClick={onAddClick} className="flex h-6 w-6 cursor-pointer items-center justify-center text-2xl font-light text-slate-400 transition-colors hover:text-[#649566]">+</button>
       </div>
       
@@ -177,6 +180,7 @@ export default function GoalsPage() {
     monthlyGoals, setMonthlyGoals,
     yearlyGoals, setYearlyGoals
   } = useGoals();
+  const { t } = useLanguage();
 
   const [categoryList, setCategoryList] = useState(['Food', 'Transport', 'Shopping']);
   const [subCategoryList, setSubCategoryList] = useState(['Coffee', 'Groceries', 'Taxi']);
@@ -264,7 +268,7 @@ export default function GoalsPage() {
       if (!isModalOpen) return;
       if (e.key === 'Enter') {
         const target = e.target as HTMLElement;
-        if (target?.tagName === 'INPUT' && (target as HTMLInputElement).placeholder === 'Add new...') return;
+        if (target?.tagName === 'INPUT' && (target as HTMLInputElement).placeholder === t('Add new...')) return;
         if (target?.tagName === 'BUTTON') return;
         if (isFormValid) {
           e.preventDefault();
@@ -299,14 +303,14 @@ export default function GoalsPage() {
             </button>
 
             <h2 className="mb-8 text-center text-[22px] font-semibold text-[#649566]">
-              {editingGoalId ? 'Edit Your Goal' : 'Add Your Goals'}
+              {editingGoalId ? t('Edit Your Goal') : t('Add Your Goals')}
             </h2>
 
             <div className="flex flex-col gap-5">
               <div className="flex flex-col gap-1.5">
-                <label className="text-sm font-medium text-[#649566]">Name</label>
+                <label className="text-sm font-medium text-[#649566]">{t('Name')}</label>
                 <input 
-                  type="text" value={goalName} onChange={(e) => setGoalName(e.target.value)} placeholder="Enter the name" 
+                  type="text" value={goalName} onChange={(e) => setGoalName(e.target.value)} placeholder={t('Enter the name')} 
                   className="w-full rounded-2xl bg-white px-5 py-3.5 text-sm text-slate-700 placeholder:text-slate-300 shadow-sm outline-none ring-1 ring-black/5 focus:ring-2 focus:ring-[#98c195]/50"
                 />
               </div>
@@ -315,7 +319,7 @@ export default function GoalsPage() {
               <div className="grid grid-cols-2 gap-4">
                 {/* 1. 사용한 금액 (Spent Amount) */}
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-sm font-medium text-[#649566]">Spent</label>
+                  <label className="text-sm font-medium text-[#649566]">{t('Spent')}</label>
                   <div className="relative">
                     <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-medium text-slate-400">$</span>
                     <input 
@@ -336,7 +340,7 @@ export default function GoalsPage() {
 
                 {/* 2. 목표 금액 (Target Amount) */}
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-sm font-medium text-[#649566]">Target</label>
+                  <label className="text-sm font-medium text-[#649566]">{t('Target')}</label>
                   <div className="relative">
                     <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-medium text-slate-400">$</span>
                     <input 
@@ -365,7 +369,7 @@ export default function GoalsPage() {
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className="text-sm font-medium text-[#649566]">Categories</label>
+                <label className="text-sm font-medium text-[#649566]">{t('Categories')}</label>
                 <CustomSelect
                   placeholder="Select the category" options={categoryList} value={goalCategory} onChange={setGoalCategory}
                   onAddOption={(newVal) => { if (!categoryList.includes(newVal)) setCategoryList([...categoryList, newVal]); }}
@@ -374,7 +378,7 @@ export default function GoalsPage() {
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className="text-sm font-medium text-[#649566]">Subcategories</label>
+                <label className="text-sm font-medium text-[#649566]">{t('Subcategories')}</label>
                 <CustomSelect
                   placeholder="Select the subcategory" options={subCategoryList} value={goalSubcategory} onChange={setGoalSubcategory}
                   onAddOption={(newVal) => { if (!subCategoryList.includes(newVal)) setSubCategoryList([...subCategoryList, newVal]); }}
@@ -385,7 +389,7 @@ export default function GoalsPage() {
               <div className="mt-4 flex gap-3">
                 {editingGoalId && (
                   <button onClick={handleDeleteGoal} className="flex-1 cursor-pointer rounded-2xl bg-red-50 py-4 text-[15px] font-semibold text-red-500 shadow-sm transition-all hover:-translate-y-1 hover:bg-red-100">
-                    Delete
+                    {t('Delete')}
                   </button>
                 )}
                 <button 
@@ -394,7 +398,7 @@ export default function GoalsPage() {
                     isFormValid ? 'cursor-pointer bg-[#649566] shadow-lg hover:-translate-y-1 hover:bg-[#527a54]' : 'cursor-not-allowed bg-slate-300 opacity-70'
                   }`}
                 >
-                  {editingGoalId ? 'Save Changes' : 'Add Goal'}
+                  {editingGoalId ? t('Save Changes') : t('Add Goal')}
                 </button>
               </div>
             </div>

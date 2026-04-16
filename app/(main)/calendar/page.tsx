@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useLanguage } from '../LanguageContext';
 
 const dotColors = {
   orange: 'bg-[#ff9f43]',
@@ -26,6 +27,7 @@ const getInitialCalendarData = (): Record<string, any> => {
 };
 
 export default function CalendarPage() {
+  const { t } = useLanguage();
   const realToday = new Date();
   const realYear = realToday.getFullYear();
   const realMonth = realToday.getMonth(); 
@@ -208,7 +210,7 @@ export default function CalendarPage() {
                 className="group flex min-w-[200px] cursor-pointer items-center justify-center gap-2 rounded-2xl px-4 py-2 transition-colors hover:bg-slate-50"
               >
                 <h2 className="text-[22px] sm:text-[24px] font-bold whitespace-nowrap group-hover:text-[#527a54] transition-colors">
-                  {monthNames[month]} {year}
+                  {t(monthNames[month])} {year}
                 </h2>
                 <svg 
                   width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" 
@@ -242,7 +244,7 @@ export default function CalendarPage() {
                                   : 'text-slate-600 hover:bg-slate-50 cursor-pointer'
                             }`}
                           >
-                            {m}
+                            {t(m)}
                           </button>
                         );
                       })}
@@ -290,7 +292,7 @@ export default function CalendarPage() {
           <div className="grid grid-cols-7 gap-2 sm:gap-4 mb-3">
             {dayNames.map(day => (
               <div key={day} className="text-center text-[13px] sm:text-[14px] font-bold text-slate-800">
-                {day}
+                {t(day)}
               </div>
             ))}
           </div>
@@ -315,7 +317,7 @@ export default function CalendarPage() {
             {/* 고정되는 헤더 (날짜 및 금액) */}
             <div className="mb-6 flex items-start justify-between shrink-0">
               <div className="text-[26px] font-bold text-[#649566] flex gap-2">
-                <span>{monthNames[month]}</span>
+                <span>{t(monthNames[month])}</span>
                 <span>{selectedDay}</span>
               </div>
               
@@ -373,18 +375,18 @@ export default function CalendarPage() {
                 ))
               ) : (
                 <div className="flex h-20 items-center justify-center text-sm font-medium text-slate-400">
-                  No transactions for this day.
+                  {t('No transactions for this day.')}
                 </div>
               )}
             </div>
 
             {/* ✨ 스크롤 영역 밖으로 빼내어 모달창 하단에 항상 고정되는 Memo 영역 (shrink-0 적용) */}
             <div className="mt-4 shrink-0 flex flex-col rounded-[24px] bg-white p-6 shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
-              <h3 className="text-[16px] font-extrabold text-slate-900">Memo</h3>
+              <h3 className="text-[16px] font-extrabold text-slate-900">{t('Memo')}</h3>
               <textarea
                 value={currentMemo}
                 onChange={handleMemoChange} 
-                placeholder="Add memo.."
+                placeholder={t('Add memo..')}
                 className="mt-3 w-full min-h-[100px] resize-none bg-transparent text-[14px] font-medium leading-relaxed text-slate-600 outline-none placeholder:text-slate-300"
               />
             </div>
