@@ -158,7 +158,7 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
       
       {/* 🟢 1. 왼쪽: 모달 패널 영역 */}
       {isPanelOpen && (
-        <div className="flex w-[380px] sm:w-[420px] max-h-[85vh] flex-col rounded-[32px] bg-[#eceef0] p-6 shadow-2xl shrink-0 animate-fade-in sm:p-8">
+        <div className="flex w-[380px] sm:w-[420px] max-h-[85vh] flex-col rounded-[32px] bg-[#eceef0] p-6 shadow-[0_25px_70px_-15px_rgba(0,0,0,0.15)] border border-white/50 shrink-0 animate-fade-in sm:p-8">
           
           <div className="mb-6 flex items-start justify-between shrink-0">
             <div className="text-[24px] font-bold text-[#649566] flex gap-2">
