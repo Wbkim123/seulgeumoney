@@ -29,6 +29,16 @@ const translations = {
     'Settings': '설정',
     'related settings will be displayed here.': '관련 설정이 여기에 표시됩니다.',
     
+    // Notification Settings
+    'Daily Spending Reminders': '일일 지출 알림',
+    'Budget Alerts': '예산 경고',
+    'Goal Achievements': '목표 달성 알림',
+    'Marketing & Promotions': '마케팅 및 프로모션',
+    'Receive notifications for your daily activities': '일일 활동에 대한 알림을 받습니다',
+    'Get notified when you are close to your budget': '예산에 가까워지면 알림을 받습니다',
+    'Celebrate when you reach your financial goals': '재정 목표를 달성하면 축하 알림을 받습니다',
+    'Special offers and new feature updates': '특별 혜택 및 새로운 기능 업데이트',
+    
     // Sidebar & Navigation
     'Spending': '지출 내역',
     'Report': '리포트',
@@ -127,6 +137,16 @@ const translations = {
     'English': 'English',
     'Settings': 'Settings',
     'related settings will be displayed here.': 'related settings will be displayed here.',
+    
+    // Notification Settings
+    'Daily Spending Reminders': 'Daily Spending Reminders',
+    'Budget Alerts': 'Budget Alerts',
+    'Goal Achievements': 'Goal Achievements',
+    'Marketing & Promotions': 'Marketing & Promotions',
+    'Receive notifications for your daily activities': 'Receive notifications for your daily activities',
+    'Get notified when you are close to your budget': 'Get notified when you are close to your budget',
+    'Celebrate when you reach your financial goals': 'Celebrate when you reach your financial goals',
+    'Special offers and new feature updates': 'Special offers and new feature updates',
     
     // Sidebar & Navigation
     'Spending': 'Spending',

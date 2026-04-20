@@ -22,7 +22,55 @@ export default function AppSetting({ isOpen, onClose }: AppSettingProps) {
   const [activeTab, setActiveTab] = useState('Language');
   const { language, setLanguage, t } = useLanguage();
 
+  // Notification states
+  const [notifications, setNotifications] = useState({
+    dailyReminders: true,
+    budgetAlerts: true,
+    goalAchievements: true,
+    marketing: false,
+  });
+
+  // Load notification settings from localStorage
+  React.useEffect(() => {
+    const saved = localStorage.getItem('seulgeumoney_notifications');
+    if (saved) {
+      try {
+        setNotifications(JSON.parse(saved));
+      } catch (e) {
+        console.error('Failed to parse notification settings', e);
+      }
+    }
+  }, []);
+
+  // Save notification settings to localStorage
+  const updateNotification = (key: keyof typeof notifications) => {
+    const newSettings = { ...notifications, [key]: !notifications[key] };
+    setNotifications(newSettings);
+    localStorage.setItem('seulgeumoney_notifications', JSON.stringify(newSettings));
+  };
+
   if (!isOpen) return null;
+
+  const NotificationToggle = ({ label, desc, enabled, onToggle }: { label: string, desc: string, enabled: boolean, onToggle: () => void }) => (
+    <div className="flex items-center justify-between py-4 border-b border-slate-50 last:border-0">
+      <div className="flex flex-col gap-0.5">
+        <span className="text-[15px] font-bold text-slate-800">{t(label)}</span>
+        <span className="text-[12px] font-medium text-slate-400">{t(desc)}</span>
+      </div>
+      <button 
+        onClick={onToggle}
+        className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+          enabled ? 'bg-[#649566]' : 'bg-slate-200'
+        }`}
+      >
+        <span
+          className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+            enabled ? 'translate-x-5' : 'translate-x-0'
+          }`}
+        />
+      </button>
+    </div>
+  );
 
   return (
     // ✨ 화면 전체를 덮는 어두운 배경 오버레이 (z-index를 사이드바보다 높게 설정)
@@ -110,6 +158,33 @@ export default function AppSetting({ isOpen, onClose }: AppSettingProps) {
                         {t('English')}
                       </button>
                    </div>
+                </div>
+              ) : activeTab === 'Notification' ? (
+                <div className="flex flex-col">
+                  <NotificationToggle 
+                    label="Daily Spending Reminders" 
+                    desc="Receive notifications for your daily activities" 
+                    enabled={notifications.dailyReminders} 
+                    onToggle={() => updateNotification('dailyReminders')} 
+                  />
+                  <NotificationToggle 
+                    label="Budget Alerts" 
+                    desc="Get notified when you are close to your budget" 
+                    enabled={notifications.budgetAlerts} 
+                    onToggle={() => updateNotification('budgetAlerts')} 
+                  />
+                  <NotificationToggle 
+                    label="Goal Achievements" 
+                    desc="Celebrate when you reach your financial goals" 
+                    enabled={notifications.goalAchievements} 
+                    onToggle={() => updateNotification('goalAchievements')} 
+                  />
+                  <NotificationToggle 
+                    label="Marketing & Promotions" 
+                    desc="Special offers and new feature updates" 
+                    enabled={notifications.marketing} 
+                    onToggle={() => updateNotification('marketing')} 
+                  />
                 </div>
               ) : (
                 <div>
