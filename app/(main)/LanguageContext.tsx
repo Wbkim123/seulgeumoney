@@ -49,6 +49,12 @@ const translations = {
     'Detailed analysis of your monthly finances': '월간 재정에 대한 상세 분석을 받습니다',
     'Comprehensive overview of your yearly progress': '연간 진행 상황에 대한 종합적인 개요를 받습니다',
     
+    // Theme Settings
+    'Dark Mode': '다크 모드',
+    'Primary Color': '기본 색상',
+    'Enable dark mode for a better night experience': '야간 사용 시 눈이 편안한 다크 모드를 활성화합니다',
+    'Choose your signature color for the app': '앱의 시그니처 색상을 선택하세요',
+    
     // Sidebar & Navigation
     'Spending': '지출 내역',
     'Report': '리포트',
@@ -168,6 +174,12 @@ const translations = {
     'Get a summary of your weekly spending habits': 'Get a summary of your weekly spending habits',
     'Detailed analysis of your monthly finances': 'Detailed analysis of your monthly finances',
     'Comprehensive overview of your yearly progress': 'Comprehensive overview of your yearly progress',
+    
+    // Theme Settings
+    'Dark Mode': 'Dark Mode',
+    'Primary Color': 'Primary Color',
+    'Enable dark mode for a better night experience': 'Enable dark mode for a better night experience',
+    'Choose your signature color for the app': 'Choose your signature color for the app',
     
     // Sidebar & Navigation
     'Spending': 'Spending',
