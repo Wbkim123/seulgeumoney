@@ -19,7 +19,7 @@ const CustomSelect = ({
       <div
         className={`flex w-full cursor-pointer items-center justify-between rounded-2xl bg-white px-5 py-3.5 text-sm shadow-sm outline-none ring-1 transition-all ${
           value ? 'text-slate-700 ring-black/5' : 'text-slate-300 ring-black/5'
-        } ${isOpen ? 'ring-2 ring-[#98c195]/50' : ''}`}
+        } ${isOpen ? 'ring-2 ring-[var(--primary-light)]/50' : ''}`}
         onClick={() => setIsOpen(!isOpen)}
       >
         <span className="truncate">{value || t(placeholder)}</span>
@@ -39,7 +39,7 @@ const CustomSelect = ({
                   className="group flex cursor-pointer items-center justify-between px-5 py-3 transition-colors hover:bg-slate-50"
                   onClick={() => { onChange(opt); setIsOpen(false); }}
                 >
-                  <span className={`text-sm ${value === opt ? 'font-bold text-[#649566]' : 'font-medium text-slate-700'}`}>{t(opt)}</span>
+                  <span className={`text-sm ${value === opt ? 'font-bold text-[var(--primary)]' : 'font-medium text-slate-700'}`}>{t(opt)}</span>
                   <button
                     onClick={(e) => { e.stopPropagation(); onDeleteOption(opt); }}
                     className="text-slate-300 opacity-0 transition-all hover:text-red-500 group-hover:opacity-100"
@@ -64,7 +64,7 @@ const CustomSelect = ({
                   value={newItem}
                   onChange={(e) => setNewItem(e.target.value)}
                   placeholder={t('Add new...')}
-                  className="flex-1 rounded-xl bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none ring-1 ring-black/5 focus:ring-2 focus:ring-[#98c195]/50"
+                  className="flex-1 rounded-xl bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none ring-1 ring-black/5 focus:ring-2 focus:ring-[var(--primary-light)]/50"
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' && newItem.trim()) {
                       onAddOption(newItem.trim());
@@ -80,7 +80,7 @@ const CustomSelect = ({
                       setNewItem('');
                     }
                   }}
-                  className="cursor-pointer rounded-xl bg-[#649566] px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#527a54]"
+                  className="cursor-pointer rounded-xl bg-[var(--primary)] px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#527a54]"
                 >
                   {t('Add')}
                 </button>
@@ -126,7 +126,7 @@ const GoalColumn = ({
     <div className="relative flex w-full flex-1 flex-col overflow-hidden rounded-[40px] bg-[#f8f9fc] px-6 pt-8 shadow-[0_8px_30px_rgba(0,0,0,0.03)] ring-1 ring-black/[0.02]">
       <div className="mb-7 flex items-center justify-between px-3">
         <h2 className="text-[18px] font-medium text-[#739e75]">{t(title)}</h2>
-        <button onClick={onAddClick} className="flex h-6 w-6 cursor-pointer items-center justify-center text-2xl font-light text-slate-400 transition-colors hover:text-[#649566]">+</button>
+        <button onClick={onAddClick} className="flex h-6 w-6 cursor-pointer items-center justify-center text-2xl font-light text-slate-400 transition-colors hover:text-[var(--primary)]">+</button>
       </div>
       
       <div 
@@ -302,16 +302,16 @@ export default function GoalsPage() {
               </svg>
             </button>
 
-            <h2 className="mb-8 text-center text-[22px] font-semibold text-[#649566]">
+            <h2 className="mb-8 text-center text-[22px] font-semibold text-[var(--primary)]">
               {editingGoalId ? t('Edit Your Goal') : t('Add Your Goals')}
             </h2>
 
             <div className="flex flex-col gap-5">
               <div className="flex flex-col gap-1.5">
-                <label className="text-sm font-medium text-[#649566]">{t('Name')}</label>
+                <label className="text-sm font-medium text-[var(--primary)]">{t('Name')}</label>
                 <input 
                   type="text" value={goalName} onChange={(e) => setGoalName(e.target.value)} placeholder={t('Enter the name')} 
-                  className="w-full rounded-2xl bg-white px-5 py-3.5 text-sm text-slate-700 placeholder:text-slate-300 shadow-sm outline-none ring-1 ring-black/5 focus:ring-2 focus:ring-[#98c195]/50"
+                  className="w-full rounded-2xl bg-white px-5 py-3.5 text-sm text-slate-700 placeholder:text-slate-300 shadow-sm outline-none ring-1 ring-black/5 focus:ring-2 focus:ring-[var(--primary-light)]/50"
                 />
               </div>
 
@@ -319,7 +319,7 @@ export default function GoalsPage() {
               <div className="grid grid-cols-2 gap-4">
                 {/* 1. 사용한 금액 (Spent Amount) */}
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-sm font-medium text-[#649566]">{t('Spent')}</label>
+                  <label className="text-sm font-medium text-[var(--primary)]">{t('Spent')}</label>
                   <div className="relative">
                     <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-medium text-slate-400">$</span>
                     <input 
@@ -333,14 +333,14 @@ export default function GoalsPage() {
                         }
                       }} 
                       placeholder="0" 
-                      className="w-full rounded-2xl bg-white py-3.5 pl-7 pr-3 text-sm text-slate-700 placeholder:text-slate-300 shadow-sm outline-none ring-1 ring-black/5 focus:ring-2 focus:ring-[#98c195]/50 [&::-webkit-inner-spin-button]:cursor-pointer [&::-webkit-outer-spin-button]:cursor-pointer"
+                      className="w-full rounded-2xl bg-white py-3.5 pl-7 pr-3 text-sm text-slate-700 placeholder:text-slate-300 shadow-sm outline-none ring-1 ring-black/5 focus:ring-2 focus:ring-[var(--primary-light)]/50 [&::-webkit-inner-spin-button]:cursor-pointer [&::-webkit-outer-spin-button]:cursor-pointer"
                     />
                   </div>
                 </div>
 
                 {/* 2. 목표 금액 (Target Amount) */}
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-sm font-medium text-[#649566]">{t('Target')}</label>
+                  <label className="text-sm font-medium text-[var(--primary)]">{t('Target')}</label>
                   <div className="relative">
                     <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-medium text-slate-400">$</span>
                     <input 
@@ -362,14 +362,14 @@ export default function GoalsPage() {
                         }
                       }}
                       placeholder="0" 
-                      className="w-full rounded-2xl bg-white py-3.5 pl-7 pr-3 text-sm text-slate-700 placeholder:text-slate-300 shadow-sm outline-none ring-1 ring-black/5 focus:ring-2 focus:ring-[#98c195]/50 [&::-webkit-inner-spin-button]:cursor-pointer [&::-webkit-outer-spin-button]:cursor-pointer"
+                      className="w-full rounded-2xl bg-white py-3.5 pl-7 pr-3 text-sm text-slate-700 placeholder:text-slate-300 shadow-sm outline-none ring-1 ring-black/5 focus:ring-2 focus:ring-[var(--primary-light)]/50 [&::-webkit-inner-spin-button]:cursor-pointer [&::-webkit-outer-spin-button]:cursor-pointer"
                     />
                   </div>
                 </div>
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className="text-sm font-medium text-[#649566]">{t('Categories')}</label>
+                <label className="text-sm font-medium text-[var(--primary)]">{t('Categories')}</label>
                 <CustomSelect
                   placeholder="Select the category" options={categoryList} value={goalCategory} onChange={setGoalCategory}
                   onAddOption={(newVal) => { if (!categoryList.includes(newVal)) setCategoryList([...categoryList, newVal]); }}
@@ -378,7 +378,7 @@ export default function GoalsPage() {
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className="text-sm font-medium text-[#649566]">{t('Subcategories')}</label>
+                <label className="text-sm font-medium text-[var(--primary)]">{t('Subcategories')}</label>
                 <CustomSelect
                   placeholder="Select the subcategory" options={subCategoryList} value={goalSubcategory} onChange={setGoalSubcategory}
                   onAddOption={(newVal) => { if (!subCategoryList.includes(newVal)) setSubCategoryList([...subCategoryList, newVal]); }}
@@ -395,7 +395,7 @@ export default function GoalsPage() {
                 <button 
                   onClick={handleSaveGoal} disabled={!isFormValid}
                   className={`flex-[2] rounded-2xl py-4 text-[15px] font-semibold text-white transition-all ${
-                    isFormValid ? 'cursor-pointer bg-[#649566] shadow-lg hover:-translate-y-1 hover:bg-[#527a54]' : 'cursor-not-allowed bg-slate-300 opacity-70'
+                    isFormValid ? 'cursor-pointer bg-[var(--primary)] shadow-lg hover:-translate-y-1 hover:bg-[#527a54]' : 'cursor-not-allowed bg-slate-300 opacity-70'
                   }`}
                 >
                   {editingGoalId ? t('Save Changes') : t('Add Goal')}

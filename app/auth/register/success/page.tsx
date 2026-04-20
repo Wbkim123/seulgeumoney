@@ -12,7 +12,7 @@ export default function RegisterSuccessPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#ffffff] px-4">
-      <div className="relative w-full max-w-sm pt-12 p-6 border border-[#649566] rounded-lg shadow-md bg-[#ffffff] text-center">
+      <div className="relative w-full max-w-sm pt-12 p-6 border border-[var(--primary)] rounded-lg shadow-md bg-[#ffffff] text-center">
 
         {/* ✅ 슬저씨 이미지 박스 위 좌측에 걸치게 */}
         <div className="absolute top-0 left-0 -translate-x-[-30%] -translate-y-[60%]">
@@ -25,7 +25,7 @@ export default function RegisterSuccessPage() {
           />
         </div>
 
-        <h2 className="text-2xl font-semibold mb-4 text-[#649566]">
+        <h2 className="text-2xl font-semibold mb-4 text-[var(--primary)]">
           Registration Successful
         </h2>
         <p className="text-[#4b6656] mb-6">
@@ -33,7 +33,7 @@ export default function RegisterSuccessPage() {
         </p>
         <button
           onClick={goToLogin}
-          className="w-full bg-[#98c195] hover:bg-[#649566] text-white font-semibold py-2 rounded-md transition"
+          className="w-full bg-[var(--primary-light)] hover:bg-[var(--primary)] text-white font-semibold py-2 rounded-md transition"
         >
           Go to Login
         </button>

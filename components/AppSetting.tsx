@@ -136,10 +136,10 @@ export default function AppSetting({ isOpen, onClose }: AppSettingProps) {
       className="flex items-center justify-between py-4 border-b border-slate-50 hover:bg-slate-50/50 transition-colors px-2 -mx-2 rounded-xl group cursor-pointer"
     >
       <div className="flex flex-col items-start gap-0.5">
-        <span className="text-[15px] font-bold text-slate-800 group-hover:text-[#649566] transition-colors">{t(label)}</span>
+        <span className="text-[15px] font-bold text-slate-800 group-hover:text-[var(--primary)] transition-colors">{t(label)}</span>
         <span className="text-[12px] font-medium text-slate-400">{t(desc)}</span>
       </div>
-      <div className="text-slate-300 group-hover:text-[#649566] transition-colors">
+      <div className="text-slate-300 group-hover:text-[var(--primary)] transition-colors">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
           <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
         </svg>

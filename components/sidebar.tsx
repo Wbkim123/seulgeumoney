@@ -67,7 +67,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
 
             <button
               onClick={onClose}
-              className="rounded-full p-2 text-[#649566] hover:bg-black/5 cursor-pointer"
+              className="rounded-full p-2 text-[var(--primary)] hover:bg-black/5 cursor-pointer"
               aria-label="Close sidebar"
             >
               <HiXMark size={20} />
@@ -91,12 +91,12 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                       className="
                         flex items-center gap-3
                         rounded-xl px-4 py-4
-                        text-[#649566]
+                        text-[var(--primary)]
                         hover:bg-black/5
                         transition
                       "
                     >
-                      <Icon size={18} className="text-[#649566]" />
+                      <Icon size={18} className="text-[var(--primary)]" />
                       <span className="text-[14px] tracking-tight">{t(item.label)}</span>
                     </Link>
 
@@ -116,7 +116,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
               className="
                 inline-flex items-center justify-center
                 rounded-full p-2
-                text-[#649566]
+                text-[var(--primary)]
                 hover:bg-black/5
                 transition
                 cursor-pointer

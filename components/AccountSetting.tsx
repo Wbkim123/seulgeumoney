@@ -143,7 +143,7 @@ export default function AccountSetting({ onClose }: AccountSettingProps) {
 
   if (!isLoaded) return null;
 
-  const inputStyles = "w-full rounded-2xl bg-[#f8fafb] px-5 py-2.5 text-[14px] font-semibold text-slate-700 outline-none ring-1 ring-black/5 border border-transparent focus:border-[#649566] focus:bg-white transition-all";
+  const inputStyles = "w-full rounded-2xl bg-[#f8fafb] px-5 py-2.5 text-[14px] font-semibold text-slate-700 outline-none ring-1 ring-black/5 border border-transparent focus:border-[var(--primary)] focus:bg-white transition-all";
 
   // ✨ 날짜 표시를 위한 헬퍼 (split 시 오류 방지)
   const renderDob = () => {
@@ -169,7 +169,7 @@ export default function AccountSetting({ onClose }: AccountSettingProps) {
 
         <div className="mb-5 flex items-center gap-8">
           <div 
-            className="group relative h-24 w-24 cursor-pointer overflow-hidden rounded-full border-4 border-white shadow-md ring-4 ring-slate-50 transition-all hover:ring-[#649566]/20"
+            className="group relative h-24 w-24 cursor-pointer overflow-hidden rounded-full border-4 border-white shadow-md ring-4 ring-slate-50 transition-all hover:ring-[var(--primary)]/20"
             onClick={() => fileInputRef.current?.click()}
           >
             <Image src={data.profilePic} alt="Profile" fill className="object-cover" unoptimized />
@@ -180,13 +180,13 @@ export default function AccountSetting({ onClose }: AccountSettingProps) {
           <input type="file" ref={fileInputRef} onChange={handleImageChange} accept="image/*" className="hidden" />
           <div className="flex flex-col">
             <h3 className="text-[22px] font-bold text-slate-800 leading-tight">{data.name}</h3>
-            <span className="text-[14px] font-extrabold text-[#649566]">{t('Verified Account')}</span>
+            <span className="text-[14px] font-extrabold text-[var(--primary)]">{t('Verified Account')}</span>
           </div>
         </div>
 
         <div className="grid grid-cols-2 gap-x-8 gap-y-3">
           <div className="group flex flex-col gap-1.5">
-            <label className="text-[12px] font-bold text-slate-500 ml-1 group-focus-within:text-[#649566] transition-colors">{t('Name')}</label>
+            <label className="text-[12px] font-bold text-slate-500 ml-1 group-focus-within:text-[var(--primary)] transition-colors">{t('Name')}</label>
             <input
               type="text"
               value={data.name}
@@ -196,17 +196,17 @@ export default function AccountSetting({ onClose }: AccountSettingProps) {
           </div>
 
           <div className="group flex flex-col gap-1.5 relative">
-            <label className={`text-[12px] font-bold ml-1 transition-colors ${showDatePicker ? 'text-[#649566]' : 'text-slate-500 group-focus-within:text-[#649566]'}`}>
+            <label className={`text-[12px] font-bold ml-1 transition-colors ${showDatePicker ? 'text-[var(--primary)]' : 'text-slate-500 group-focus-within:text-[var(--primary)]'}`}>
               {t('Date of Birth')}
             </label>
             <div 
               className="relative group cursor-pointer"
               onClick={() => setShowDatePicker(!showDatePicker)}
             >
-              <div className={`${inputStyles} flex items-center ${showDatePicker ? 'border-[#649566] bg-white ring-1 ring-[#649566]' : ''}`}>
+              <div className={`${inputStyles} flex items-center ${showDatePicker ? 'border-[var(--primary)] bg-white ring-1 ring-[var(--primary)]' : ''}`}>
                 {renderDob()}
               </div>
-              <HiCalendarDays size={20} className={`absolute right-5 top-1/2 -translate-y-1/2 transition-colors ${showDatePicker ? 'text-[#649566]' : 'text-slate-400 group-hover:text-[#649566]'}`} />
+              <HiCalendarDays size={20} className={`absolute right-5 top-1/2 -translate-y-1/2 transition-colors ${showDatePicker ? 'text-[var(--primary)]' : 'text-slate-400 group-hover:text-[var(--primary)]'}`} />
             </div>
 
             {showDatePicker && (
@@ -215,7 +215,7 @@ export default function AccountSetting({ onClose }: AccountSettingProps) {
                 className="absolute top-full mt-2 left-0 z-50 w-[300px] bg-white rounded-3xl shadow-[0_15px_45px_rgba(0,0,0,0.15)] ring-1 ring-black/5 p-5 animate-fade-in"
               >
                 <div className="flex items-center justify-between mb-4">
-                  <button onClick={() => handleMonthChange(-1)} className="p-1 hover:bg-slate-100 rounded-full transition-colors"><HiChevronLeft size={20} className="text-[#649566]" /></button>
+                  <button onClick={() => handleMonthChange(-1)} className="p-1 hover:bg-slate-100 rounded-full transition-colors"><HiChevronLeft size={20} className="text-[var(--primary)]" /></button>
                   <div className="flex flex-col items-center">
                     <span className="text-[14px] font-bold text-slate-800">
                       {language === 'ko' ? `${formatYear(currentYear)} ${t(monthNames[currentMonth])}` : t(monthNames[currentMonth])}
@@ -223,12 +223,12 @@ export default function AccountSetting({ onClose }: AccountSettingProps) {
                     <select 
                       value={currentYear} 
                       onChange={(e) => handleYearChange(parseInt(e.target.value))}
-                      className="text-[12px] font-bold text-[#649566] bg-transparent outline-none cursor-pointer"
+                      className="text-[12px] font-bold text-[var(--primary)] bg-transparent outline-none cursor-pointer"
                     >
                       {years.map(y => <option key={y} value={y}>{formatYear(y)}</option>)}
                     </select>
                   </div>
-                  <button onClick={() => handleMonthChange(1)} className="p-1 hover:bg-slate-100 rounded-full transition-colors"><HiChevronRight size={20} className="text-[#649566]" /></button>
+                  <button onClick={() => handleMonthChange(1)} className="p-1 hover:bg-slate-100 rounded-full transition-colors"><HiChevronRight size={20} className="text-[var(--primary)]" /></button>
                 </div>
                 <div className="grid grid-cols-7 gap-1 text-center mb-2">
                   {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(d => <span key={d} className="text-[10px] font-extrabold text-slate-300">{t(d)}</span>)}
@@ -242,7 +242,7 @@ export default function AccountSetting({ onClose }: AccountSettingProps) {
                       <button 
                         key={day}
                         onClick={() => selectDate(day)}
-                        className={`aspect-square flex items-center justify-center rounded-xl text-[13px] font-bold transition-all ${isSelected ? 'bg-[#649566] text-white shadow-md' : 'hover:bg-[#649566]/10 text-slate-600'}`}
+                        className={`aspect-square flex items-center justify-center rounded-xl text-[13px] font-bold transition-all ${isSelected ? 'bg-[var(--primary)] text-white shadow-md' : 'hover:bg-[var(--primary)]/10 text-slate-600'}`}
                       >
                         {day}
                       </button>
@@ -254,7 +254,7 @@ export default function AccountSetting({ onClose }: AccountSettingProps) {
           </div>
 
           <div className="group col-span-2 flex flex-col gap-1.5">
-            <label className="text-[12px] font-bold text-slate-500 ml-1 group-focus-within:text-[#649566] transition-colors">{t('Phone Number')}</label>
+            <label className="text-[12px] font-bold text-slate-500 ml-1 group-focus-within:text-[var(--primary)] transition-colors">{t('Phone Number')}</label>
             <input
               type="tel"
               value={data.phone}
@@ -264,7 +264,7 @@ export default function AccountSetting({ onClose }: AccountSettingProps) {
           </div>
 
           <div className="group col-span-2 flex flex-col gap-1.5">
-            <label className="text-[12px] font-bold text-slate-500 ml-1 group-focus-within:text-[#649566] transition-colors">{t('Home Address')}</label>
+            <label className="text-[12px] font-bold text-slate-500 ml-1 group-focus-within:text-[var(--primary)] transition-colors">{t('Home Address')}</label>
             <input
               type="text"
               value={data.address}
@@ -274,7 +274,7 @@ export default function AccountSetting({ onClose }: AccountSettingProps) {
           </div>
 
           <div className="group col-span-2 flex flex-col gap-1.5">
-            <label className="text-[12px] font-bold text-slate-500 ml-1 group-focus-within:text-[#649566] transition-colors">{t('Email')}</label>
+            <label className="text-[12px] font-bold text-slate-500 ml-1 group-focus-within:text-[var(--primary)] transition-colors">{t('Email')}</label>
             <input
               type="email"
               value={data.email}
@@ -286,7 +286,7 @@ export default function AccountSetting({ onClose }: AccountSettingProps) {
 
         <div className="mt-5 flex justify-end gap-3 border-t border-slate-50 pt-4">
           <button onClick={handleCancel} className="rounded-xl px-6 py-2.5 text-[13px] font-bold text-slate-400 hover:bg-black/5 transition-colors cursor-pointer">{t('Cancel')}</button>
-          <button onClick={handleSave} className="rounded-xl bg-[#649566] px-10 py-2.5 text-[13px] font-bold text-white shadow-xl shadow-[#649566]/20 hover:bg-[#527a54] hover:-translate-y-0.5 transition-all cursor-pointer">{t('Save Changes')}</button>
+          <button onClick={handleSave} className="rounded-xl bg-[var(--primary)] px-10 py-2.5 text-[13px] font-bold text-white shadow-xl shadow-[var(--primary)]/20 hover:bg-[#527a54] hover:-translate-y-0.5 transition-all cursor-pointer">{t('Save Changes')}</button>
         </div>
       </div>
     </div>

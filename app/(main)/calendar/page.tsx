@@ -153,11 +153,11 @@ export default function CalendarPage() {
           isFuture 
             ? 'cursor-default bg-slate-50 opacity-40 ring-black/5' 
             : isSelected 
-              ? 'ring-[2px] ring-[#649566] shadow-md bg-slate-50/50 cursor-pointer' 
+              ? 'ring-[2px] ring-[var(--primary)] shadow-md bg-slate-50/50 cursor-pointer' 
               : 'bg-white shadow-sm ring-black/5 cursor-pointer hover:-translate-y-1 hover:shadow-md' 
         }`}
       >
-        <span className={`text-[15px] font-medium ${isFuture ? 'text-slate-400' : isSelected ? 'text-[#649566] font-bold' : 'text-[#649566]'}`}>
+        <span className={`text-[15px] font-medium ${isFuture ? 'text-slate-400' : isSelected ? 'text-[var(--primary)] font-bold' : 'text-[var(--primary)]'}`}>
           {day}
         </span>
 
@@ -196,7 +196,7 @@ export default function CalendarPage() {
   return (
     <>
       <div className="relative w-full max-w-[760px] mx-auto rounded-[32px] border border-white bg-white px-6 py-10 sm:px-12 sm:py-12 shadow-[0_18px_50px_rgba(0,0,0,0.14)] animate-fade-in">
-        <div className="mb-10 flex items-center justify-center gap-4 sm:gap-8 text-[#649566]">
+        <div className="mb-10 flex items-center justify-center gap-4 sm:gap-8 text-[var(--primary)]">
             <button 
               onClick={handlePrevMonth}
               className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full transition-colors hover:bg-slate-100"
@@ -214,7 +214,7 @@ export default function CalendarPage() {
                 </h2>
                 <svg 
                   width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" 
-                  className={`transition-transform duration-300 ${isDropdownOpen ? 'rotate-180 text-[#649566]' : 'text-slate-400 group-hover:text-[#649566]'}`}
+                  className={`transition-transform duration-300 ${isDropdownOpen ? 'rotate-180 text-[var(--primary)]' : 'text-slate-400 group-hover:text-[var(--primary)]'}`}
                 >
                   <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
@@ -240,7 +240,7 @@ export default function CalendarPage() {
                               isDisabled 
                                 ? 'text-slate-300 cursor-default' 
                                 : month === idx 
-                                  ? 'bg-[#649566] text-white shadow-sm' 
+                                  ? 'bg-[var(--primary)] text-white shadow-sm' 
                                   : 'text-slate-600 hover:bg-slate-50 cursor-pointer'
                             }`}
                           >
@@ -263,7 +263,7 @@ export default function CalendarPage() {
                           }}
                           className={`w-full text-left px-4 py-2.5 text-[14px] font-semibold rounded-xl transition-colors cursor-pointer ${
                             year === y 
-                              ? 'bg-[#649566] text-white shadow-sm' 
+                              ? 'bg-[var(--primary)] text-white shadow-sm' 
                               : 'text-slate-600 hover:bg-slate-50'
                           }`}
                         >
@@ -316,14 +316,14 @@ export default function CalendarPage() {
           >
             {/* 고정되는 헤더 (날짜 및 금액) */}
             <div className="mb-6 flex items-start justify-between shrink-0">
-              <div className="text-[26px] font-bold text-[#649566] flex gap-2">
+              <div className="text-[26px] font-bold text-[var(--primary)] flex gap-2">
                 <span>{t(monthNames[month])}</span>
                 <span>{formatDay(selectedDay)}</span>
               </div>
               
               <div className="flex items-start gap-4">
                 <div className="flex flex-col items-end text-right">
-                  <span className="text-[14px] font-bold text-[#649566]">
+                  <span className="text-[14px] font-bold text-[var(--primary)]">
                     $ {activeData.income ? Number(activeData.income).toFixed(2) : '0.00'}
                   </span>
                   <span className="text-[14px] font-bold text-[#ee5253]">
@@ -368,7 +368,7 @@ export default function CalendarPage() {
                         )}
                       </div>
                     </div>
-                    <div className={`text-[14px] font-extrabold ${tx.type === 'income' ? 'text-[#649566]' : 'text-[#ee5253]'}`}>
+                    <div className={`text-[14px] font-extrabold ${tx.type === 'income' ? 'text-[var(--primary)]' : 'text-[#ee5253]'}`}>
                       {tx.amount}
                     </div>
                   </div>

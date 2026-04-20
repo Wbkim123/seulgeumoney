@@ -112,7 +112,7 @@ export default function SpendingPage() {
               </div>
             )}
 
-            <h2 className="mb-10 text-center text-[22px] font-semibold text-[#649566]">
+            <h2 className="mb-10 text-center text-[22px] font-semibold text-[var(--primary)]">
               {t('Type of Account')}
             </h2>
 
@@ -126,8 +126,8 @@ export default function SpendingPage() {
                     // ✨ Report Page와 완벽히 동일한 버튼 스타일 (선택 시 초록색 테두리/텍스트)
                     className={`w-full cursor-pointer rounded-2xl px-6 py-4 text-left text-[15px] font-semibold transition-all duration-300 ${
                       isSelected 
-                        ? 'shadow-md ring-[1.5px] ring-[#98c195] text-[#649566]' 
-                        : 'text-slate-400 ring-1 ring-black/5 hover:-translate-y-1 hover:shadow-lg hover:text-[#649566]'
+                        ? 'shadow-md ring-[1.5px] ring-[var(--primary-light)] text-[var(--primary)]' 
+                        : 'text-slate-400 ring-1 ring-black/5 hover:-translate-y-1 hover:shadow-lg hover:text-[var(--primary)]'
                     }`}
                   >
                     {t(account.label)}
@@ -153,7 +153,7 @@ export default function SpendingPage() {
                 </div>
               )}
 
-              <h2 className="mb-10 text-center text-[22px] font-semibold text-[#649566]">
+              <h2 className="mb-10 text-center text-[22px] font-semibold text-[var(--primary)]">
                 {selectedType === 'checking' && t('Checking Account')}
                 {selectedType === 'savings' && t('Savings Account')}
                 {selectedType === 'credit' && t('Credit Balance')}
@@ -168,7 +168,7 @@ export default function SpendingPage() {
                         setSelectedBank('Bank of America');
                         setIsModalOpen(true);
                       }}
-                      className="w-full cursor-pointer rounded-2xl bg-white px-6 py-4 text-left text-[15px] font-semibold text-slate-400 ring-1 ring-black/5 transition-all hover:-translate-y-1 hover:shadow-lg hover:text-[#649566]"
+                      className="w-full cursor-pointer rounded-2xl bg-white px-6 py-4 text-left text-[15px] font-semibold text-slate-400 ring-1 ring-black/5 transition-all hover:-translate-y-1 hover:shadow-lg hover:text-[var(--primary)]"
                     >
                       Bank of America
                     </button>
@@ -183,7 +183,7 @@ export default function SpendingPage() {
                         setSelectedBank('Chase');
                         setIsModalOpen(true);
                       }}
-                      className="w-full cursor-pointer rounded-2xl bg-white px-6 py-4 text-left text-[15px] font-semibold text-slate-400 ring-1 ring-black/5 transition-all hover:-translate-y-1 hover:shadow-lg hover:text-[#649566]"
+                      className="w-full cursor-pointer rounded-2xl bg-white px-6 py-4 text-left text-[15px] font-semibold text-slate-400 ring-1 ring-black/5 transition-all hover:-translate-y-1 hover:shadow-lg hover:text-[var(--primary)]"
                     >
                       Chase
                     </button>
@@ -227,7 +227,7 @@ export default function SpendingPage() {
             </button>
 
             <div className="mb-6 text-center">
-              <h2 className="text-2xl font-semibold text-[#649566]">
+              <h2 className="text-2xl font-semibold text-[var(--primary)]">
                 {t('Transaction')}
               </h2>
               {selectedBank && (
@@ -241,11 +241,11 @@ export default function SpendingPage() {
               <input 
                 type="text" 
                 placeholder={t('Search')} 
-                className="w-full rounded-full bg-white px-5 py-3 pr-12 text-sm text-slate-700 placeholder:text-slate-400 shadow-[0_10px_25px_rgba(0,0,0,0.10)] outline-none ring-1 ring-black/5 focus:ring-2 focus:ring-[#98c195]/50"
+                className="w-full rounded-full bg-white px-5 py-3 pr-12 text-sm text-slate-700 placeholder:text-slate-400 shadow-[0_10px_25px_rgba(0,0,0,0.10)] outline-none ring-1 ring-black/5 focus:ring-2 focus:ring-[var(--primary-light)]/50"
               />
               <button
                 type="button"
-                className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-2 text-slate-400 hover:text-[#649566] hover:bg-black/5 transition cursor-pointer"
+                className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-2 text-slate-400 hover:text-[var(--primary)] hover:bg-black/5 transition cursor-pointer"
                 aria-label="Search"
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
@@ -310,7 +310,7 @@ export default function SpendingPage() {
                                 </span>
                               </div>
                             </div>
-                            <span className={`text-sm font-extrabold ${tx.type === 'income' ? 'text-[#649566]' : 'text-red-500'}`}>
+                            <span className={`text-sm font-extrabold ${tx.type === 'income' ? 'text-[var(--primary)]' : 'text-red-500'}`}>
                               {tx.amount}
                             </span>
                           </div>

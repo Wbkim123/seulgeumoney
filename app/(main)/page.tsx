@@ -42,7 +42,7 @@ function Donut({ label, amount }: { label: string; amount: string }) {
   const { t } = useLanguage();
   return (
     <div className="flex flex-col items-center justify-center">
-      <div className="relative h-60 w-60 rounded-full bg-gradient-to-b from-[#cfe6c9] via-[#98c195] to-[#6ea96b] shadow-[0_24px_55px_rgba(0,0,0,0.20)]">
+      <div className="relative h-60 w-60 rounded-full bg-gradient-to-b from-[var(--primary-light)]/50 via-[var(--primary-light)] to-[var(--primary)] shadow-[0_24px_55px_rgba(0,0,0,0.20)]">
         <div className="absolute left-1/2 top-1/2 h-30 w-30 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white shadow-inner" />
         <div className="absolute inset-0 rounded-full shadow-[inset_0_10px_25px_rgba(255,255,255,0.35)]" />
       </div>
@@ -88,7 +88,7 @@ const ColumnHeaderSelector = ({ value, onChange }: { value: string, onChange: (v
                     setIsOpen(false);
                   }}
                 >
-                  <span className={`text-[14px] ${value === opt ? 'font-bold text-[#649566]' : 'font-medium text-slate-600'}`}>
+                  <span className={`text-[14px] ${value === opt ? 'font-bold text-[var(--primary)]' : 'font-medium text-slate-600'}`}>
                     {t(opt)}
                   </span>
                 </div>
@@ -126,7 +126,7 @@ export default function DashboardPage() {
         
         {/* 🟢 Goals 섹션 */}
         <section className="flex aspect-[50/51] flex-col rounded-[32px] bg-[#f8f9fc] p-8 shadow-[0_10px_40px_rgba(0,0,0,0.04)] border border-white">
-          <div className="text-[22px] font-semibold text-[#649566]">{t('Goals')}</div>
+          <div className="text-[22px] font-semibold text-[var(--primary)]">{t('Goals')}</div>
           
           <div className="mt-6 grid grid-cols-2 gap-6 text-center">
             <ColumnHeaderSelector value={leftCategory} onChange={(val: any) => setLeftCategory(val)} />
@@ -191,7 +191,7 @@ export default function DashboardPage() {
         {/* 🟢 Total Spending 섹션 */}
         <section className="flex aspect-[50/51] flex-col rounded-[32px] bg-[#f8f9fc] p-8 shadow-[0_10px_40px_rgba(0,0,0,0.04)] border border-white">
           <div className="flex items-start justify-between">
-            <div className="text-[22px] font-semibold text-[#649566]">{t('Total Spending')}</div>
+            <div className="text-[22px] font-semibold text-[var(--primary)]">{t('Total Spending')}</div>
             <div className="text-[28px] font-extrabold text-slate-900">$ 1,082</div>
           </div>
           <div className="flex flex-1 items-center justify-center">
@@ -219,7 +219,7 @@ export default function DashboardPage() {
               </svg>
             </button>
 
-            <h2 className="mb-8 text-center text-[22px] font-semibold text-[#649566]">
+            <h2 className="mb-8 text-center text-[22px] font-semibold text-[var(--primary)]">
               {t('Goal Details')}
             </h2>
 
@@ -228,7 +228,7 @@ export default function DashboardPage() {
               
               {/* Name */}
               <div className="flex flex-col gap-1.5">
-                <label className="text-sm font-medium text-[#649566]">{t('Name')}</label>
+                <label className="text-sm font-medium text-[var(--primary)]">{t('Name')}</label>
                 <div className="w-full rounded-2xl bg-white px-5 py-3.5 text-sm font-medium text-slate-700 shadow-sm ring-1 ring-black/5">
                   {selectedGoal.title}
                 </div>
@@ -237,13 +237,13 @@ export default function DashboardPage() {
               {/* Spent / Target (나란히 배치) */}
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-sm font-medium text-[#649566]">{t('Spent')}</label>
+                  <label className="text-sm font-medium text-[var(--primary)]">{t('Spent')}</label>
                   <div className="w-full rounded-2xl bg-white px-5 py-3.5 text-sm font-medium text-slate-700 shadow-sm ring-1 ring-black/5">
                     $ {selectedGoal.current}
                   </div>
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-sm font-medium text-[#649566]">{t('Target')}</label>
+                  <label className="text-sm font-medium text-[var(--primary)]">{t('Target')}</label>
                   <div className="w-full rounded-2xl bg-white px-5 py-3.5 text-sm font-medium text-slate-700 shadow-sm ring-1 ring-black/5">
                     $ {selectedGoal.target}
                   </div>
@@ -252,7 +252,7 @@ export default function DashboardPage() {
 
               {/* Category */}
               <div className="flex flex-col gap-1.5">
-                <label className="text-sm font-medium text-[#649566]">{t('Categories')}</label>
+                <label className="text-sm font-medium text-[var(--primary)]">{t('Categories')}</label>
                 <div className="w-full rounded-2xl bg-white px-5 py-3.5 text-sm font-medium text-slate-700 shadow-sm ring-1 ring-black/5">
                   {selectedGoal.category || '-'}
                 </div>
@@ -260,7 +260,7 @@ export default function DashboardPage() {
 
               {/* Subcategory */}
               <div className="flex flex-col gap-1.5">
-                <label className="text-sm font-medium text-[#649566]">{t('Subcategories')}</label>
+                <label className="text-sm font-medium text-[var(--primary)]">{t('Subcategories')}</label>
                 <div className="w-full rounded-2xl bg-white px-5 py-3.5 text-sm font-medium text-slate-700 shadow-sm ring-1 ring-black/5">
                   {selectedGoal.subcategory || '-'}
                 </div>

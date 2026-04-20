@@ -107,7 +107,7 @@ export default function ReportPeriodPage() {
               </div>
             )}
 
-            <h2 className="mb-10 text-center text-[22px] font-semibold text-[#649566]">
+            <h2 className="mb-10 text-center text-[22px] font-semibold text-[var(--primary)]">
               {t('Select a Report Period')}
             </h2>
 
@@ -120,8 +120,8 @@ export default function ReportPeriodPage() {
                     onClick={() => setSelectedPeriod(period)}
                     className={`w-full cursor-pointer rounded-2xl px-6 py-4 text-left text-[15px] font-semibold transition-all duration-300 ${
                       isSelected 
-                        ? 'shadow-md ring-[1.5px] ring-[#98c195] text-[#649566]' 
-                        : 'text-slate-400 ring-1 ring-black/5 hover:-translate-y-1 hover:shadow-lg hover:text-[#649566]'
+                        ? 'shadow-md ring-[1.5px] ring-[var(--primary-light)] text-[var(--primary)]' 
+                        : 'text-slate-400 ring-1 ring-black/5 hover:-translate-y-1 hover:shadow-lg hover:text-[var(--primary)]'
                     }`}
                   >
                     {t(period)}
@@ -145,7 +145,7 @@ export default function ReportPeriodPage() {
                 </div>
               )}
 
-              <h2 className="mb-10 text-center text-[22px] font-semibold text-[#649566]">
+              <h2 className="mb-10 text-center text-[22px] font-semibold text-[var(--primary)]">
                 {selectedPeriod ? t(selectedPeriod) : t('Select')}
               </h2>
 
@@ -156,7 +156,7 @@ export default function ReportPeriodPage() {
                     key={index}
                     onClick={() => handleOpenModal(detail)}
                     // ✨ 버튼이 스크롤되면서 찌그러지지 않도록 shrink-0 추가
-                    className="w-full shrink-0 cursor-pointer rounded-2xl bg-white px-6 py-4 text-left text-[15px] font-semibold text-slate-400 ring-1 ring-black/5 transition-all hover:-translate-y-1 hover:shadow-lg hover:text-[#649566]"
+                    className="w-full shrink-0 cursor-pointer rounded-2xl bg-white px-6 py-4 text-left text-[15px] font-semibold text-slate-400 ring-1 ring-black/5 transition-all hover:-translate-y-1 hover:shadow-lg hover:text-[var(--primary)]"
                   >
                     {detail.translated}
                   </button>
@@ -190,7 +190,7 @@ export default function ReportPeriodPage() {
             </button>
 
             <div className="mb-8 shrink-0 text-center">
-              <h2 className="text-[24px] font-bold text-[#649566]">
+              <h2 className="text-[24px] font-bold text-[var(--primary)]">
                 {selectedReportDetail.translated}
               </h2>
               <p className="mt-1 text-sm font-medium text-slate-400">
@@ -208,20 +208,20 @@ export default function ReportPeriodPage() {
                   </div>
                   <div className="rounded-3xl bg-white p-6 shadow-[0_4px_20px_rgba(0,0,0,0.03)] ring-1 ring-black/5">
                     <div className="text-[13px] font-semibold text-slate-400">{t('Your Budget')}</div>
-                    <div className="mt-2 text-2xl font-extrabold text-[#649566]">$ 200.00</div>
+                    <div className="mt-2 text-2xl font-extrabold text-[var(--primary)]">$ 200.00</div>
                   </div>
                 </div>
 
-                <div className="rounded-3xl bg-[#f0f5f0] p-6 ring-1 ring-[#98c195]/30">
+                <div className="rounded-3xl bg-[#f0f5f0] p-6 ring-1 ring-[var(--primary-light)]/30">
                   <div className="mb-3 flex items-center gap-2">
                     <span className="text-xl">💡</span>
-                    <h3 className="text-[15px] font-bold text-[#649566]">{t('Insight')}</h3>
+                    <h3 className="text-[15px] font-bold text-[var(--primary)]">{t('Insight')}</h3>
                   </div>
                   <p className="text-[14px] font-medium leading-relaxed text-[#527a54]">
                     {language === 'ko' ? (
-                      <>잘하셨어요! 평균 예산보다 <span className="font-bold text-[#649566]">27% 적게</span> 지출하셨습니다. 가장 큰 지출 항목은 <span className="font-bold">식비</span>였지만, 불필요한 쇼핑은 성공적으로 피하셨네요.</>
+                      <>잘하셨어요! 평균 예산보다 <span className="font-bold text-[var(--primary)]">27% 적게</span> 지출하셨습니다. 가장 큰 지출 항목은 <span className="font-bold">식비</span>였지만, 불필요한 쇼핑은 성공적으로 피하셨네요.</>
                     ) : (
-                      <>Great job! You spent <span className="font-bold text-[#649566]">27% less</span> than your average budget. Your biggest expense was <span className="font-bold">Food</span>, but you successfully avoided unnecessary shopping.</>
+                      <>Great job! You spent <span className="font-bold text-[var(--primary)]">27% less</span> than your average budget. Your biggest expense was <span className="font-bold">Food</span>, but you successfully avoided unnecessary shopping.</>
                     )}
                   </p>
                 </div>

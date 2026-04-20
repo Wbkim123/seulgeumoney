@@ -47,16 +47,16 @@ export default function PersonalInfoPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#ffffff] px-4">
-      <div className="w-full max-w-sm p-6 border border-[#649566] rounded-lg shadow-md bg-[#ffffff]">
+      <div className="w-full max-w-sm p-6 border border-[var(--primary)] rounded-lg shadow-md bg-[#ffffff]">
 
-        <h2 className="text-2xl font-semibold text-center mb-4 text-[#649566]">
+        <h2 className="text-2xl font-semibold text-center mb-4 text-[var(--primary)]">
           Personal Information
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Name */}
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-[#649566] mb-1">
+            <label htmlFor="name" className="block text-sm font-medium text-[var(--primary)] mb-1">
               Name
             </label>
             <input
@@ -64,7 +64,7 @@ export default function PersonalInfoPage() {
               id="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full border border-[#649566] rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-[#98c195] text-[#4b6656] placeholder-[#4b6656]"
+              className="w-full border border-[var(--primary)] rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-[var(--primary-light)] text-[#4b6656] placeholder-[#4b6656]"
               placeholder="Your name"
               required
             />
@@ -72,7 +72,7 @@ export default function PersonalInfoPage() {
 
           {/* Birth of date */}
           <div>
-            <label htmlFor="birthDate" className="block text-sm font-medium text-[#649566] mb-1">
+            <label htmlFor="birthDate" className="block text-sm font-medium text-[var(--primary)] mb-1">
               Birth of date
             </label>
             <input
@@ -81,14 +81,14 @@ export default function PersonalInfoPage() {
               lang="en"
               value={birthDate}
               onChange={(e) => setBirthDate(e.target.value)}
-              className="w-full border border-[#649566] rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-[#98c195] text-[#4b6656]"
+              className="w-full border border-[var(--primary)] rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-[var(--primary-light)] text-[#4b6656]"
               required
             />
           </div>
 
           {/* Country selector */}
           <div>
-            <label htmlFor="country" className="block text-sm font-medium text-[#649566] mb-1">
+            <label htmlFor="country" className="block text-sm font-medium text-[var(--primary)] mb-1">
               Country of residence
             </label>
             <select
@@ -98,7 +98,7 @@ export default function PersonalInfoPage() {
                 setCountry(e.target.value);
                 setPhoneLocal(''); // 나라 바꾸면 번호 초기화
               }}
-              className="w-full border border-[#649566] rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-[#98c195] text-[#4b6656] bg-white"
+              className="w-full border border-[var(--primary)] rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-[var(--primary-light)] text-[#4b6656] bg-white"
               required
             >
               <option value="us">United States (+1)</option>
@@ -108,11 +108,11 @@ export default function PersonalInfoPage() {
 
           {/* Phone number */}
           <div>
-            <label htmlFor="phone" className="block text-sm font-medium text-[#649566] mb-1">
+            <label htmlFor="phone" className="block text-sm font-medium text-[var(--primary)] mb-1">
               Phone number
             </label>
             <div className="flex">
-              <span className="inline-flex items-center px-3 border border-r-0 border-[#649566] rounded-l-md bg-[#f0fdf4] text-[#4b6656]">
+              <span className="inline-flex items-center px-3 border border-r-0 border-[var(--primary)] rounded-l-md bg-[#f0fdf4] text-[#4b6656]">
                 {countryDialCodes[country]}
               </span>
               <input
@@ -124,7 +124,7 @@ export default function PersonalInfoPage() {
                   setPhoneLocal(cleaned);
                 }}
                 inputMode="numeric"
-                className="w-full border border-[#649566] rounded-r-md p-2 focus:outline-none focus:ring-2 focus:ring-[#98c195] text-[#4b6656] placeholder-[#4b6656]"
+                className="w-full border border-[var(--primary)] rounded-r-md p-2 focus:outline-none focus:ring-2 focus:ring-[var(--primary-light)] text-[#4b6656] placeholder-[#4b6656]"
                 placeholder="Enter phone number"
                 required
               />
@@ -137,7 +137,7 @@ export default function PersonalInfoPage() {
             disabled={!isFormValid}
             className={`w-full font-semibold py-2 rounded-md transition ${
               isFormValid
-                ? 'bg-[#98c195] hover:bg-[#649566] text-white'
+                ? 'bg-[var(--primary-light)] hover:bg-[var(--primary)] text-white'
                 : 'bg-gray-300 text-gray-500 cursor-not-allowed'
             }`}
           >

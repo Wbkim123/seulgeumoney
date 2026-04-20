@@ -158,17 +158,17 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
       
       {/* 🟢 1. 왼쪽: 모달 패널 영역 */}
       {isPanelOpen && (
-        <div className="flex w-[380px] sm:w-[420px] max-h-[85vh] flex-col rounded-[32px] bg-[#eceef0] p-6 shadow-[0_25px_70px_-15px_rgba(0,0,0,0.15)] border-2 border-[#649566]/30 shrink-0 animate-fade-in sm:p-8">
+        <div className="flex w-[380px] sm:w-[420px] max-h-[85vh] flex-col rounded-[32px] bg-[#eceef0] p-6 shadow-[0_25px_70px_-15px_rgba(0,0,0,0.15)] border-2 border-[var(--primary)]/30 shrink-0 animate-fade-in sm:p-8">
           
           <div className="mb-6 flex items-start justify-between shrink-0">
-            <div className="text-[24px] font-bold text-[#649566] flex gap-2">
+            <div className="text-[24px] font-bold text-[var(--primary)] flex gap-2">
               <span>{t(MONTH_NAMES[selected.month])}</span>
               <span>{formatDay(selected.day)}</span>
             </div>
 
             <div className="flex items-start gap-3">
               <div className="flex flex-col items-end text-right">
-                <span className="text-[14px] font-bold text-[#649566]">
+                <span className="text-[14px] font-bold text-[var(--primary)]">
                   $ {activeData.income ? Number(activeData.income).toFixed(2) : '0.00'}
                 </span>
                 <span className="text-[14px] font-bold text-[#ee5253]">
@@ -208,7 +208,7 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
                       )}
                     </div>
                   </div>
-                  <div className={`text-[14px] font-extrabold ${tx.type === 'income' ? 'text-[#649566]' : 'text-[#ee5253]'}`}>
+                  <div className={`text-[14px] font-extrabold ${tx.type === 'income' ? 'text-[var(--primary)]' : 'text-[#ee5253]'}`}>
                     {tx.amount}
                   </div>
                 </div>
@@ -234,7 +234,7 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
         <div className="flex items-center justify-end px-3 pt-3">
           <button
             onClick={onClose}
-            className="rounded-full p-1 text-[#649566] hover:bg-black/5 transition cursor-pointer"
+            className="rounded-full p-1 text-[var(--primary)] hover:bg-black/5 transition cursor-pointer"
             aria-label="Close calendar"
           >
             <HiXMark size={18} />
@@ -243,13 +243,13 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
 
         <div className="px-5 pb-3">
           <div className="flex items-center justify-between">
-            <button onClick={prevMonth} className="rounded-full p-2 text-[#649566] hover:bg-black/5 transition cursor-pointer">
+            <button onClick={prevMonth} className="rounded-full p-2 text-[var(--primary)] hover:bg-black/5 transition cursor-pointer">
               <HiChevronLeft size={18} />
             </button>
-            <div className="text-center text-[16px] tracking-tight text-[#649566] font-bold">
+            <div className="text-center text-[16px] tracking-tight text-[var(--primary)] font-bold">
               {t(MONTH_NAMES[month])} {formatYear(year)}
             </div>
-            <button onClick={nextMonth} className="rounded-full p-2 text-[#649566] hover:bg-black/5 transition cursor-pointer">
+            <button onClick={nextMonth} className="rounded-full p-2 text-[var(--primary)] hover:bg-black/5 transition cursor-pointer">
               <HiChevronRight size={18} />
             </button>
           </div>
@@ -288,9 +288,9 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
                     future
                       ? 'bg-white text-slate-300 cursor-default'
                       : active
-                        ? 'bg-[#649566] text-white font-bold shadow-md'
+                        ? 'bg-[var(--primary)] text-white font-bold shadow-md'
                         : todayMark
-                          ? 'bg-white text-[#649566] font-bold ring-[2px] ring-[#649566]/30'
+                          ? 'bg-white text-[var(--primary)] font-bold ring-[2px] ring-[var(--primary)]/30'
                           : 'bg-white text-slate-600 hover:bg-slate-50',
                   ].join(' ')}
                 >
