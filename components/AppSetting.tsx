@@ -27,6 +27,8 @@ export default function AppSetting({ isOpen, onClose }: AppSettingProps) {
     dailyReminders: true,
     budgetAlerts: true,
     goalAchievements: true,
+    weeklyReports: true,
+    monthlyReports: true,
     marketing: false,
   });
 
@@ -35,7 +37,7 @@ export default function AppSetting({ isOpen, onClose }: AppSettingProps) {
     const saved = localStorage.getItem('seulgeumoney_notifications');
     if (saved) {
       try {
-        setNotifications(JSON.parse(saved));
+        setNotifications((prev) => ({ ...prev, ...JSON.parse(saved) }));
       } catch (e) {
         console.error('Failed to parse notification settings', e);
       }
@@ -59,12 +61,12 @@ export default function AppSetting({ isOpen, onClose }: AppSettingProps) {
       </div>
       <button 
         onClick={onToggle}
-        className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+        className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] focus:outline-none active:scale-95 ${
           enabled ? 'bg-[#649566]' : 'bg-slate-200'
         }`}
       >
         <span
-          className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+          className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg ring-0 transition duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
             enabled ? 'translate-x-5' : 'translate-x-0'
           }`}
         />
@@ -178,6 +180,18 @@ export default function AppSetting({ isOpen, onClose }: AppSettingProps) {
                     desc="Celebrate when you reach your financial goals" 
                     enabled={notifications.goalAchievements} 
                     onToggle={() => updateNotification('goalAchievements')} 
+                  />
+                  <NotificationToggle 
+                    label="Weekly Reports" 
+                    desc="Get a summary of your weekly spending habits" 
+                    enabled={notifications.weeklyReports} 
+                    onToggle={() => updateNotification('weeklyReports')} 
+                  />
+                  <NotificationToggle 
+                    label="Monthly Reports" 
+                    desc="Detailed analysis of your monthly finances" 
+                    enabled={notifications.monthlyReports} 
+                    onToggle={() => updateNotification('monthlyReports')} 
                   />
                   <NotificationToggle 
                     label="Marketing & Promotions" 

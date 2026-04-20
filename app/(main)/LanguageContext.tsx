@@ -34,10 +34,14 @@ const translations = {
     'Budget Alerts': '예산 경고',
     'Goal Achievements': '목표 달성 알림',
     'Marketing & Promotions': '마케팅 및 프로모션',
+    'Weekly Reports': '주간 리포트 알림',
+    'Monthly Reports': '월간 리포트 알림',
     'Receive notifications for your daily activities': '일일 활동에 대한 알림을 받습니다',
     'Get notified when you are close to your budget': '예산에 가까워지면 알림을 받습니다',
     'Celebrate when you reach your financial goals': '재정 목표를 달성하면 축하 알림을 받습니다',
     'Special offers and new feature updates': '특별 혜택 및 새로운 기능 업데이트',
+    'Get a summary of your weekly spending habits': '주간 지출 습관에 대한 요약을 받습니다',
+    'Detailed analysis of your monthly finances': '월간 재정에 대한 상세 분석을 받습니다',
     
     // Sidebar & Navigation
     'Spending': '지출 내역',
@@ -143,10 +147,14 @@ const translations = {
     'Budget Alerts': 'Budget Alerts',
     'Goal Achievements': 'Goal Achievements',
     'Marketing & Promotions': 'Marketing & Promotions',
+    'Weekly Reports': 'Weekly Reports',
+    'Monthly Reports': 'Monthly Reports',
     'Receive notifications for your daily activities': 'Receive notifications for your daily activities',
     'Get notified when you are close to your budget': 'Get notified when you are close to your budget',
     'Celebrate when you reach your financial goals': 'Celebrate when you reach your financial goals',
     'Special offers and new feature updates': 'Special offers and new feature updates',
+    'Get a summary of your weekly spending habits': 'Get a summary of your weekly spending habits',
+    'Detailed analysis of your monthly finances': 'Detailed analysis of your monthly finances',
     
     // Sidebar & Navigation
     'Spending': 'Spending',
