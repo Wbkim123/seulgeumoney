@@ -20,6 +20,7 @@ const tabs = [
 
 export default function AppSetting({ isOpen, onClose }: AppSettingProps) {
   const [activeTab, setActiveTab] = useState('Language');
+  const [isReportSubView, setIsReportSubView] = useState(false);
   const { language, setLanguage, t } = useLanguage();
 
   // Notification states
@@ -27,10 +28,17 @@ export default function AppSetting({ isOpen, onClose }: AppSettingProps) {
     dailyReminders: true,
     budgetAlerts: true,
     goalAchievements: true,
+    dailyReports: true,
     weeklyReports: true,
     monthlyReports: true,
+    yearlyReports: true,
     marketing: false,
   });
+
+  // Reset subview when tab changes
+  React.useEffect(() => {
+    setIsReportSubView(false);
+  }, [activeTab]);
 
   // Load notification settings from localStorage
   React.useEffect(() => {
@@ -72,6 +80,23 @@ export default function AppSetting({ isOpen, onClose }: AppSettingProps) {
         />
       </button>
     </div>
+  );
+
+  const SubMenuLink = ({ label, desc, onClick }: { label: string, desc: string, onClick: () => void }) => (
+    <button 
+      onClick={onClick}
+      className="flex items-center justify-between py-4 border-b border-slate-50 hover:bg-slate-50/50 transition-colors px-2 -mx-2 rounded-xl group cursor-pointer"
+    >
+      <div className="flex flex-col items-start gap-0.5">
+        <span className="text-[15px] font-bold text-slate-800 group-hover:text-[#649566] transition-colors">{t(label)}</span>
+        <span className="text-[12px] font-medium text-slate-400">{t(desc)}</span>
+      </div>
+      <div className="text-slate-300 group-hover:text-[#649566] transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+        </svg>
+      </div>
+    </button>
   );
 
   return (
@@ -162,43 +187,76 @@ export default function AppSetting({ isOpen, onClose }: AppSettingProps) {
                    </div>
                 </div>
               ) : activeTab === 'Notification' ? (
-                <div className="flex flex-col">
-                  <NotificationToggle 
-                    label="Daily Spending Reminders" 
-                    desc="Receive notifications for your daily activities" 
-                    enabled={notifications.dailyReminders} 
-                    onToggle={() => updateNotification('dailyReminders')} 
-                  />
-                  <NotificationToggle 
-                    label="Budget Alerts" 
-                    desc="Get notified when you are close to your budget" 
-                    enabled={notifications.budgetAlerts} 
-                    onToggle={() => updateNotification('budgetAlerts')} 
-                  />
-                  <NotificationToggle 
-                    label="Goal Achievements" 
-                    desc="Celebrate when you reach your financial goals" 
-                    enabled={notifications.goalAchievements} 
-                    onToggle={() => updateNotification('goalAchievements')} 
-                  />
-                  <NotificationToggle 
-                    label="Weekly Reports" 
-                    desc="Get a summary of your weekly spending habits" 
-                    enabled={notifications.weeklyReports} 
-                    onToggle={() => updateNotification('weeklyReports')} 
-                  />
-                  <NotificationToggle 
-                    label="Monthly Reports" 
-                    desc="Detailed analysis of your monthly finances" 
-                    enabled={notifications.monthlyReports} 
-                    onToggle={() => updateNotification('monthlyReports')} 
-                  />
-                  <NotificationToggle 
-                    label="Marketing & Promotions" 
-                    desc="Special offers and new feature updates" 
-                    enabled={notifications.marketing} 
-                    onToggle={() => updateNotification('marketing')} 
-                  />
+                <div className="flex flex-col animate-fade-in" key={isReportSubView ? 'report' : 'general'}>
+                  {!isReportSubView ? (
+                    <>
+                      <NotificationToggle 
+                        label="Daily Spending Reminders" 
+                        desc="Receive notifications for your daily activities" 
+                        enabled={notifications.dailyReminders} 
+                        onToggle={() => updateNotification('dailyReminders')} 
+                      />
+                      <NotificationToggle 
+                        label="Budget Alerts" 
+                        desc="Get notified when you are close to your budget" 
+                        enabled={notifications.budgetAlerts} 
+                        onToggle={() => updateNotification('budgetAlerts')} 
+                      />
+                      <NotificationToggle 
+                        label="Goal Achievements" 
+                        desc="Celebrate when you reach your financial goals" 
+                        enabled={notifications.goalAchievements} 
+                        onToggle={() => updateNotification('goalAchievements')} 
+                      />
+                      <SubMenuLink 
+                        label="Report Notifications"
+                        desc="Customize your report delivery preferences"
+                        onClick={() => setIsReportSubView(true)}
+                      />
+                      <NotificationToggle 
+                        label="Marketing & Promotions" 
+                        desc="Special offers and new feature updates" 
+                        enabled={notifications.marketing} 
+                        onToggle={() => updateNotification('marketing')} 
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <button 
+                        onClick={() => setIsReportSubView(false)}
+                        className="mb-4 flex items-center gap-2 text-[#649566] font-bold hover:underline cursor-pointer w-max"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                        </svg>
+                        {t('Back')}
+                      </button>
+                      <NotificationToggle 
+                        label="Daily Reports" 
+                        desc="Daily summary of your spending and savings" 
+                        enabled={notifications.dailyReports} 
+                        onToggle={() => updateNotification('dailyReports')} 
+                      />
+                      <NotificationToggle 
+                        label="Weekly Reports" 
+                        desc="Get a summary of your weekly spending habits" 
+                        enabled={notifications.weeklyReports} 
+                        onToggle={() => updateNotification('weeklyReports')} 
+                      />
+                      <NotificationToggle 
+                        label="Monthly Reports" 
+                        desc="Detailed analysis of your monthly finances" 
+                        enabled={notifications.monthlyReports} 
+                        onToggle={() => updateNotification('monthlyReports')} 
+                      />
+                      <NotificationToggle 
+                        label="Yearly Reports" 
+                        desc="Comprehensive overview of your yearly progress" 
+                        enabled={notifications.yearlyReports} 
+                        onToggle={() => updateNotification('yearlyReports')} 
+                      />
+                    </>
+                  )}
                 </div>
               ) : (
                 <div>

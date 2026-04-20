@@ -34,14 +34,20 @@ const translations = {
     'Budget Alerts': '예산 경고',
     'Goal Achievements': '목표 달성 알림',
     'Marketing & Promotions': '마케팅 및 프로모션',
+    'Report Notifications': '리포트 알림 설정',
+    'Daily Reports': '일일 리포트 알림',
     'Weekly Reports': '주간 리포트 알림',
     'Monthly Reports': '월간 리포트 알림',
+    'Yearly Reports': '연간 리포트 알림',
     'Receive notifications for your daily activities': '일일 활동에 대한 알림을 받습니다',
     'Get notified when you are close to your budget': '예산에 가까워지면 알림을 받습니다',
     'Celebrate when you reach your financial goals': '재정 목표를 달성하면 축하 알림을 받습니다',
     'Special offers and new feature updates': '특별 혜택 및 새로운 기능 업데이트',
+    'Customize your report delivery preferences': '리포트 수신 설정을 사용자 정의합니다',
+    'Daily summary of your spending and savings': '일일 지출 및 저축 요약을 받습니다',
     'Get a summary of your weekly spending habits': '주간 지출 습관에 대한 요약을 받습니다',
     'Detailed analysis of your monthly finances': '월간 재정에 대한 상세 분석을 받습니다',
+    'Comprehensive overview of your yearly progress': '연간 진행 상황에 대한 종합적인 개요를 받습니다',
     
     // Sidebar & Navigation
     'Spending': '지출 내역',
@@ -123,6 +129,7 @@ const translations = {
     'Home Address': '집 주소',
     'Email': '이메일',
     'Cancel': '취소',
+    'Back': '뒤로',
     'Changes saved successfully!': '변경 사항이 저장되었습니다!',
     'Unsaved Changes Warning': "저장되지 않은 변경 사항이 있습니다. 저장하지 않고 나가시겠습니까? \n\n'확인'을 누르면 취소되고, '취소'를 누르면 계속 수정할 수 있습니다."
   },
@@ -147,14 +154,20 @@ const translations = {
     'Budget Alerts': 'Budget Alerts',
     'Goal Achievements': 'Goal Achievements',
     'Marketing & Promotions': 'Marketing & Promotions',
+    'Report Notifications': 'Report Notifications',
+    'Daily Reports': 'Daily Reports',
     'Weekly Reports': 'Weekly Reports',
     'Monthly Reports': 'Monthly Reports',
+    'Yearly Reports': 'Yearly Reports',
     'Receive notifications for your daily activities': 'Receive notifications for your daily activities',
     'Get notified when you are close to your budget': 'Get notified when you are close to your budget',
     'Celebrate when you reach your financial goals': 'Celebrate when you reach your financial goals',
     'Special offers and new feature updates': 'Special offers and new feature updates',
+    'Customize your report delivery preferences': 'Customize your report delivery preferences',
+    'Daily summary of your spending and savings': 'Daily summary of your spending and savings',
     'Get a summary of your weekly spending habits': 'Get a summary of your weekly spending habits',
     'Detailed analysis of your monthly finances': 'Detailed analysis of your monthly finances',
+    'Comprehensive overview of your yearly progress': 'Comprehensive overview of your yearly progress',
     
     // Sidebar & Navigation
     'Spending': 'Spending',
@@ -236,6 +249,7 @@ const translations = {
     'Home Address': 'Home Address',
     'Email': 'Email',
     'Cancel': 'Cancel',
+    'Back': 'Back',
     'Changes saved successfully!': 'Changes saved successfully!',
     'Unsaved Changes Warning': "You have unsaved changes. Do you want to leave without saving? \n\nClick 'OK' to Discard, or 'Cancel' to Keep Editing."
   }
