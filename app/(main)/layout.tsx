@@ -38,7 +38,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   return (
     <LanguageProvider>
       <GoalsProvider>
-        <div className="relative min-h-screen bg-[#eef0f3] flex flex-col">
+        <div className="relative min-h-screen bg-background flex flex-col transition-colors duration-300">
           {/* Header */}
           <header className="w-full h-[96px] px-10 py-5 flex items-center justify-between">
             {/* Left */}
@@ -66,7 +66,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
             {/* Profile / Back button */}
             <button
               onClick={handleAccountToggle}
-              className="flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-[0_8px_20px_rgba(0,0,0,0.08)] hover:scale-105 transition-all duration-200 cursor-pointer"
+              className="flex h-12 w-12 items-center justify-center rounded-full bg-surface shadow-[0_8px_20px_rgba(0,0,0,0.08)] hover:scale-105 transition-all duration-200 cursor-pointer ring-1 ring-border-custom/5"
               aria-label={isAccountOpen ? "Back to page" : "Account Settings"}
             >
               {isAccountOpen ? (

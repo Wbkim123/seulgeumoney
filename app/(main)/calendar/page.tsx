@@ -127,7 +127,7 @@ export default function CalendarPage() {
   if (!isLoaded) return null;
 
   const emptyCellsStart = Array.from({ length: firstDayOfMonth }).map((_, i) => (
-    <div key={`empty-start-${i}`} className="flex aspect-square flex-col items-center justify-center rounded-2xl bg-white shadow-sm ring-1 ring-black/5 text-slate-300">
+    <div key={`empty-start-${i}`} className="flex aspect-square flex-col items-center justify-center rounded-2xl bg-surface shadow-sm ring-1 ring-border-custom/10 text-slate-300">
       -
     </div>
   ));
@@ -151,13 +151,13 @@ export default function CalendarPage() {
         onClick={() => { if (!isFuture) handleDayClick(day); }}
         className={`relative flex aspect-square flex-col items-center pt-3 sm:pt-4 transition-all rounded-2xl ring-1 ${
           isFuture 
-            ? 'cursor-default bg-slate-50 opacity-40 ring-black/5' 
+            ? 'cursor-default bg-slate-50 opacity-40 ring-border-custom/10' 
             : isSelected 
               ? 'ring-[2px] ring-[var(--primary)] shadow-md bg-slate-50/50 cursor-pointer' 
-              : 'bg-white shadow-sm ring-black/5 cursor-pointer hover:-translate-y-1 hover:shadow-md' 
+              : 'bg-surface shadow-sm ring-border-custom/10 cursor-pointer hover:-translate-y-1 hover:shadow-md' 
         }`}
       >
-        <span className={`text-[15px] font-medium ${isFuture ? 'text-slate-400' : isSelected ? 'text-[var(--primary)] font-bold' : 'text-[var(--primary)]'}`}>
+        <span className={`text-[15px] font-medium ${isFuture ? 'text-text-muted' : isSelected ? 'text-[var(--primary)] font-bold' : 'text-[var(--primary)]'}`}>
           {day}
         </span>
 
@@ -184,7 +184,7 @@ export default function CalendarPage() {
   const totalCells = firstDayOfMonth + daysInMonth;
   const emptyCellsEndCount = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
   const emptyCellsEnd = Array.from({ length: emptyCellsEndCount }).map((_, i) => (
-    <div key={`empty-end-${i}`} className="flex aspect-square flex-col items-center justify-center rounded-2xl bg-white shadow-sm ring-1 ring-black/5 text-slate-300">
+    <div key={`empty-end-${i}`} className="flex aspect-square flex-col items-center justify-center rounded-2xl bg-surface shadow-sm ring-1 ring-border-custom/10 text-slate-300">
       -
     </div>
   ));
@@ -195,7 +195,7 @@ export default function CalendarPage() {
 
   return (
     <>
-      <div className="relative w-full max-w-[760px] mx-auto rounded-[32px] border border-white bg-white px-6 py-10 sm:px-12 sm:py-12 shadow-[0_18px_50px_rgba(0,0,0,0.14)] animate-fade-in">
+      <div className="relative w-full max-w-[760px] mx-auto rounded-[32px] border border-white bg-surface px-6 py-10 sm:px-12 sm:py-12 shadow-[0_18px_50px_rgba(0,0,0,0.14)] animate-fade-in">
         <div className="mb-10 flex items-center justify-center gap-4 sm:gap-8 text-[var(--primary)]">
             <button 
               onClick={handlePrevMonth}
@@ -214,7 +214,7 @@ export default function CalendarPage() {
                 </h2>
                 <svg 
                   width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" 
-                  className={`transition-transform duration-300 ${isDropdownOpen ? 'rotate-180 text-[var(--primary)]' : 'text-slate-400 group-hover:text-[var(--primary)]'}`}
+                  className={`transition-transform duration-300 ${isDropdownOpen ? 'rotate-180 text-[var(--primary)]' : 'text-text-muted group-hover:text-[var(--primary)]'}`}
                 >
                   <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
@@ -223,7 +223,7 @@ export default function CalendarPage() {
               {isDropdownOpen && (
                 <>
                   <div className="fixed inset-0 z-40" onClick={() => setIsDropdownOpen(false)}></div>
-                  <div className="absolute top-full mt-2 z-50 flex w-[280px] overflow-hidden rounded-2xl bg-white shadow-xl ring-1 ring-black/5 left-1/2 -translate-x-1/2 animate-fade-in-down">
+                  <div className="absolute top-full mt-2 z-50 flex w-[280px] overflow-hidden rounded-2xl bg-surface shadow-xl ring-1 ring-border-custom/10 left-1/2 -translate-x-1/2 animate-fade-in-down">
                     <div className="flex-1 max-h-[260px] overflow-y-auto border-r border-slate-100 p-2 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-200">
                       {monthNames.map((m, idx) => {
                         const isDisabled = year === realYear && idx > realMonth;
@@ -241,7 +241,7 @@ export default function CalendarPage() {
                                 ? 'text-slate-300 cursor-default' 
                                 : month === idx 
                                   ? 'bg-[var(--primary)] text-white shadow-sm' 
-                                  : 'text-slate-600 hover:bg-slate-50 cursor-pointer'
+                                  : 'text-text-muted hover:bg-slate-50 cursor-pointer'
                             }`}
                           >
                             {t(m)}
@@ -264,7 +264,7 @@ export default function CalendarPage() {
                           className={`w-full text-left px-4 py-2.5 text-[14px] font-semibold rounded-xl transition-colors cursor-pointer ${
                             year === y 
                               ? 'bg-[var(--primary)] text-white shadow-sm' 
-                              : 'text-slate-600 hover:bg-slate-50'
+                              : 'text-text-muted hover:bg-slate-50'
                           }`}
                         >
                           {y}
@@ -291,7 +291,7 @@ export default function CalendarPage() {
 
           <div className="grid grid-cols-7 gap-2 sm:gap-4 mb-3">
             {dayNames.map(day => (
-              <div key={day} className="text-center text-[13px] sm:text-[14px] font-bold text-slate-800">
+              <div key={day} className="text-center text-[13px] sm:text-[14px] font-bold text-text-main">
                 {t(day)}
               </div>
             ))}
@@ -311,7 +311,7 @@ export default function CalendarPage() {
           onClick={() => setIsModalOpen(false)} 
         >
           <div 
-            className="relative flex w-full max-w-[460px] max-h-[85vh] flex-col rounded-[32px] bg-[#eceef0] p-6 shadow-2xl sm:p-8"
+            className="relative flex w-full max-w-[460px] max-h-[85vh] flex-col rounded-[32px] bg-surface-alt p-6 shadow-2xl sm:p-8"
             onClick={(e) => e.stopPropagation()} 
           >
             {/* 고정되는 헤더 (날짜 및 금액) */}
@@ -333,7 +333,7 @@ export default function CalendarPage() {
                 
                 <button
                   onClick={() => setIsModalOpen(false)}
-                  className="flex h-8 w-8 items-center justify-center rounded-full bg-black/5 text-slate-500 hover:bg-black/10 hover:text-slate-800 transition-colors cursor-pointer"
+                  className="flex h-8 w-8 items-center justify-center rounded-full bg-black/5 text-text-muted hover:bg-black/10 hover:text-text-main transition-colors cursor-pointer"
                   aria-label="Close modal"
                 >
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -348,16 +348,16 @@ export default function CalendarPage() {
             <div className="flex-1 overflow-y-auto pr-1 flex flex-col gap-3 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-300/50">
               {activeData.transactions && activeData.transactions.length > 0 ? (
                 activeData.transactions.map((tx: any) => (
-                  <div key={tx.id} className="flex items-center justify-between rounded-2xl bg-white px-5 py-4 shadow-[0_2px_10px_rgba(0,0,0,0.02)] transition-transform hover:-translate-y-0.5">
+                  <div key={tx.id} className="flex items-center justify-between rounded-2xl bg-surface px-5 py-4 shadow-[0_2px_10px_rgba(0,0,0,0.02)] transition-transform hover:-translate-y-0.5">
                     <div className="flex items-center gap-3">
                       <div className="text-xl">{tx.icon}</div>
                       <div className={`h-2.5 w-2.5 rounded-full ${tx.color}`}></div>
                       <div className="flex flex-col">
-                        <span className="text-[14px] font-bold text-slate-800 leading-tight">
+                        <span className="text-[14px] font-bold text-text-main leading-tight">
                           {tx.name}
                         </span>
                         {tx.desc && (
-                          <span className="mt-0.5 text-[10px] font-medium text-slate-400 w-40 truncate sm:w-56">
+                          <span className="mt-0.5 text-[10px] font-medium text-text-muted w-40 truncate sm:w-56">
                             {tx.desc}
                           </span>
                         )}
@@ -374,20 +374,20 @@ export default function CalendarPage() {
                   </div>
                 ))
               ) : (
-                <div className="flex h-20 items-center justify-center text-sm font-medium text-slate-400">
+                <div className="flex h-20 items-center justify-center text-sm font-medium text-text-muted">
                   {t('No transactions for this day.')}
                 </div>
               )}
             </div>
 
             {/* ✨ 스크롤 영역 밖으로 빼내어 모달창 하단에 항상 고정되는 Memo 영역 (shrink-0 적용) */}
-            <div className="mt-4 shrink-0 flex flex-col rounded-[24px] bg-white p-6 shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
-              <h3 className="text-[16px] font-extrabold text-slate-900">{t('Memo')}</h3>
+            <div className="mt-4 shrink-0 flex flex-col rounded-[24px] bg-surface p-6 shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
+              <h3 className="text-[16px] font-extrabold text-text-main">{t('Memo')}</h3>
               <textarea
                 value={currentMemo}
                 onChange={handleMemoChange} 
                 placeholder={t('Add memo..')}
-                className="mt-3 w-full min-h-[100px] resize-none bg-transparent text-[14px] font-medium leading-relaxed text-slate-600 outline-none placeholder:text-slate-300"
+                className="mt-3 w-full min-h-[100px] resize-none bg-transparent text-[14px] font-medium leading-relaxed text-text-muted outline-none placeholder:text-slate-300"
               />
             </div>
 

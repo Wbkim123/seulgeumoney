@@ -11,8 +11,8 @@ export default function RegisterSuccessPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#ffffff] px-4">
-      <div className="relative w-full max-w-sm pt-12 p-6 border border-[var(--primary)] rounded-lg shadow-md bg-[#ffffff] text-center">
+    <div className="min-h-screen flex items-center justify-center bg-background px-4">
+      <div className="relative w-full max-w-sm pt-12 p-6 border border-border-custom/50 rounded-lg shadow-md bg-surface text-center">
 
         {/* ✅ 슬저씨 이미지 박스 위 좌측에 걸치게 */}
         <div className="absolute top-0 left-0 -translate-x-[-30%] -translate-y-[60%]">
@@ -25,16 +25,16 @@ export default function RegisterSuccessPage() {
           />
         </div>
 
-        <h2 className="text-2xl font-semibold mb-4 text-[var(--primary)]">
+        <h2 className="text-2xl font-semibold mb-4 text-text-main">
           Password reset Successful
         </h2>
-        <p className="text-[#4b6656] mb-6">
+        <p className="text-text-muted mb-6">
           Your password reset is complete.<br />
           Please log in.
         </p>
         <button
           onClick={goToLogin}
-          className="w-full bg-[var(--primary-light)] hover:bg-[var(--primary)] text-white font-semibold py-2 rounded-md transition"
+          className="w-full bg-primary-light hover:bg-primary text-white font-semibold py-2 rounded-md transition"
         >
           Go to Login
         </button>

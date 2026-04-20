@@ -20,15 +20,15 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#ffffff] px-4">
-      <div className="w-full max-w-sm p-6 border border-[var(--primary)] rounded-lg shadow-md bg-[#ffffff]">
-        <h2 className="text-2xl font-semibold text-center mb-6 text-[var(--primary)]">
+    <div className="min-h-screen flex items-center justify-center bg-background px-4">
+      <div className="w-full max-w-sm p-6 border border-border-custom/50 rounded-lg shadow-md bg-surface">
+        <h2 className="text-2xl font-semibold text-center mb-6 text-text-main">
           Register
         </h2>
 
         {/* Apple */}
         <button
-          className="flex items-center justify-center w-full border border-[var(--primary)] rounded-md py-2 mb-3 hover:bg-[var(--primary-light)]/30 transition text-[#4b6656] font-medium"
+          className="flex items-center justify-center w-full border border-border-custom/50 rounded-md py-2 mb-3 hover:bg-primary-light/30 transition text-text-muted font-medium"
         >
           <span className="mr-2">🍎</span>
           Continue with Apple
@@ -36,27 +36,27 @@ export default function RegisterPage() {
 
         {/* Google */}
         <button
-          className="flex items-center justify-center w-full border border-[var(--primary)] rounded-md py-2 mb-4 hover:bg-[var(--primary-light)]/30 transition text-[#4b6656] font-medium"
+          className="flex items-center justify-center w-full border border-border-custom/50 rounded-md py-2 mb-4 hover:bg-primary-light/30 transition text-text-muted font-medium"
         >
           <span className="mr-2">🌐</span>
           Continue with Google
         </button>
 
         {/* Divider */}
-        <div className="my-4 border-t border-[var(--primary)]" />
+        <div className="my-4 border-t border-border-custom/50" />
 
         {/* Email form */}
         <form onSubmit={handleSubmit}>
           <label
             htmlFor="email"
-            className="block text-sm font-medium text-[var(--primary)] mb-1"
+            className="block text-sm font-medium text-text-main mb-1"
           >
             Your Email Address
           </label>
           <input
             type="email"
             id="email"
-            className="w-full border border-[var(--primary)] rounded-md p-2 mb-4 focus:outline-none focus:ring-2 focus:ring-[var(--primary-light)] text-[#4b6656] placeholder-[#4b6656]"
+            className="w-full border border-border-custom/50 rounded-md p-2 mb-4 focus:outline-none focus:ring-2 focus:ring-border-custom/10 text-text-main bg-transparent placeholder-text-muted"
             placeholder="email@address.com"
             required
             value={email}
@@ -68,8 +68,8 @@ export default function RegisterPage() {
             disabled={!isEmailValid}
             className={`w-full font-semibold py-2 rounded-md transition ${
               isEmailValid
-                ? 'bg-[var(--primary-light)] hover:bg-[var(--primary)] text-white'
-                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                ? 'bg-primary-light hover:bg-primary text-white'
+                : 'bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed'
             }`}
           >
             Continue with email
@@ -77,7 +77,7 @@ export default function RegisterPage() {
         </form>
 
         {/* Terms */}
-        <p className="mt-4 text-xs text-[var(--primary)] text-center">
+        <p className="mt-4 text-xs text-text-muted text-center">
           By continuing, you agree to our{' '}
           <a href="#" className="underline">
             Terms of Use

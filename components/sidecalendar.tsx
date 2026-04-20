@@ -158,7 +158,7 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
       
       {/* 🟢 1. 왼쪽: 모달 패널 영역 */}
       {isPanelOpen && (
-        <div className="flex w-[380px] sm:w-[420px] max-h-[85vh] flex-col rounded-[32px] bg-[#eceef0] p-6 shadow-[0_25px_70px_-15px_rgba(0,0,0,0.15)] border-2 border-[var(--primary)]/30 shrink-0 animate-fade-in sm:p-8">
+        <div className="flex w-[380px] sm:w-[420px] max-h-[85vh] flex-col rounded-[32px] bg-surface-alt p-6 shadow-[0_25px_70px_-15px_rgba(0,0,0,0.15)] border-2 border-[var(--primary)]/30 shrink-0 animate-fade-in sm:p-8">
           
           <div className="mb-6 flex items-start justify-between shrink-0">
             <div className="text-[24px] font-bold text-[var(--primary)] flex gap-2">
@@ -178,7 +178,7 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
               
               <button
                 onClick={() => setIsPanelOpen(false)}
-                className="flex h-8 w-8 items-center justify-center rounded-full bg-black/5 text-slate-500 hover:bg-black/10 hover:text-slate-800 transition-colors cursor-pointer"
+                className="flex h-8 w-8 items-center justify-center rounded-full bg-black/5 text-text-muted hover:bg-black/10 hover:text-text-main transition-colors cursor-pointer"
               >
                 <HiXMark size={18} strokeWidth={1} />
               </button>
@@ -188,16 +188,16 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
           <div className="flex-1 overflow-y-auto pr-1 flex flex-col gap-3 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-300/50">
             {activeData.transactions && activeData.transactions.length > 0 ? (
               activeData.transactions.map((tx: any) => (
-                <div key={tx.id} className="flex items-center justify-between rounded-2xl bg-white px-5 py-4 shadow-[0_2px_10px_rgba(0,0,0,0.02)] transition-transform hover:-translate-y-0.5">
+                <div key={tx.id} className="flex items-center justify-between rounded-2xl bg-surface px-5 py-4 shadow-[0_2px_10px_rgba(0,0,0,0.02)] transition-transform hover:-translate-y-0.5">
                   <div className="flex items-center gap-3">
                     <div className="text-xl">{tx.icon}</div>
                     <div className={`h-2.5 w-2.5 rounded-full ${tx.color}`}></div>
                     <div className="flex flex-col">
-                      <span className="text-[14px] font-bold text-slate-800 leading-tight">
+                      <span className="text-[14px] font-bold text-text-main leading-tight">
                         {tx.name}
                       </span>
                       {tx.desc && (
-                        <span className="mt-0.5 text-[10px] font-medium text-slate-400 w-32 truncate sm:w-48">
+                        <span className="mt-0.5 text-[10px] font-medium text-text-muted w-32 truncate sm:w-48">
                           {tx.desc}
                         </span>
                       )}
@@ -214,15 +214,15 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
                 </div>
               ))
             ) : (
-              <div className="flex h-20 items-center justify-center text-sm font-medium text-slate-400">
+              <div className="flex h-20 items-center justify-center text-sm font-medium text-text-muted">
                 {t('No transactions for this day.')}
               </div>
             )}
           </div>
 
-          <div className="mt-4 shrink-0 flex flex-col rounded-[24px] bg-white p-6 shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
-            <h3 className="text-[16px] font-extrabold text-slate-900">{t('Memo')}</h3>
-            <div className="mt-3 w-full min-h-[80px] sm:min-h-[100px] text-[14px] font-medium leading-relaxed text-slate-600 whitespace-pre-wrap overflow-y-auto">
+          <div className="mt-4 shrink-0 flex flex-col rounded-[24px] bg-surface p-6 shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
+            <h3 className="text-[16px] font-extrabold text-text-main">{t('Memo')}</h3>
+            <div className="mt-3 w-full min-h-[80px] sm:min-h-[100px] text-[14px] font-medium leading-relaxed text-text-muted whitespace-pre-wrap overflow-y-auto">
               {activeData.memo ? activeData.memo : <span className="text-slate-300">{t('No memo available.')}</span>}
             </div>
           </div>
@@ -230,7 +230,7 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
       )}
 
       {/* 🟢 2. 오른쪽: 사이드 캘린더 영역 */}
-      <div className="w-[320px] shrink-0 rounded-2xl bg-white shadow-[0_18px_50px_rgba(0,0,0,0.14)] ring-1 ring-black/10 overflow-hidden">
+      <div className="w-[320px] shrink-0 rounded-2xl bg-surface shadow-[0_18px_50px_rgba(0,0,0,0.14)] ring-1 ring-black/10 overflow-hidden">
         <div className="flex items-center justify-end px-3 pt-3">
           <button
             onClick={onClose}
@@ -267,7 +267,7 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
           <div className="grid grid-cols-7 gap-2">
             {cells.map((c) => {
               const d = c.day;
-              if (!d) return <div key={c.key} className="h-9 w-9 rounded-lg bg-slate-50 ring-1 ring-black/5 flex items-center justify-center text-slate-300 text-sm">-</div>;
+              if (!d) return <div key={c.key} className="h-9 w-9 rounded-lg bg-slate-50 ring-1 ring-border-custom/10 flex items-center justify-center text-slate-300 text-sm">-</div>;
 
               const sel: Selected = { day: d, month, year };
               const active = isSameDate(selected, sel);
@@ -284,14 +284,14 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
                     setIsPanelOpen(true);
                   }}
                   className={[
-                    'h-9 w-9 rounded-lg ring-1 ring-black/5 flex items-center justify-center text-[14px] font-medium transition cursor-pointer',
+                    'h-9 w-9 rounded-lg ring-1 ring-border-custom/10 flex items-center justify-center text-[14px] font-medium transition cursor-pointer',
                     future
-                      ? 'bg-white text-slate-300 cursor-default'
+                      ? 'bg-surface text-slate-300 cursor-default'
                       : active
                         ? 'bg-[var(--primary)] text-white font-bold shadow-md'
                         : todayMark
-                          ? 'bg-white text-[var(--primary)] font-bold ring-[2px] ring-[var(--primary)]/30'
-                          : 'bg-white text-slate-600 hover:bg-slate-50',
+                          ? 'bg-surface text-[var(--primary)] font-bold ring-[2px] ring-[var(--primary)]/30'
+                          : 'bg-surface text-text-muted hover:bg-slate-50',
                   ].join(' ')}
                 >
                   {d}

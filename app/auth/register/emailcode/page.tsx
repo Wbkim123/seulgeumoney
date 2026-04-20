@@ -21,8 +21,8 @@ export default function EmailVerifyPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#ffffff] px-4">
-      <div className="relative w-full max-w-sm pt-12 p-6 border border-[var(--primary)] rounded-lg shadow-md bg-[#ffffff]">
+    <div className="min-h-screen flex items-center justify-center bg-background px-4">
+      <div className="relative w-full max-w-sm pt-12 p-6 border border-border-custom/50 rounded-lg shadow-md bg-surface">
 
         {/* ✅ 슬저씨 이미지 박스 위 좌측에 걸치게 */}
         <div className="absolute top-0 left-0 -translate-x-[-30%] -translate-y-[60%]">
@@ -35,10 +35,10 @@ export default function EmailVerifyPage() {
           />
         </div>
 
-        <h2 className="text-2xl font-semibold text-center mb-2 text-[var(--primary)]">
+        <h2 className="text-2xl font-semibold text-center mb-2 text-text-main">
           Verify your email
         </h2>
-        <p className="text-center text-sm text-[#4b6656] mb-6">
+        <p className="text-center text-sm text-text-muted mb-6">
           We've sent a verification code to your email.
         </p>
 
@@ -46,7 +46,7 @@ export default function EmailVerifyPage() {
           <div>
             <label
               htmlFor="code"
-              className="block text-sm font-medium text-[var(--primary)] mb-1"
+              className="block text-sm font-medium text-text-main mb-1"
             >
               Verification Code
             </label>
@@ -55,7 +55,7 @@ export default function EmailVerifyPage() {
               id="code"
               inputMode="numeric"
               pattern="\d*"
-              className="w-full border border-[var(--primary)] rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-[var(--primary-light)] text-[#4b6656] placeholder-[#4b6656]"
+              className="w-full border border-border-custom/50 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-border-custom/10 text-text-main bg-transparent placeholder-text-muted"
               placeholder="Enter 6-digit code"
               required
               value={code}
@@ -72,15 +72,15 @@ export default function EmailVerifyPage() {
             disabled={!isValidCode}
             className={`w-full font-semibold py-2 rounded-md transition ${
               isValidCode
-                ? 'bg-[var(--primary-light)] hover:bg-[var(--primary)] text-white'
-                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                ? 'bg-primary-light hover:bg-primary text-white'
+                : 'bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed'
             }`}
           >
             Verify
           </button>
         </form>
 
-        <p className="mt-4 text-sm text-[var(--primary)] text-center">
+        <p className="mt-4 text-sm text-text-main text-center">
           Couldn't find a code? <a href="#" className="underline">Resend an email</a>
         </p>
       </div>

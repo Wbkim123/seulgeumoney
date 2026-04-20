@@ -103,7 +103,7 @@ export default function SpendingPage() {
         <div className="relative flex items-center justify-center transition-all duration-500 ease-in-out">
           
           {/* 🟢 1단계: 왼쪽 박스 (항상 고정된 너비 420px 유지) */}
-          <div className="relative w-[420px] shrink-0 rounded-[32px] border border-white bg-white px-10 py-12 shadow-[0_18px_50px_rgba(0,0,0,0.12)]">
+          <div className="relative w-[420px] shrink-0 rounded-[32px] border border-border-custom/10 bg-surface px-10 py-12 shadow-[0_18px_50px_rgba(0,0,0,0.12)]">
             
             {/* ✨ 아무것도 선택되지 않았을 때만 왼쪽에 슬저씨 표시 */}
             {!selectedType && (
@@ -127,7 +127,7 @@ export default function SpendingPage() {
                     className={`w-full cursor-pointer rounded-2xl px-6 py-4 text-left text-[15px] font-semibold transition-all duration-300 ${
                       isSelected 
                         ? 'shadow-md ring-[1.5px] ring-[var(--primary-light)] text-[var(--primary)]' 
-                        : 'text-slate-400 ring-1 ring-black/5 hover:-translate-y-1 hover:shadow-lg hover:text-[var(--primary)]'
+                        : 'text-text-muted ring-1 ring-border-custom/10 hover:-translate-y-1 hover:shadow-lg hover:text-[var(--primary)]'
                     }`}
                   >
                     {t(account.label)}
@@ -144,7 +144,7 @@ export default function SpendingPage() {
             }`}
           >
             {/* ✨ 안쪽 컨텐츠 (relative 속성을 추가하여 슬저씨가 정중앙에 올라가도록 설정) */}
-            <div className="relative w-[420px] rounded-[32px] border border-white bg-white px-10 py-12 shadow-[0_18px_50px_rgba(0,0,0,0.12)]">
+            <div className="relative w-[420px] rounded-[32px] border border-border-custom/10 bg-surface px-10 py-12 shadow-[0_18px_50px_rgba(0,0,0,0.12)]">
               
               {/* ✨ 선택되었을 때만 오른쪽에 슬저씨 표시 */}
               {selectedType && (
@@ -168,7 +168,7 @@ export default function SpendingPage() {
                         setSelectedBank('Bank of America');
                         setIsModalOpen(true);
                       }}
-                      className="w-full cursor-pointer rounded-2xl bg-white px-6 py-4 text-left text-[15px] font-semibold text-slate-400 ring-1 ring-black/5 transition-all hover:-translate-y-1 hover:shadow-lg hover:text-[var(--primary)]"
+                      className="w-full cursor-pointer rounded-2xl bg-surface px-6 py-4 text-left text-[15px] font-semibold text-text-muted ring-1 ring-border-custom/10 transition-all hover:-translate-y-1 hover:shadow-lg hover:text-[var(--primary)]"
                     >
                       Bank of America
                     </button>
@@ -183,7 +183,7 @@ export default function SpendingPage() {
                         setSelectedBank('Chase');
                         setIsModalOpen(true);
                       }}
-                      className="w-full cursor-pointer rounded-2xl bg-white px-6 py-4 text-left text-[15px] font-semibold text-slate-400 ring-1 ring-black/5 transition-all hover:-translate-y-1 hover:shadow-lg hover:text-[var(--primary)]"
+                      className="w-full cursor-pointer rounded-2xl bg-surface px-6 py-4 text-left text-[15px] font-semibold text-text-muted ring-1 ring-border-custom/10 transition-all hover:-translate-y-1 hover:shadow-lg hover:text-[var(--primary)]"
                     >
                       Chase
                     </button>
@@ -212,12 +212,12 @@ export default function SpendingPage() {
           onClick={() => setIsModalOpen(false)}
         >
           <div 
-            className="relative w-full max-w-[500px] rounded-3xl bg-[#f4f5f7] px-8 py-10 shadow-2xl"
+            className="relative w-full max-w-[500px] rounded-3xl bg-surface-alt px-8 py-10 shadow-2xl"
             onClick={(e) => e.stopPropagation()} 
           >
             <button
               onClick={() => setIsModalOpen(false)}
-              className="absolute right-6 top-6 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-slate-200 hover:text-slate-600"
+              className="absolute right-6 top-6 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-text-muted transition-colors hover:bg-surface-alt hover:text-slate-600"
               aria-label="Close modal"
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -231,7 +231,7 @@ export default function SpendingPage() {
                 {t('Transaction')}
               </h2>
               {selectedBank && (
-                <p className="mt-1 text-sm font-medium text-slate-400">
+                <p className="mt-1 text-sm font-medium text-text-muted">
                   {selectedBank}
                 </p>
               )}
@@ -241,11 +241,11 @@ export default function SpendingPage() {
               <input 
                 type="text" 
                 placeholder={t('Search')} 
-                className="w-full rounded-full bg-white px-5 py-3 pr-12 text-sm text-slate-700 placeholder:text-slate-400 shadow-[0_10px_25px_rgba(0,0,0,0.10)] outline-none ring-1 ring-black/5 focus:ring-2 focus:ring-[var(--primary-light)]/50"
+                className="w-full rounded-full bg-surface px-5 py-3 pr-12 text-sm text-text-main placeholder:text-text-muted shadow-[0_10px_25px_rgba(0,0,0,0.10)] outline-none ring-1 ring-border-custom/10 focus:ring-2 focus:ring-[var(--primary-light)]/50"
               />
               <button
                 type="button"
-                className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-2 text-slate-400 hover:text-[var(--primary)] hover:bg-black/5 transition cursor-pointer"
+                className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-2 text-text-muted hover:text-[var(--primary)] hover:bg-border-custom/10 transition cursor-pointer"
                 aria-label="Search"
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
@@ -255,7 +255,7 @@ export default function SpendingPage() {
               </button>
             </div>
 
-            <div className="flex flex-col bg-white rounded-2xl overflow-hidden shadow-sm ring-1 ring-black/5">
+            <div className="flex flex-col bg-surface rounded-2xl overflow-hidden shadow-sm ring-1 ring-border-custom/10">
               
               <div className="flex items-center justify-between bg-[#b3b3b3] px-6 py-1.5 text-sm font-bold text-white z-20">
                 <button 
@@ -286,7 +286,7 @@ export default function SpendingPage() {
                 {dynamicGroupedTransactions.map((group, groupIdx) => (
                   <div key={groupIdx}>
                     
-                    <div className="sticky top-0 z-10 border-b border-t border-slate-100 bg-slate-50/95 backdrop-blur-sm px-5 py-1.5 text-[12px] font-bold text-slate-400">
+                    <div className="sticky top-0 z-10 border-b border-t border-slate-100 bg-surface-alt/95 backdrop-blur-sm px-5 py-1.5 text-[12px] font-bold text-text-muted">
                       {group.translatedDate}
                     </div>
 
@@ -302,10 +302,10 @@ export default function SpendingPage() {
                                 {tx.icon}
                               </div>
                               <div className="flex flex-col">
-                                <span className="text-[14px] font-semibold text-slate-800">
+                                <span className="text-[14px] font-semibold text-text-main">
                                   {tx.name}
                                 </span>
-                                <span className="text-[11px] font-medium text-slate-400">
+                                <span className="text-[11px] font-medium text-text-muted">
                                   {tx.time}
                                 </span>
                               </div>

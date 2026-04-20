@@ -40,9 +40,9 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           'fixed z-50',
           'left-6 top-6 bottom-6 w-[260px]',
           'rounded-2xl',
-          'bg-white/95 backdrop-blur-md',
+          'bg-surface/95 backdrop-blur-md',
           'shadow-[0_18px_50px_rgba(0,0,0,0.14)]',
-          'ring-1 ring-black/10',
+          'ring-1 ring-border-custom/20',
           'transition-transform duration-300 ease-out',
           isOpen ? 'translate-x-0' : '-translate-x-[120%]',
         ].join(' ')}

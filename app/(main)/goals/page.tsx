@@ -17,13 +17,13 @@ const CustomSelect = ({
   return (
     <div className="relative">
       <div
-        className={`flex w-full cursor-pointer items-center justify-between rounded-2xl bg-white px-5 py-3.5 text-sm shadow-sm outline-none ring-1 transition-all ${
-          value ? 'text-slate-700 ring-black/5' : 'text-slate-300 ring-black/5'
+        className={`flex w-full cursor-pointer items-center justify-between rounded-2xl bg-surface px-5 py-3.5 text-sm shadow-sm outline-none ring-1 transition-all ${
+          value ? 'text-text-main ring-border-custom/10' : 'text-slate-300 ring-border-custom/10'
         } ${isOpen ? 'ring-2 ring-[var(--primary-light)]/50' : ''}`}
         onClick={() => setIsOpen(!isOpen)}
       >
         <span className="truncate">{value || t(placeholder)}</span>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`transition-transform duration-300 text-slate-400 ${isOpen ? 'rotate-180' : ''}`}>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`transition-transform duration-300 text-text-muted ${isOpen ? 'rotate-180' : ''}`}>
           <polyline points="6 9 12 15 18 9"></polyline>
         </svg>
       </div>
@@ -31,15 +31,15 @@ const CustomSelect = ({
       {isOpen && (
         <>
           <div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)}></div>
-          <div className="absolute z-50 mt-2 w-full overflow-hidden rounded-2xl bg-white shadow-xl ring-1 ring-black/5">
+          <div className="absolute z-50 mt-2 w-full overflow-hidden rounded-2xl bg-surface shadow-xl ring-1 ring-border-custom/10">
             <div className="max-h-40 overflow-y-auto">
               {options.map((opt) => (
                 <div 
                   key={opt} 
-                  className="group flex cursor-pointer items-center justify-between px-5 py-3 transition-colors hover:bg-slate-50"
+                  className="group flex cursor-pointer items-center justify-between px-5 py-3 transition-colors hover:bg-surface-alt"
                   onClick={() => { onChange(opt); setIsOpen(false); }}
                 >
-                  <span className={`text-sm ${value === opt ? 'font-bold text-[var(--primary)]' : 'font-medium text-slate-700'}`}>{t(opt)}</span>
+                  <span className={`text-sm ${value === opt ? 'font-bold text-[var(--primary)]' : 'font-medium text-text-main'}`}>{t(opt)}</span>
                   <button
                     onClick={(e) => { e.stopPropagation(); onDeleteOption(opt); }}
                     className="text-slate-300 opacity-0 transition-all hover:text-red-500 group-hover:opacity-100"
@@ -53,18 +53,18 @@ const CustomSelect = ({
                 </div>
               ))}
               {options.length === 0 && (
-                <div className="px-5 py-3 text-sm text-slate-400">{t('No options added yet.')}</div>
+                <div className="px-5 py-3 text-sm text-text-muted">{t('No options added yet.')}</div>
               )}
             </div>
             
-            <div className="relative z-50 border-t border-slate-100 bg-slate-50 p-3" onClick={(e) => e.stopPropagation()}>
+            <div className="relative z-50 border-t border-border-custom/10 bg-surface-alt p-3" onClick={(e) => e.stopPropagation()}>
               <div className="flex items-center gap-2">
                 <input
                   type="text"
                   value={newItem}
                   onChange={(e) => setNewItem(e.target.value)}
                   placeholder={t('Add new...')}
-                  className="flex-1 rounded-xl bg-white px-3 py-2 text-sm text-slate-700 shadow-sm outline-none ring-1 ring-black/5 focus:ring-2 focus:ring-[var(--primary-light)]/50"
+                  className="flex-1 rounded-xl bg-surface px-3 py-2 text-sm text-text-main shadow-sm outline-none ring-1 ring-border-custom/10 focus:ring-2 focus:ring-[var(--primary-light)]/50"
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' && newItem.trim()) {
                       onAddOption(newItem.trim());
@@ -123,10 +123,10 @@ const GoalColumn = ({
   };
 
   return (
-    <div className="relative flex w-full flex-1 flex-col overflow-hidden rounded-[40px] bg-[#f8f9fc] px-6 pt-8 shadow-[0_8px_30px_rgba(0,0,0,0.03)] ring-1 ring-black/[0.02]">
+    <div className="relative flex w-full flex-1 flex-col overflow-hidden rounded-[40px] bg-background px-6 pt-8 shadow-[0_8px_30px_rgba(0,0,0,0.03)] ring-1 ring-border-custom/10">
       <div className="mb-7 flex items-center justify-between px-3">
         <h2 className="text-[18px] font-medium text-[#739e75]">{t(title)}</h2>
-        <button onClick={onAddClick} className="flex h-6 w-6 cursor-pointer items-center justify-center text-2xl font-light text-slate-400 transition-colors hover:text-[var(--primary)]">+</button>
+        <button onClick={onAddClick} className="flex h-6 w-6 cursor-pointer items-center justify-center text-2xl font-light text-text-muted transition-colors hover:text-[var(--primary)]">+</button>
       </div>
       
       <div 
@@ -147,20 +147,20 @@ const GoalColumn = ({
               onDragEnd={handleDragEnd}
               onDragOver={(e) => e.preventDefault()}
               onClick={() => onEditClick(goal)} 
-              className="flex shrink-0 cursor-grab active:cursor-grabbing flex-col justify-center gap-1.5 rounded-full bg-white px-6 py-4 shadow-[0_5px_15px_rgba(0,0,0,0.04)] ring-1 ring-black/[0.02] transition-transform hover:-translate-y-1 hover:shadow-md"
+              className="flex shrink-0 cursor-grab active:cursor-grabbing flex-col justify-center gap-1.5 rounded-full bg-surface px-6 py-4 shadow-[0_5px_15px_rgba(0,0,0,0.04)] ring-1 ring-border-custom/10 transition-transform hover:-translate-y-1 hover:shadow-md"
             >
               <div className="flex items-center justify-between gap-4 pointer-events-none">
-                <span className="truncate text-[14px] font-medium text-slate-800">{goal.title}</span>
-                <span className={`shrink-0 text-[10px] font-semibold ${isOverLimit ? 'text-red-500' : 'text-slate-400'}`}>{percentage}%</span>
+                <span className="truncate text-[14px] font-medium text-text-main">{goal.title}</span>
+                <span className={`shrink-0 text-[10px] font-semibold ${isOverLimit ? 'text-red-500' : 'text-text-muted'}`}>{percentage}%</span>
               </div>
               <div className="flex items-center justify-between gap-5 pointer-events-none">
                 <div className="flex-1 overflow-hidden rounded-full bg-slate-100 h-[4px]">
                   <div className={`h-full rounded-full transition-all duration-500 ease-in-out ${isOverLimit ? 'bg-red-500' : 'bg-[#89b388]'}`} style={{ width: `${Math.min(percentage, 100)}%` }} />
                 </div>
                 <div className="shrink-0 text-right">
-                  <span className={`tracking-tight text-[12px] font-semibold ${isOverLimit ? 'text-red-500' : 'text-slate-800'}`}>
+                  <span className={`tracking-tight text-[12px] font-semibold ${isOverLimit ? 'text-red-500' : 'text-text-main'}`}>
                     {isOverLimit ? `$-${goal.current - goal.target}` : `$${goal.current}`}
-                    <span className="text-slate-400 text-[10px] font-medium"> / ${goal.target}</span>
+                    <span className="text-text-muted text-[10px] font-medium"> / ${goal.target}</span>
                   </span>
                 </div>
               </div>
@@ -168,7 +168,7 @@ const GoalColumn = ({
           );
         })}
       </div>
-      <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-28 bg-gradient-to-t from-[#f8f9fc] via-[#f8f9fc]/90 to-transparent"></div>
+      <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-28 bg-gradient-to-t from-background via-background/90 to-transparent"></div>
     </div>
   );
 };
@@ -290,10 +290,10 @@ export default function GoalsPage() {
 
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-          <div className="relative w-full max-w-[420px] rounded-3xl bg-[#f4f5f7] px-8 py-10 shadow-2xl">
+          <div className="relative w-full max-w-[420px] rounded-3xl bg-surface-alt px-8 py-10 shadow-2xl">
             <button 
               onClick={() => setIsModalOpen(false)}
-              className="absolute right-5 top-5 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-slate-200 hover:text-slate-700"
+              className="absolute right-5 top-5 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-text-muted transition-colors hover:bg-surface-alt hover:text-slate-700"
               aria-label="Close"
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -311,7 +311,7 @@ export default function GoalsPage() {
                 <label className="text-sm font-medium text-[var(--primary)]">{t('Name')}</label>
                 <input 
                   type="text" value={goalName} onChange={(e) => setGoalName(e.target.value)} placeholder={t('Enter the name')} 
-                  className="w-full rounded-2xl bg-white px-5 py-3.5 text-sm text-slate-700 placeholder:text-slate-300 shadow-sm outline-none ring-1 ring-black/5 focus:ring-2 focus:ring-[var(--primary-light)]/50"
+                  className="w-full rounded-2xl bg-surface px-5 py-3.5 text-sm text-text-main placeholder:text-text-muted shadow-sm outline-none ring-1 ring-border-custom/10 focus:ring-2 focus:ring-[var(--primary-light)]/50"
                 />
               </div>
 
@@ -321,7 +321,7 @@ export default function GoalsPage() {
                 <div className="flex flex-col gap-1.5">
                   <label className="text-sm font-medium text-[var(--primary)]">{t('Spent')}</label>
                   <div className="relative">
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-medium text-slate-400">$</span>
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-medium text-text-muted">$</span>
                     <input 
                       type="number" 
                       step="0.01"
@@ -333,7 +333,7 @@ export default function GoalsPage() {
                         }
                       }} 
                       placeholder="0" 
-                      className="w-full rounded-2xl bg-white py-3.5 pl-7 pr-3 text-sm text-slate-700 placeholder:text-slate-300 shadow-sm outline-none ring-1 ring-black/5 focus:ring-2 focus:ring-[var(--primary-light)]/50 [&::-webkit-inner-spin-button]:cursor-pointer [&::-webkit-outer-spin-button]:cursor-pointer"
+                      className="w-full rounded-2xl bg-surface py-3.5 pl-7 pr-3 text-sm text-text-main placeholder:text-text-muted shadow-sm outline-none ring-1 ring-border-custom/10 focus:ring-2 focus:ring-[var(--primary-light)]/50 [&::-webkit-inner-spin-button]:cursor-pointer [&::-webkit-outer-spin-button]:cursor-pointer"
                     />
                   </div>
                 </div>
@@ -342,7 +342,7 @@ export default function GoalsPage() {
                 <div className="flex flex-col gap-1.5">
                   <label className="text-sm font-medium text-[var(--primary)]">{t('Target')}</label>
                   <div className="relative">
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-medium text-slate-400">$</span>
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-medium text-text-muted">$</span>
                     <input 
                       type="number" 
                       step="1"
@@ -362,7 +362,7 @@ export default function GoalsPage() {
                         }
                       }}
                       placeholder="0" 
-                      className="w-full rounded-2xl bg-white py-3.5 pl-7 pr-3 text-sm text-slate-700 placeholder:text-slate-300 shadow-sm outline-none ring-1 ring-black/5 focus:ring-2 focus:ring-[var(--primary-light)]/50 [&::-webkit-inner-spin-button]:cursor-pointer [&::-webkit-outer-spin-button]:cursor-pointer"
+                      className="w-full rounded-2xl bg-surface py-3.5 pl-7 pr-3 text-sm text-text-main placeholder:text-text-muted shadow-sm outline-none ring-1 ring-border-custom/10 focus:ring-2 focus:ring-[var(--primary-light)]/50 [&::-webkit-inner-spin-button]:cursor-pointer [&::-webkit-outer-spin-button]:cursor-pointer"
                     />
                   </div>
                 </div>

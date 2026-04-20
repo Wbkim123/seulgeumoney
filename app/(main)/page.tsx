@@ -20,11 +20,11 @@ function GoalPill({ label, valueText, percent = 0, tone = 'normal', onClick }: G
     // ✨ cursor-pointer와 onClick 이벤트를 추가해서 캡슐을 누를 수 있게 만들었습니다.
     <div 
       onClick={onClick}
-      className="w-full shrink-0 cursor-pointer rounded-full bg-white px-6 py-4 shadow-[0_5px_15px_rgba(0,0,0,0.08)] ring-1 ring-slate-200/80 transition-transform hover:-translate-y-0.5 hover:shadow-lg"
+      className="w-full shrink-0 cursor-pointer rounded-full bg-surface px-6 py-4 shadow-[0_5px_15px_rgba(0,0,0,0.08)] ring-1 ring-border-custom/10 transition-transform hover:-translate-y-0.5 hover:shadow-lg"
     >
       <div className="flex items-center justify-between text-[14px]">
-        <span className="truncate pr-2 font-medium text-slate-800">{label}</span>
-        <span className={`font-semibold ${isDanger ? 'text-red-500' : 'text-slate-500'}`}>
+        <span className="truncate pr-2 font-medium text-text-main">{label}</span>
+        <span className={`font-semibold ${isDanger ? 'text-red-500' : 'text-text-muted'}`}>
           {valueText}
         </span>
       </div>
@@ -43,10 +43,10 @@ function Donut({ label, amount }: { label: string; amount: string }) {
   return (
     <div className="flex flex-col items-center justify-center">
       <div className="relative h-60 w-60 rounded-full bg-gradient-to-b from-[var(--primary-light)]/50 via-[var(--primary-light)] to-[var(--primary)] shadow-[0_24px_55px_rgba(0,0,0,0.20)]">
-        <div className="absolute left-1/2 top-1/2 h-30 w-30 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white shadow-inner" />
+        <div className="absolute left-1/2 top-1/2 h-30 w-30 -translate-x-1/2 -translate-y-1/2 rounded-full bg-surface shadow-inner" />
         <div className="absolute inset-0 rounded-full shadow-[inset_0_10px_25px_rgba(255,255,255,0.35)]" />
       </div>
-      <div className="mt-7 flex items-center gap-3 text-slate-500">
+      <div className="mt-7 flex items-center gap-3 text-text-muted">
         <span className="text-[15px] font-semibold">{t(label)}</span>
         <span className="text-2xl font-extrabold text-slate-600">{amount}</span>
       </div>
@@ -65,9 +65,9 @@ const ColumnHeaderSelector = ({ value, onChange }: { value: string, onChange: (v
         className="flex cursor-pointer items-center gap-1.5 transition-opacity hover:opacity-70"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <span className="text-[15px] font-semibold text-slate-400">{t(value)}</span>
+        <span className="text-[15px] font-semibold text-text-muted">{t(value)}</span>
         <svg 
-          className={`text-slate-400 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} 
+          className={`text-text-muted transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} 
           width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
         >
           <polyline points="6 9 12 15 18 9"></polyline>
@@ -77,7 +77,7 @@ const ColumnHeaderSelector = ({ value, onChange }: { value: string, onChange: (v
       {isOpen && (
         <>
           <div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)}></div>
-          <div className="absolute top-full z-50 mt-2 w-[120px] overflow-hidden rounded-2xl bg-white shadow-xl ring-1 ring-black/5">
+          <div className="absolute top-full z-50 mt-2 w-[120px] overflow-hidden rounded-2xl bg-surface shadow-xl ring-1 ring-border-custom/10">
             <div className="flex flex-col py-1.5">
               {options.map((opt) => (
                 <div 
@@ -125,7 +125,7 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 gap-10 md:grid-cols-2">
         
         {/* 🟢 Goals 섹션 */}
-        <section className="flex aspect-[50/51] flex-col rounded-[32px] bg-[#f8f9fc] p-8 shadow-[0_10px_40px_rgba(0,0,0,0.04)] border border-white">
+        <section className="flex aspect-[50/51] flex-col rounded-[32px] bg-background p-8 shadow-[0_10px_40px_rgba(0,0,0,0.04)] border border-white">
           <div className="text-[22px] font-semibold text-[var(--primary)]">{t('Goals')}</div>
           
           <div className="mt-6 grid grid-cols-2 gap-6 text-center">
@@ -184,15 +184,15 @@ export default function DashboardPage() {
               
             </div>
 
-            <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-[#f8f9fc] via-[#f8f9fc]/90 to-transparent"></div>
+            <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-background via-background/90 to-transparent"></div>
           </div>
         </section>
 
         {/* 🟢 Total Spending 섹션 */}
-        <section className="flex aspect-[50/51] flex-col rounded-[32px] bg-[#f8f9fc] p-8 shadow-[0_10px_40px_rgba(0,0,0,0.04)] border border-white">
+        <section className="flex aspect-[50/51] flex-col rounded-[32px] bg-background p-8 shadow-[0_10px_40px_rgba(0,0,0,0.04)] border border-white">
           <div className="flex items-start justify-between">
             <div className="text-[22px] font-semibold text-[var(--primary)]">{t('Total Spending')}</div>
-            <div className="text-[28px] font-extrabold text-slate-900">$ 1,082</div>
+            <div className="text-[28px] font-extrabold text-text-main">$ 1,082</div>
           </div>
           <div className="flex flex-1 items-center justify-center">
             <Donut label="Grocery" amount="$ 536" />
@@ -204,13 +204,13 @@ export default function DashboardPage() {
       {selectedGoal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm" onClick={() => setSelectedGoal(null)}>
           <div 
-            className="relative w-full max-w-[420px] rounded-3xl bg-[#f4f5f7] px-8 py-10 shadow-2xl" 
+            className="relative w-full max-w-[420px] rounded-3xl bg-surface-alt px-8 py-10 shadow-2xl" 
             onClick={(e) => e.stopPropagation()}
           >
             {/* 닫기 (X) 버튼 */}
             <button 
               onClick={() => setSelectedGoal(null)}
-              className="absolute right-5 top-5 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-slate-200 hover:text-slate-700"
+              className="absolute right-5 top-5 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-text-muted transition-colors hover:bg-slate-200 hover:text-slate-700"
               aria-label="Close"
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -229,7 +229,7 @@ export default function DashboardPage() {
               {/* Name */}
               <div className="flex flex-col gap-1.5">
                 <label className="text-sm font-medium text-[var(--primary)]">{t('Name')}</label>
-                <div className="w-full rounded-2xl bg-white px-5 py-3.5 text-sm font-medium text-slate-700 shadow-sm ring-1 ring-black/5">
+                <div className="w-full rounded-2xl bg-surface px-5 py-3.5 text-sm font-medium text-slate-700 shadow-sm ring-1 ring-border-custom/10">
                   {selectedGoal.title}
                 </div>
               </div>
@@ -238,13 +238,13 @@ export default function DashboardPage() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex flex-col gap-1.5">
                   <label className="text-sm font-medium text-[var(--primary)]">{t('Spent')}</label>
-                  <div className="w-full rounded-2xl bg-white px-5 py-3.5 text-sm font-medium text-slate-700 shadow-sm ring-1 ring-black/5">
+                  <div className="w-full rounded-2xl bg-surface px-5 py-3.5 text-sm font-medium text-slate-700 shadow-sm ring-1 ring-border-custom/10">
                     $ {selectedGoal.current}
                   </div>
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <label className="text-sm font-medium text-[var(--primary)]">{t('Target')}</label>
-                  <div className="w-full rounded-2xl bg-white px-5 py-3.5 text-sm font-medium text-slate-700 shadow-sm ring-1 ring-black/5">
+                  <div className="w-full rounded-2xl bg-surface px-5 py-3.5 text-sm font-medium text-slate-700 shadow-sm ring-1 ring-border-custom/10">
                     $ {selectedGoal.target}
                   </div>
                 </div>
@@ -253,7 +253,7 @@ export default function DashboardPage() {
               {/* Category */}
               <div className="flex flex-col gap-1.5">
                 <label className="text-sm font-medium text-[var(--primary)]">{t('Categories')}</label>
-                <div className="w-full rounded-2xl bg-white px-5 py-3.5 text-sm font-medium text-slate-700 shadow-sm ring-1 ring-black/5">
+                <div className="w-full rounded-2xl bg-surface px-5 py-3.5 text-sm font-medium text-slate-700 shadow-sm ring-1 ring-border-custom/10">
                   {selectedGoal.category || '-'}
                 </div>
               </div>
@@ -261,7 +261,7 @@ export default function DashboardPage() {
               {/* Subcategory */}
               <div className="flex flex-col gap-1.5">
                 <label className="text-sm font-medium text-[var(--primary)]">{t('Subcategories')}</label>
-                <div className="w-full rounded-2xl bg-white px-5 py-3.5 text-sm font-medium text-slate-700 shadow-sm ring-1 ring-black/5">
+                <div className="w-full rounded-2xl bg-surface px-5 py-3.5 text-sm font-medium text-slate-700 shadow-sm ring-1 ring-border-custom/10">
                   {selectedGoal.subcategory || '-'}
                 </div>
               </div>

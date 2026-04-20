@@ -15,8 +15,8 @@ export default function VerifyCodePage() {
   const isValidCode = /^\d{6}$/.test(code);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white px-4">
-      <div className="relative w-full max-w-sm pt-12 p-6 border border-[var(--primary)] rounded-lg shadow-md bg-white text-center">
+    <div className="min-h-screen flex items-center justify-center bg-background px-4">
+      <div className="relative w-full max-w-sm pt-12 p-6 border border-border-custom/50 rounded-lg shadow-md bg-surface text-center">
 
         {/* ✅ 슬저씨 위치 그대로 */}
         <div className="absolute top-0 left-0 -translate-x-[-30%] -translate-y-[60%]">
@@ -28,7 +28,7 @@ export default function VerifyCodePage() {
           />
         </div>
 
-        <h2 className="text-2xl font-bold mb-6 text-[var(--primary)]">Verify Code</h2>
+        <h2 className="text-2xl font-bold mb-6 text-text-main">Verify Code</h2>
 
         <input
           type="text"
@@ -39,7 +39,7 @@ export default function VerifyCodePage() {
           value={code}
           onChange={(e) => setCode(e.target.value)}
           required
-          className="w-full px-4 py-2 border border-[var(--primary)] text-[#666666] placeholder-[#666666] bg-white rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-[var(--primary-light)]"
+          className="w-full px-4 py-2 border border-border-custom/50 text-text-main placeholder-text-muted bg-transparent rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-border-custom/10"
         />
 
         <button
@@ -47,8 +47,8 @@ export default function VerifyCodePage() {
           disabled={!isValidCode}
           className={`w-full py-2 rounded-md font-semibold transition
             ${isValidCode
-              ? 'bg-[var(--primary)] hover:bg-[#557d55] text-white'
-              : 'bg-gray-300 text-white cursor-not-allowed'}
+              ? 'bg-primary hover:bg-primary/90 text-white'
+              : 'bg-gray-300 dark:bg-gray-600 text-white dark:text-gray-400 cursor-not-allowed'}
           `}
         >
           Verify
