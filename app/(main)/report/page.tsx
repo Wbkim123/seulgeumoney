@@ -175,12 +175,12 @@ export default function ReportPeriodPage() {
           onClick={() => setIsModalOpen(false)} 
         >
           <div 
-            className="relative flex w-full max-w-[520px] max-h-[85vh] flex-col rounded-[32px] bg-background px-8 py-10 shadow-2xl"
+            className="relative flex w-full max-w-[520px] max-h-[85vh] flex-col rounded-[32px] bg-surface px-8 py-10 shadow-2xl border border-border-custom/5"
             onClick={(e) => e.stopPropagation()} 
           >
             <button
               onClick={() => setIsModalOpen(false)}
-              className="absolute right-6 top-6 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-text-muted transition-colors hover:bg-surface-alt hover:text-slate-600"
+              className="absolute right-6 top-6 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-text-muted transition-colors hover:bg-surface-alt hover:text-text-main"
               aria-label="Close modal"
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -202,22 +202,22 @@ export default function ReportPeriodPage() {
               <div className="flex flex-col gap-6">
                 
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="rounded-3xl bg-surface p-6 shadow-[0_4px_20px_rgba(0,0,0,0.03)] ring-1 ring-border-custom/10">
+                  <div className="rounded-3xl bg-surface-alt p-6 shadow-[0_4px_20px_rgba(0,0,0,0.03)] ring-1 ring-border-custom/10">
                     <div className="text-[13px] font-semibold text-text-muted">{t('Total Spent')}</div>
                     <div className="mt-2 text-2xl font-extrabold text-text-main">$ 145.50</div>
                   </div>
-                  <div className="rounded-3xl bg-surface p-6 shadow-[0_4px_20px_rgba(0,0,0,0.03)] ring-1 ring-border-custom/10">
+                  <div className="rounded-3xl bg-surface-alt p-6 shadow-[0_4px_20px_rgba(0,0,0,0.03)] ring-1 ring-border-custom/10">
                     <div className="text-[13px] font-semibold text-text-muted">{t('Your Budget')}</div>
                     <div className="mt-2 text-2xl font-extrabold text-[var(--primary)]">$ 200.00</div>
                   </div>
                 </div>
 
-                <div className="rounded-3xl bg-[#f0f5f0] p-6 ring-1 ring-[var(--primary-light)]/30">
+                <div className="rounded-3xl bg-primary-muted p-6 ring-1 ring-[var(--primary-light)]/30">
                   <div className="mb-3 flex items-center gap-2">
                     <span className="text-xl">💡</span>
                     <h3 className="text-[15px] font-bold text-[var(--primary)]">{t('Insight')}</h3>
                   </div>
-                  <p className="text-[14px] font-medium leading-relaxed text-[#527a54]">
+                  <p className="text-[14px] font-medium leading-relaxed text-text-main">
                     {language === 'ko' ? (
                       <>잘하셨어요! 평균 예산보다 <span className="font-bold text-[var(--primary)]">27% 적게</span> 지출하셨습니다. 가장 큰 지출 항목은 <span className="font-bold">식비</span>였지만, 불필요한 쇼핑은 성공적으로 피하셨네요.</>
                     ) : (
@@ -226,37 +226,37 @@ export default function ReportPeriodPage() {
                   </p>
                 </div>
 
-                <div className="rounded-3xl bg-surface p-6 shadow-[0_4px_20px_rgba(0,0,0,0.03)] ring-1 ring-border-custom/10">
-                  <h3 className="mb-5 text-[15px] font-bold text-slate-700">{t('Top Categories')}</h3>
-                  
+                <div className="rounded-3xl bg-surface-alt p-6 shadow-[0_4px_20px_rgba(0,0,0,0.03)] ring-1 ring-border-custom/10">
+                  <h3 className="mb-5 text-[15px] font-bold text-text-main">{t('Top Categories')}</h3>
+
                   <div className="flex flex-col gap-6">
                     <div>
                       <div className="mb-2 flex justify-between text-[14px] font-semibold">
-                        <span className="text-slate-700">🍔 {t('Food & Dining')}</span>
+                        <span className="text-text-main">🍔 {t('Food & Dining')}</span>
                         <span className="text-text-main">$ 85.00</span>
                       </div>
-                      <div className="h-2.5 w-full overflow-hidden rounded-full bg-surface-alt">
-                        <div className="h-full rounded-full bg-[#89b388]" style={{ width: '58%' }}></div>
+                      <div className="h-2.5 w-full overflow-hidden rounded-full bg-surface">
+                        <div className="h-full rounded-full bg-[var(--primary-light)]" style={{ width: '58%' }}></div>
                       </div>
                     </div>
                     
                     <div>
                       <div className="mb-2 flex justify-between text-[14px] font-semibold">
-                        <span className="text-slate-700">🚕 {t('Transport')}</span>
+                        <span className="text-text-main">🚕 {t('Transport')}</span>
                         <span className="text-text-main">$ 45.00</span>
                       </div>
-                      <div className="h-2.5 w-full overflow-hidden rounded-full bg-surface-alt">
-                        <div className="h-full rounded-full bg-[#a3c9a2]" style={{ width: '31%' }}></div>
+                      <div className="h-2.5 w-full overflow-hidden rounded-full bg-surface">
+                        <div className="h-full rounded-full bg-[var(--primary-light)] opacity-70" style={{ width: '31%' }}></div>
                       </div>
                     </div>
 
                     <div>
                       <div className="mb-2 flex justify-between text-[14px] font-semibold">
-                        <span className="text-slate-700">☕ {t('Coffee')}</span>
+                        <span className="text-text-main">☕ {t('Coffee')}</span>
                         <span className="text-text-main">$ 15.50</span>
                       </div>
-                      <div className="h-2.5 w-full overflow-hidden rounded-full bg-surface-alt">
-                        <div className="h-full rounded-full bg-[#c2e0c1]" style={{ width: '11%' }}></div>
+                      <div className="h-2.5 w-full overflow-hidden rounded-full bg-surface">
+                        <div className="h-full rounded-full bg-[var(--primary-light)] opacity-40" style={{ width: '11%' }}></div>
                       </div>
                     </div>
                   </div>

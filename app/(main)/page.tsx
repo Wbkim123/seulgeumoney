@@ -125,7 +125,7 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 gap-10 md:grid-cols-2">
         
         {/* 🟢 Goals 섹션 */}
-        <section className="flex aspect-[50/51] flex-col rounded-[32px] bg-background p-8 shadow-[0_10px_40px_rgba(0,0,0,0.04)] border border-white">
+        <section className="flex aspect-[50/51] flex-col rounded-[32px] bg-surface p-8 shadow-[0_10px_40px_rgba(0,0,0,0.06)] border border-border-custom/5">
           <div className="text-[22px] font-semibold text-[var(--primary)]">{t('Goals')}</div>
           
           <div className="mt-6 grid grid-cols-2 gap-6 text-center">
@@ -153,7 +153,7 @@ export default function DashboardPage() {
                     />
                   ))
                 ) : (
-                  <div className="mt-10 text-center text-sm font-medium text-slate-300">
+                  <div className="mt-10 text-center text-sm font-medium text-text-muted">
                     {t(`No ${leftCategory.toLowerCase()} goals`)}
                   </div>
                 )}
@@ -176,7 +176,7 @@ export default function DashboardPage() {
                     />
                   ))
                 ) : (
-                  <div className="mt-10 text-center text-sm font-medium text-slate-300">
+                  <div className="mt-10 text-center text-sm font-medium text-text-muted">
                     {t(`No ${rightCategory.toLowerCase()} goals`)}
                   </div>
                 )}
@@ -184,12 +184,12 @@ export default function DashboardPage() {
               
             </div>
 
-            <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-background via-background/90 to-transparent"></div>
+            <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-surface via-surface/90 to-transparent"></div>
           </div>
         </section>
 
         {/* 🟢 Total Spending 섹션 */}
-        <section className="flex aspect-[50/51] flex-col rounded-[32px] bg-background p-8 shadow-[0_10px_40px_rgba(0,0,0,0.04)] border border-white">
+        <section className="flex aspect-[50/51] flex-col rounded-[32px] bg-surface p-8 shadow-[0_10px_40px_rgba(0,0,0,0.06)] border border-border-custom/5">
           <div className="flex items-start justify-between">
             <div className="text-[22px] font-semibold text-[var(--primary)]">{t('Total Spending')}</div>
             <div className="text-[28px] font-extrabold text-text-main">$ 1,082</div>

@@ -172,7 +172,7 @@ export default function SpendingPage() {
                     >
                       Bank of America
                     </button>
-                    <span className="text-[12px] font-medium text-slate-300">
+                    <span className="text-[12px] font-medium text-text-muted/60">
                       Adv Plus Banking | ***9330
                     </span>
                   </div>
@@ -187,7 +187,7 @@ export default function SpendingPage() {
                     >
                       Chase
                     </button>
-                    <span className="text-[12px] font-medium text-slate-300">
+                    <span className="text-[12px] font-medium text-text-muted/60">
                       Chase College | ***2885
                     </span>
                   </div>
@@ -195,7 +195,7 @@ export default function SpendingPage() {
               )}
 
               {selectedType !== 'checking' && (
-                <div className="flex h-32 items-center justify-center text-sm font-medium text-slate-300">
+                <div className="flex h-32 items-center justify-center text-sm font-medium text-text-muted/40">
                   {t('No account details')}
                 </div>
               )}
@@ -208,16 +208,16 @@ export default function SpendingPage() {
       {/* 🟢 3. 오버레이(모달) 영역 - 원본 코드 100% 유지 */}
       {isModalOpen && (
         <div 
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm transition-opacity"
           onClick={() => setIsModalOpen(false)}
         >
           <div 
-            className="relative w-full max-w-[500px] rounded-3xl bg-surface-alt px-8 py-10 shadow-2xl"
+            className="relative w-full max-w-[500px] rounded-3xl bg-surface px-8 py-10 shadow-2xl border border-border-custom/5"
             onClick={(e) => e.stopPropagation()} 
           >
             <button
               onClick={() => setIsModalOpen(false)}
-              className="absolute right-6 top-6 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-text-muted transition-colors hover:bg-surface-alt hover:text-slate-600"
+              className="absolute right-6 top-6 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-text-muted transition-colors hover:bg-surface-alt hover:text-text-main"
               aria-label="Close modal"
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -241,7 +241,7 @@ export default function SpendingPage() {
               <input 
                 type="text" 
                 placeholder={t('Search')} 
-                className="w-full rounded-full bg-surface px-5 py-3 pr-12 text-sm text-text-main placeholder:text-text-muted shadow-[0_10px_25px_rgba(0,0,0,0.10)] outline-none ring-1 ring-border-custom/10 focus:ring-2 focus:ring-[var(--primary-light)]/50"
+                className="w-full rounded-full bg-surface-alt px-5 py-3 pr-12 text-sm text-text-main placeholder:text-text-muted shadow-sm outline-none ring-1 ring-border-custom/10 focus:ring-2 focus:ring-[var(--primary-light)]/50"
               />
               <button
                 type="button"
@@ -257,7 +257,7 @@ export default function SpendingPage() {
 
             <div className="flex flex-col bg-surface rounded-2xl overflow-hidden shadow-sm ring-1 ring-border-custom/10">
               
-              <div className="flex items-center justify-between bg-[#b3b3b3] px-6 py-1.5 text-sm font-bold text-white z-20">
+              <div className="flex items-center justify-between bg-slate-400 dark:bg-slate-600 px-6 py-1.5 text-sm font-bold text-white z-20">
                 <button 
                   onClick={handlePrevMonth}
                   className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-full transition-colors hover:bg-white/20"
@@ -286,19 +286,19 @@ export default function SpendingPage() {
                 {dynamicGroupedTransactions.map((group, groupIdx) => (
                   <div key={groupIdx}>
                     
-                    <div className="sticky top-0 z-10 border-b border-t border-slate-100 bg-surface-alt/95 backdrop-blur-sm px-5 py-1.5 text-[12px] font-bold text-text-muted">
+                    <div className="sticky top-0 z-10 border-b border-t border-border-custom/5 bg-surface-alt/95 backdrop-blur-sm px-5 py-1.5 text-[12px] font-bold text-text-muted">
                       {group.translatedDate}
                     </div>
 
                     {group.items.length > 0 ? (
-                      <div className="divide-y divide-slate-100">
+                      <div className="divide-y divide-border-custom/5">
                         {group.items.map((tx) => (
                           <div 
                             key={tx.id} 
-                            className="flex items-center justify-between p-3.5 hover:bg-slate-50 transition-colors"
+                            className="flex items-center justify-between p-3.5 hover:bg-surface-alt transition-colors"
                           >
                             <div className="flex items-center gap-3">
-                              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-100 text-lg">
+                              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-surface-alt text-lg shadow-sm">
                                 {tx.icon}
                               </div>
                               <div className="flex flex-col">
@@ -317,7 +317,7 @@ export default function SpendingPage() {
                         ))}
                       </div>
                     ) : (
-                      <div className="py-3 text-center text-[12px] font-medium text-slate-300">
+                      <div className="py-3 text-center text-[12px] font-medium text-text-muted/30">
                         {t('No transactions')}
                       </div>
                     )}

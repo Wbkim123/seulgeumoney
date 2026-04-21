@@ -195,7 +195,7 @@ export default function CalendarPage() {
 
   return (
     <>
-      <div className="relative w-full max-w-[760px] mx-auto rounded-[32px] border border-white bg-surface px-6 py-10 sm:px-12 sm:py-12 shadow-[0_18px_50px_rgba(0,0,0,0.14)] animate-fade-in">
+      <div className="relative w-full max-w-[760px] mx-auto rounded-[32px] border border-border-custom/5 bg-surface px-6 py-10 sm:px-12 sm:py-12 shadow-[0_18px_50px_rgba(0,0,0,0.14)] animate-fade-in">
         <div className="mb-10 flex items-center justify-center gap-4 sm:gap-8 text-[var(--primary)]">
             <button 
               onClick={handlePrevMonth}

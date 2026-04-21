@@ -123,7 +123,7 @@ const GoalColumn = ({
   };
 
   return (
-    <div className="relative flex w-full flex-1 flex-col overflow-hidden rounded-[40px] bg-background px-6 pt-8 shadow-[0_8px_30px_rgba(0,0,0,0.03)] ring-1 ring-border-custom/10">
+    <div className="relative flex w-full flex-1 flex-col overflow-hidden rounded-[40px] bg-surface px-6 pt-8 shadow-[0_8px_30px_rgba(0,0,0,0.05)] ring-1 ring-border-custom/10 border border-border-custom/5">
       <div className="mb-7 flex items-center justify-between px-3">
         <h2 className="text-[18px] font-medium text-[#739e75]">{t(title)}</h2>
         <button onClick={onAddClick} className="flex h-6 w-6 cursor-pointer items-center justify-center text-2xl font-light text-text-muted transition-colors hover:text-[var(--primary)]">+</button>
@@ -147,7 +147,7 @@ const GoalColumn = ({
               onDragEnd={handleDragEnd}
               onDragOver={(e) => e.preventDefault()}
               onClick={() => onEditClick(goal)} 
-              className="flex shrink-0 cursor-grab active:cursor-grabbing flex-col justify-center gap-1.5 rounded-full bg-surface px-6 py-4 shadow-[0_5px_15px_rgba(0,0,0,0.04)] ring-1 ring-border-custom/10 transition-transform hover:-translate-y-1 hover:shadow-md"
+              className="flex shrink-0 cursor-grab active:cursor-grabbing flex-col justify-center gap-1.5 rounded-full bg-surface-alt px-6 py-4 shadow-[0_5px_15px_rgba(0,0,0,0.04)] ring-1 ring-border-custom/10 transition-transform hover:-translate-y-1 hover:shadow-md border border-border-custom/5"
             >
               <div className="flex items-center justify-between gap-4 pointer-events-none">
                 <span className="truncate text-[14px] font-medium text-text-main">{goal.title}</span>
@@ -290,7 +290,7 @@ export default function GoalsPage() {
 
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-          <div className="relative w-full max-w-[420px] rounded-3xl bg-surface-alt px-8 py-10 shadow-2xl">
+          <div className="relative w-full max-w-[420px] rounded-3xl bg-surface px-8 py-10 shadow-2xl border border-border-custom/5">
             <button 
               onClick={() => setIsModalOpen(false)}
               className="absolute right-5 top-5 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-text-muted transition-colors hover:bg-surface-alt hover:text-slate-700"
