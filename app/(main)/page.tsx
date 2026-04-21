@@ -30,7 +30,7 @@ function GoalPill({ label, valueText, percent = 0, tone = 'normal', onClick }: G
       </div>
       <div className="mt-2.5 h-[5px] w-full overflow-hidden rounded-full bg-slate-100">
         <div
-          className={`h-full rounded-full transition-all duration-500 ease-in-out ${isDanger ? 'bg-red-500' : 'bg-[#89b388]'}`}
+          className={`h-full rounded-full transition-all duration-500 ease-in-out ${isDanger ? 'bg-red-500' : 'bg-[var(--primary-light)]'}`}
           style={{ width: `${safe}%` }}
         />
       </div>

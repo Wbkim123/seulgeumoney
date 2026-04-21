@@ -286,7 +286,7 @@ export default function AccountSetting({ onClose }: AccountSettingProps) {
 
         <div className="mt-5 flex justify-end gap-3 pt-4">
           <button onClick={handleCancel} className="rounded-xl px-6 py-2.5 text-[13px] font-bold text-text-muted hover:bg-black/5 transition-colors cursor-pointer">{t('Cancel')}</button>
-          <button onClick={handleSave} className="rounded-xl bg-[var(--primary)] px-10 py-2.5 text-[13px] font-bold text-white shadow-xl shadow-[var(--primary)]/20 hover:bg-[#527a54] hover:-translate-y-0.5 transition-all cursor-pointer">{t('Save Changes')}</button>
+          <button onClick={handleSave} className="rounded-xl bg-[var(--primary)] px-10 py-2.5 text-[13px] font-bold text-white shadow-xl shadow-[var(--primary)]/20 hover:bg-[var(--primary-hover)] hover:-translate-y-0.5 transition-all cursor-pointer">{t('Save Changes')}</button>
         </div>
       </div>
     </div>

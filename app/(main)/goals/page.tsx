@@ -80,7 +80,7 @@ const CustomSelect = ({
                       setNewItem('');
                     }
                   }}
-                  className="cursor-pointer rounded-xl bg-[var(--primary)] px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#527a54]"
+                  className="cursor-pointer rounded-xl bg-[var(--primary)] px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-[var(--primary-hover)]"
                 >
                   {t('Add')}
                 </button>
@@ -125,7 +125,7 @@ const GoalColumn = ({
   return (
     <div className="relative flex w-full flex-1 flex-col overflow-hidden rounded-[40px] bg-surface px-6 pt-8 shadow-[0_8px_30px_rgba(0,0,0,0.05)] ring-1 ring-border-custom/10 border border-border-custom/5">
       <div className="mb-7 flex items-center justify-between px-3">
-        <h2 className="text-[18px] font-medium text-[#739e75]">{t(title)}</h2>
+        <h2 className="text-[18px] font-medium text-[var(--primary)]">{t(title)}</h2>
         <button onClick={onAddClick} className="flex h-6 w-6 cursor-pointer items-center justify-center text-2xl font-light text-text-muted transition-colors hover:text-[var(--primary)]">+</button>
       </div>
       
@@ -155,7 +155,7 @@ const GoalColumn = ({
               </div>
               <div className="flex items-center justify-between gap-5 pointer-events-none">
                 <div className="flex-1 overflow-hidden rounded-full bg-slate-100 h-[4px]">
-                  <div className={`h-full rounded-full transition-all duration-500 ease-in-out ${isOverLimit ? 'bg-red-500' : 'bg-[#89b388]'}`} style={{ width: `${Math.min(percentage, 100)}%` }} />
+                  <div className={`h-full rounded-full transition-all duration-500 ease-in-out ${isOverLimit ? 'bg-red-500' : 'bg-[var(--primary-light)]'}`} style={{ width: `${Math.min(percentage, 100)}%` }} />
                 </div>
                 <div className="shrink-0 text-right">
                   <span className={`tracking-tight text-[12px] font-semibold ${isOverLimit ? 'text-red-500' : 'text-text-main'}`}>
@@ -395,7 +395,7 @@ export default function GoalsPage() {
                 <button 
                   onClick={handleSaveGoal} disabled={!isFormValid}
                   className={`flex-[2] rounded-2xl py-4 text-[15px] font-semibold text-white transition-all ${
-                    isFormValid ? 'cursor-pointer bg-[var(--primary)] shadow-lg hover:-translate-y-1 hover:bg-[#527a54]' : 'cursor-not-allowed bg-slate-300 opacity-70'
+                    isFormValid ? 'cursor-pointer bg-[var(--primary)] shadow-lg hover:-translate-y-1 hover:bg-[var(--primary-hover)]' : 'cursor-not-allowed bg-slate-300 opacity-70'
                   }`}
                 >
                   {editingGoalId ? t('Save Changes') : t('Add Goal')}
