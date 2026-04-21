@@ -159,8 +159,8 @@ export default function AccountSetting({ onClose }: AccountSettingProps) {
   };
 
   return (
-    <div className="flex min-h-[calc(100vh-140px)] w-full items-start justify-center px-6 pt-2 pb-10 bg-surface-alt">
-      <div className="w-full max-w-[720px] rounded-[40px] border border-white bg-surface px-10 py-7 shadow-[0_20px_60px_rgba(0,0,0,0.12)] animate-fade-in flex flex-col relative z-10">
+    <div className="flex w-full items-start justify-center px-6 pt-2 pb-10">
+      <div className="w-full max-w-[720px] rounded-[40px] border border-border-custom/5 bg-surface px-10 py-7 shadow-[0_20px_60px_rgba(0,0,0,0.1)] animate-fade-in flex flex-col relative z-10">
         
         <div className="mb-4 flex flex-col gap-1">
           <h1 className="text-[26px] font-bold text-text-main tracking-tight">{t('Personal Info')}</h1>
