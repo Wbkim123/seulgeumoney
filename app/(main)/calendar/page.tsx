@@ -151,9 +151,9 @@ export default function CalendarPage() {
         onClick={() => { if (!isFuture) handleDayClick(day); }}
         className={`relative flex aspect-square flex-col items-center pt-3 sm:pt-4 transition-all rounded-2xl ring-1 ${
           isFuture 
-            ? 'cursor-default bg-slate-50 opacity-40 ring-border-custom/10' 
+            ? 'cursor-default bg-slate-50 dark:bg-slate-800/50 opacity-40 ring-border-custom/10 pointer-events-none' 
             : isSelected 
-              ? 'ring-[2px] ring-[var(--primary)] shadow-md bg-slate-50/50 cursor-pointer' 
+              ? 'ring-[2px] ring-[var(--primary)] shadow-md bg-slate-50/50 dark:bg-slate-700/30 cursor-pointer' 
               : 'bg-surface shadow-sm ring-border-custom/10 cursor-pointer hover:-translate-y-1 hover:shadow-md' 
         }`}
       >

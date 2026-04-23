@@ -284,14 +284,14 @@ export default function SideCalendar({ isOpen, onClose }: SideCalendarProps) {
                     setIsPanelOpen(true);
                   }}
                   className={[
-                    'h-9 w-9 rounded-lg ring-1 ring-border-custom/10 flex items-center justify-center text-[14px] font-medium transition cursor-pointer',
+                    'h-9 w-9 rounded-lg ring-1 ring-border-custom/10 flex items-center justify-center text-[14px] font-medium transition',
                     future
-                      ? 'bg-surface text-slate-300 cursor-default'
+                      ? 'bg-surface text-slate-200 cursor-default pointer-events-none'
                       : active
-                        ? 'bg-[var(--primary)] text-white font-bold shadow-md'
+                        ? 'bg-[var(--primary)] text-white font-bold shadow-md cursor-pointer'
                         : todayMark
-                          ? 'bg-surface text-[var(--primary)] font-bold ring-[2px] ring-[var(--primary)]/30'
-                          : 'bg-surface text-text-muted hover:bg-slate-50',
+                          ? 'bg-surface text-[var(--primary)] font-bold ring-[2px] ring-[var(--primary)]/30 cursor-pointer'
+                          : 'bg-surface text-text-muted hover:bg-slate-50 cursor-pointer',
                   ].join(' ')}
                 >
                   {d}
