@@ -70,9 +70,9 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
               aria-label={isAccountOpen ? "Back to page" : "Account Settings"}
             >
               {isAccountOpen ? (
-                <HiChevronLeft size={30} className="text-[var(--primary-light)]" />
+                <HiChevronLeft size={30} className="text-[var(--primary)]" />
               ) : (
-                <HiUser size={30} className="text-[var(--primary-light)]" />
+                <HiUser size={30} className="text-[var(--primary)]" />
               )}
             </button>
           </header>
