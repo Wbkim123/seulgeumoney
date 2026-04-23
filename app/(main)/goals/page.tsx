@@ -147,7 +147,7 @@ const GoalColumn = ({
               onDragEnd={handleDragEnd}
               onDragOver={(e) => e.preventDefault()}
               onClick={() => onEditClick(goal)} 
-              className="flex shrink-0 cursor-grab active:cursor-grabbing flex-col justify-center gap-1.5 rounded-full bg-surface-alt px-6 py-4 shadow-[0_5px_15px_rgba(0,0,0,0.04)] ring-1 ring-border-custom/10 transition-transform hover:-translate-y-1 hover:shadow-md border border-border-custom/5"
+              className="flex shrink-0 cursor-grab active:cursor-grabbing flex-col justify-center gap-1.5 rounded-full bg-surface px-6 py-4 shadow-[0_5px_15px_rgba(0,0,0,0.04)] ring-1 ring-border-custom/10 transition-transform hover:-translate-y-1 hover:shadow-md border border-border-custom/5"
             >
               <div className="flex items-center justify-between gap-4 pointer-events-none">
                 <span className="truncate text-[14px] font-medium text-text-main">{goal.title}</span>
