@@ -168,7 +168,6 @@ const GoalColumn = ({
           );
         })}
       </div>
-      <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-28 bg-gradient-to-t from-background via-background/90 to-transparent"></div>
     </div>
   );
 };
