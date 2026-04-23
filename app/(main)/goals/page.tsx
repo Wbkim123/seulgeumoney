@@ -123,7 +123,7 @@ const GoalColumn = ({
   };
 
   return (
-    <div className="relative flex w-full flex-1 flex-col overflow-hidden rounded-[40px] bg-surface px-6 pt-8 shadow-[0_8px_30px_rgba(0,0,0,0.05)] ring-1 ring-border-custom/10 border border-border-custom/5">
+    <div className="relative flex w-full flex-1 flex-col overflow-hidden rounded-[40px] bg-surface/50 backdrop-blur-md px-6 pt-8 shadow-[0_8px_30px_rgba(0,0,0,0.05)] ring-1 ring-border-custom/10 border border-border-custom/5">
       <div className="mb-7 flex items-center justify-between px-3">
         <h2 className="text-[18px] font-medium text-[var(--primary)]">{t(title)}</h2>
         <button onClick={onAddClick} className="flex h-6 w-6 cursor-pointer items-center justify-center text-2xl font-light text-text-muted transition-colors hover:text-[var(--primary)]">+</button>
