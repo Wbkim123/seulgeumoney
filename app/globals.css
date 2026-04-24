@@ -10,9 +10,9 @@
   --surface-alt: #f0f2f5;
   --border: #e2e8f0;
   --primary: #649566;
-  --primary-hover: #527a54;
-  --primary-light: #98c195;
-  --primary-muted: #f0fdf4;
+  --primary-hover: color-mix(in srgb, var(--primary), black 15%);
+  --primary-light: color-mix(in srgb, var(--primary), white 40%);
+  --primary-muted: color-mix(in srgb, var(--primary), transparent 90%);
   --primary-foreground: #ffffff;
   --text-main: #1e293b;
   --text-muted: #64748b;
@@ -24,8 +24,8 @@
   --surface: #1e293b;
   --surface-alt: #2d3a5a;
   --border: #3d4b63;
-  --primary-muted: rgba(100, 149, 102, 0.15);
-  --primary-hover: #73a875;
+  --primary-muted: color-mix(in srgb, var(--primary), transparent 85%);
+  --primary-hover: color-mix(in srgb, var(--primary), white 15%);
   --text-main: #f1f5f9;
   --text-muted: #94a3b8;
 }

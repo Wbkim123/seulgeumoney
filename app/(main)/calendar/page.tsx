@@ -209,7 +209,7 @@ export default function CalendarPage() {
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 className="group flex min-w-[200px] cursor-pointer items-center justify-center gap-2 rounded-2xl px-4 py-2 transition-colors hover:bg-slate-50"
               >
-                <h2 className="text-[22px] sm:text-[24px] font-bold whitespace-nowrap group-hover:text-[var(--primary-hover)] transition-colors">
+                <h2 className="text-[22px] sm:text-[24px] font-bold whitespace-nowrap group-hover:text-[var(--primary)] transition-colors">
                   {language === 'ko' ? `${formatYear(year)} ${t(monthNames[month])}` : `${t(monthNames[month])} ${formatYear(year)}`}
                 </h2>
                 <svg 
