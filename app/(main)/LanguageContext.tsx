@@ -20,7 +20,7 @@ const translations = {
     'Notification': '알림',
     'Theme': '테마',
     'Change PW': '비밀번호 변경',
-    'People': '사람들',
+    'Friend': '친구',
     'Tone': '말투',
     'Language Settings': '언어 설정',
     'Select your preferred language': '선호하는 언어를 선택하세요',

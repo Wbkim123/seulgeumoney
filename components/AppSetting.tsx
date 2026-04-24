@@ -14,7 +14,7 @@ const tabs = [
   'Notification',
   'Theme',
   'Change PW',
-  'People',
+  'Friend',
   'Tone',
 ];
 
