@@ -144,7 +144,7 @@ export default function SpendingPage() {
             }`}
           >
             {/* ✨ 안쪽 컨텐츠 (relative 속성을 추가하여 슬저씨가 정중앙에 올라가도록 설정) */}
-            <div className="relative w-[420px] rounded-[32px] border border-border-custom/10 bg-surface px-10 py-12 shadow-[0_18px_50px_rgba(0,0,0,0.12)]">
+            <div className="relative w-[420px] rounded-[32px] border border-border-custom/10 bg-surface/50 backdrop-blur-md px-10 py-12 shadow-[0_18px_50px_rgba(0,0,0,0.12)]">
               
               {/* ✨ 선택되었을 때만 오른쪽에 슬저씨 표시 */}
               {selectedType && (
