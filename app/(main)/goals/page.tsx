@@ -17,7 +17,7 @@ const CustomSelect = ({
   return (
     <div className="relative">
       <div
-        className={`flex w-full cursor-pointer items-center justify-between rounded-2xl bg-surface px-5 py-3.5 text-sm shadow-sm outline-none ring-1 transition-all ${
+        className={`flex w-full cursor-pointer items-center justify-between rounded-2xl bg-background px-5 py-3.5 text-sm shadow-sm outline-none ring-1 transition-all ${
           value ? 'text-text-main ring-border-custom/10' : 'text-slate-300 ring-border-custom/10'
         } ${isOpen ? 'ring-2 ring-[var(--primary-light)]/50' : ''}`}
         onClick={() => setIsOpen(!isOpen)}
@@ -289,10 +289,10 @@ export default function GoalsPage() {
 
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-          <div className="relative w-full max-w-[420px] rounded-3xl bg-surface px-8 py-10 shadow-2xl border border-border-custom/5">
+          <div className="relative w-full max-w-[420px] rounded-3xl bg-surface-alt px-8 py-10 shadow-2xl border border-border-custom/5">
             <button 
               onClick={() => setIsModalOpen(false)}
-              className="absolute right-5 top-5 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-text-muted transition-colors hover:bg-surface-alt hover:text-slate-700"
+              className="absolute right-5 top-5 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-text-muted transition-colors hover:bg-black/5 hover:text-text-main"
               aria-label="Close"
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -310,7 +310,7 @@ export default function GoalsPage() {
                 <label className="text-sm font-medium text-[var(--primary)]">{t('Name')}</label>
                 <input 
                   type="text" value={goalName} onChange={(e) => setGoalName(e.target.value)} placeholder={t('Enter the name')} 
-                  className="w-full rounded-2xl bg-surface px-5 py-3.5 text-sm text-text-main placeholder:text-text-muted shadow-sm outline-none ring-1 ring-border-custom/10 focus:ring-2 focus:ring-[var(--primary-light)]/50"
+                  className="w-full rounded-2xl bg-background px-5 py-3.5 text-sm text-text-main placeholder:text-text-muted shadow-sm outline-none ring-1 ring-border-custom/10 focus:ring-2 focus:ring-[var(--primary-light)]/50"
                 />
               </div>
 
@@ -332,7 +332,7 @@ export default function GoalsPage() {
                         }
                       }} 
                       placeholder="0" 
-                      className="w-full rounded-2xl bg-surface py-3.5 pl-7 pr-3 text-sm text-text-main placeholder:text-text-muted shadow-sm outline-none ring-1 ring-border-custom/10 focus:ring-2 focus:ring-[var(--primary-light)]/50 [&::-webkit-inner-spin-button]:cursor-pointer [&::-webkit-outer-spin-button]:cursor-pointer"
+                      className="w-full rounded-2xl bg-background py-3.5 pl-7 pr-3 text-sm text-text-main placeholder:text-text-muted shadow-sm outline-none ring-1 ring-border-custom/10 focus:ring-2 focus:ring-[var(--primary-light)]/50 [&::-webkit-inner-spin-button]:cursor-pointer [&::-webkit-outer-spin-button]:cursor-pointer"
                     />
                   </div>
                 </div>
@@ -361,7 +361,7 @@ export default function GoalsPage() {
                         }
                       }}
                       placeholder="0" 
-                      className="w-full rounded-2xl bg-surface py-3.5 pl-7 pr-3 text-sm text-text-main placeholder:text-text-muted shadow-sm outline-none ring-1 ring-border-custom/10 focus:ring-2 focus:ring-[var(--primary-light)]/50 [&::-webkit-inner-spin-button]:cursor-pointer [&::-webkit-outer-spin-button]:cursor-pointer"
+                      className="w-full rounded-2xl bg-background py-3.5 pl-7 pr-3 text-sm text-text-main placeholder:text-text-muted shadow-sm outline-none ring-1 ring-border-custom/10 focus:ring-2 focus:ring-[var(--primary-light)]/50 [&::-webkit-inner-spin-button]:cursor-pointer [&::-webkit-outer-spin-button]:cursor-pointer"
                     />
                   </div>
                 </div>
