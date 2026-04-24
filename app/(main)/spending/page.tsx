@@ -124,7 +124,7 @@ export default function SpendingPage() {
                     key={account.value}
                     onClick={() => setSelectedType(account.value)}
                     // ✨ Report Page와 완벽히 동일한 버튼 스타일 (선택 시 초록색 테두리/텍스트)
-                    className={`w-full cursor-pointer rounded-2xl px-6 py-4 text-left text-[15px] font-semibold transition-all duration-300 ${
+                    className={`w-full cursor-pointer rounded-2xl bg-surface px-6 py-4 text-left text-[15px] font-semibold transition-all duration-300 ${
                       isSelected 
                         ? 'shadow-md ring-[1.5px] ring-[var(--primary-light)] text-[var(--primary)]' 
                         : 'text-text-muted ring-1 ring-border-custom/10 hover:-translate-y-1 hover:shadow-lg hover:text-[var(--primary)]'
