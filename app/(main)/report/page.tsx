@@ -99,7 +99,7 @@ export default function ReportPeriodPage() {
         <div className="relative flex items-center justify-center transition-all duration-500 ease-in-out">
 
           {/* 🟢 1단계: 왼쪽 박스 */}
-          <div className="relative w-[420px] shrink-0 rounded-[32px] border border-border-custom/10 bg-surface px-10 py-12 shadow-[0_18px_50px_rgba(0,0,0,0.12)]">
+          <div className="relative w-[420px] shrink-0 rounded-[32px] border border-border-custom/10 bg-surface/50 backdrop-blur-md px-10 py-12 shadow-[0_18px_50px_rgba(0,0,0,0.12)]">
             
             {!selectedPeriod && (
               <div className="absolute -top-[45px] left-1/2 -translate-x-1/2 z-10 transition-opacity duration-300">
