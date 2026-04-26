@@ -20,7 +20,7 @@ function GoalPill({ label, valueText, percent = 0, tone = 'normal', onClick }: G
     // ✨ cursor-pointer와 onClick 이벤트를 추가해서 캡슐을 누를 수 있게 만들었습니다.
     <div 
       onClick={onClick}
-      className="w-full shrink-0 cursor-pointer rounded-full bg-surface px-6 py-4 shadow-[0_5px_15px_rgba(0,0,0,0.08)] ring-1 ring-border-custom/10 transition-transform hover:-translate-y-0.5 hover:shadow-lg"
+      className="w-full shrink-0 cursor-pointer rounded-full bg-surface px-6 py-4 shadow-[0_5px_15px_rgba(0,0,0,0.08)] ring-1 ring-border-custom/10 border border-border-custom/5 transition-transform hover:-translate-y-0.5 hover:shadow-lg"
     >
       <div className="flex items-center justify-between text-[14px]">
         <span className="truncate pr-2 font-medium text-text-main">{label}</span>
@@ -125,7 +125,7 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 gap-10 md:grid-cols-2">
         
         {/* 🟢 Goals 섹션 */}
-        <section className="flex aspect-[50/51] flex-col rounded-[32px] bg-surface p-8 shadow-[0_10px_40px_rgba(0,0,0,0.06)] border border-border-custom/5">
+        <section className="flex aspect-[50/51] flex-col rounded-[40px] bg-surface/50 backdrop-blur-md p-8 shadow-[0_10px_40px_rgba(0,0,0,0.06)] border border-border-custom/5">
           <div className="text-[22px] font-semibold text-[var(--primary)]">{t('Goals')}</div>
           
           <div className="mt-6 grid grid-cols-2 gap-6 text-center">
@@ -183,13 +183,11 @@ export default function DashboardPage() {
               </div>
               
             </div>
-
-            <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-surface via-surface/90 to-transparent"></div>
           </div>
         </section>
 
         {/* 🟢 Total Spending 섹션 */}
-        <section className="flex aspect-[50/51] flex-col rounded-[32px] bg-surface p-8 shadow-[0_10px_40px_rgba(0,0,0,0.06)] border border-border-custom/5">
+        <section className="flex aspect-[50/51] flex-col rounded-[40px] bg-surface/50 backdrop-blur-md p-8 shadow-[0_10px_40px_rgba(0,0,0,0.06)] border border-border-custom/5">
           <div className="flex items-start justify-between">
             <div className="text-[22px] font-semibold text-[var(--primary)]">{t('Total Spending')}</div>
             <div className="text-[28px] font-extrabold text-text-main">$ 1,082</div>
@@ -204,13 +202,13 @@ export default function DashboardPage() {
       {selectedGoal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm" onClick={() => setSelectedGoal(null)}>
           <div 
-            className="relative w-full max-w-[420px] rounded-3xl bg-surface-alt px-8 py-10 shadow-2xl" 
+            className="relative w-full max-w-[420px] rounded-3xl bg-surface-alt px-8 py-10 shadow-2xl border border-border-custom/5" 
             onClick={(e) => e.stopPropagation()}
           >
             {/* 닫기 (X) 버튼 */}
             <button 
               onClick={() => setSelectedGoal(null)}
-              className="absolute right-5 top-5 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-text-muted transition-colors hover:bg-slate-200 hover:text-slate-700"
+              className="absolute right-5 top-5 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-text-muted transition-colors hover:bg-black/5 hover:text-text-main"
               aria-label="Close"
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -229,7 +227,7 @@ export default function DashboardPage() {
               {/* Name */}
               <div className="flex flex-col gap-1.5">
                 <label className="text-sm font-medium text-[var(--primary)]">{t('Name')}</label>
-                <div className="w-full rounded-2xl bg-surface px-5 py-3.5 text-sm font-medium text-slate-700 shadow-sm ring-1 ring-border-custom/10">
+                <div className="w-full rounded-2xl bg-background px-5 py-3.5 text-sm font-medium text-text-main shadow-sm ring-1 ring-border-custom/10">
                   {selectedGoal.title}
                 </div>
               </div>
@@ -238,13 +236,13 @@ export default function DashboardPage() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex flex-col gap-1.5">
                   <label className="text-sm font-medium text-[var(--primary)]">{t('Spent')}</label>
-                  <div className="w-full rounded-2xl bg-surface px-5 py-3.5 text-sm font-medium text-slate-700 shadow-sm ring-1 ring-border-custom/10">
+                  <div className="w-full rounded-2xl bg-background px-5 py-3.5 text-sm font-medium text-text-main shadow-sm ring-1 ring-border-custom/10">
                     $ {selectedGoal.current}
                   </div>
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <label className="text-sm font-medium text-[var(--primary)]">{t('Target')}</label>
-                  <div className="w-full rounded-2xl bg-surface px-5 py-3.5 text-sm font-medium text-slate-700 shadow-sm ring-1 ring-border-custom/10">
+                  <div className="w-full rounded-2xl bg-background px-5 py-3.5 text-sm font-medium text-text-main shadow-sm ring-1 ring-border-custom/10">
                     $ {selectedGoal.target}
                   </div>
                 </div>
@@ -253,7 +251,7 @@ export default function DashboardPage() {
               {/* Category */}
               <div className="flex flex-col gap-1.5">
                 <label className="text-sm font-medium text-[var(--primary)]">{t('Categories')}</label>
-                <div className="w-full rounded-2xl bg-surface px-5 py-3.5 text-sm font-medium text-slate-700 shadow-sm ring-1 ring-border-custom/10">
+                <div className="w-full rounded-2xl bg-background px-5 py-3.5 text-sm font-medium text-text-main shadow-sm ring-1 ring-border-custom/10">
                   {selectedGoal.category || '-'}
                 </div>
               </div>
@@ -261,7 +259,7 @@ export default function DashboardPage() {
               {/* Subcategory */}
               <div className="flex flex-col gap-1.5">
                 <label className="text-sm font-medium text-[var(--primary)]">{t('Subcategories')}</label>
-                <div className="w-full rounded-2xl bg-surface px-5 py-3.5 text-sm font-medium text-slate-700 shadow-sm ring-1 ring-border-custom/10">
+                <div className="w-full rounded-2xl bg-background px-5 py-3.5 text-sm font-medium text-text-main shadow-sm ring-1 ring-border-custom/10">
                   {selectedGoal.subcategory || '-'}
                 </div>
               </div>
