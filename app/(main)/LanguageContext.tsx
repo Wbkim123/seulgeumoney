@@ -318,6 +318,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   };
 
   const setTone = (t: Tone) => {
+    console.log('Setting tone to:', t);
     setToneState(t);
     localStorage.setItem('tone', t);
   };
