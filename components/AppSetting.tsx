@@ -342,7 +342,7 @@ export default function AppSetting({ isOpen, onClose }: AppSettingProps) {
                    <div className="flex gap-4">
                       <button 
                         onClick={() => setTone('Normal')}
-                        className={`flex-1 py-4 px-6 rounded-2xl border-2 transition-all duration-200 font-bold text-[16px] cursor-pointer ${
+                        className={`flex-1 py-4 px-6 rounded-2xl border-2 transition-all duration-200 font-bold text-[15px] cursor-pointer ${
                           tone === 'Normal' 
                           ? 'border-[var(--primary)] bg-[var(--primary)]/5 text-[var(--primary)]' 
                           : 'border-slate-100/10 bg-surface-alt/50 text-text-muted hover:border-slate-200/30'
@@ -352,13 +352,23 @@ export default function AppSetting({ isOpen, onClose }: AppSettingProps) {
                       </button>
                       <button 
                         onClick={() => setTone('Friend')}
-                        className={`flex-1 py-4 px-6 rounded-2xl border-2 transition-all duration-200 font-bold text-[16px] cursor-pointer ${
+                        className={`flex-1 py-4 px-6 rounded-2xl border-2 transition-all duration-200 font-bold text-[15px] cursor-pointer ${
                           tone === 'Friend' 
                           ? 'border-[var(--primary)] bg-[var(--primary)]/5 text-[var(--primary)]' 
                           : 'border-slate-100/10 bg-surface-alt/50 text-text-muted hover:border-slate-200/30'
                         }`}
                       >
                         {t('Friend_tone')}
+                      </button>
+                      <button 
+                        onClick={() => setTone('Teacher')}
+                        className={`flex-1 py-4 px-6 rounded-2xl border-2 transition-all duration-200 font-bold text-[15px] cursor-pointer ${
+                          tone === 'Teacher' 
+                          ? 'border-[var(--primary)] bg-[var(--primary)]/5 text-[var(--primary)]' 
+                          : 'border-slate-100/10 bg-surface-alt/50 text-text-muted hover:border-slate-200/30'
+                        }`}
+                      >
+                        {t('Teacher_tone')}
                       </button>
                    </div>
                 </div>

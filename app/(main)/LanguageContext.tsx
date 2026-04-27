@@ -3,7 +3,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 type Language = 'ko' | 'en';
-type Tone = 'Normal' | 'Friend';
+type Tone = 'Normal' | 'Friend' | 'Teacher';
 
 interface LanguageContextType {
   language: Language;
@@ -31,6 +31,7 @@ const translations: Record<Language, Record<string, string>> = {
     'Select your preferred app tone': '앱의 전체적인 말투를 선택하세요',
     'Normal': '기본',
     'Friend_tone': '친구 (팩폭)',
+    'Teacher_tone': '선생님 (엄격)',
     'Korean': '한국어',
     'English': '영어',
     'Settings': '설정',
@@ -108,6 +109,8 @@ const translations: Record<Language, Record<string, string>> = {
     'Total Spent': '총 지출액',
     'Your Budget': '나의 예산',
     'Insight': '인사이트',
+    'Insight_friend': '팩폭 인사이트',
+    'Insight_teacher': '평가 의견',
     'Top Categories': '주요 카테고리',
     'Food & Dining': '식사 및 외식',
     'Transport': '교통',
@@ -115,6 +118,7 @@ const translations: Record<Language, Record<string, string>> = {
     
     'insight_text': '잘하셨어요! 평균 예산보다 적게 지출하셨습니다. 가장 큰 지출 항목은 식비였지만, 불필요한 쇼핑은 성공적으로 피하셨네요.',
     'insight_text_friend': '오~ 웬일이야? 이번엔 예산 좀 아꼈네? 식비에 좀 쓰긴 했어도 충동구매 안 한 건 칭찬해줄게. 근데 자판기에 $100이나 쓴 건 좀 아니지 않냐? 너 부자야?',
+    'insight_text_teacher': '지출 내역이 양호합니다. 예산 범위 내에서 소비가 이루어졌습니다. 다만, 특정 항목에 편중되지 않도록 주의하십시오. 자판기 지출 건은 불필요한 낭비입니다.',
 
     // Goals Page
     'Edit Your Goal': '목표 수정',
@@ -164,6 +168,7 @@ const translations: Record<Language, Record<string, string>> = {
     'Select your preferred app tone': 'Select your preferred app tone',
     'Normal': 'Normal',
     'Friend_tone': 'Friend (Blunt)',
+    'Teacher_tone': 'Teacher (Strict)',
     'Korean': 'Korean',
     'English': 'English',
     'Settings': 'Settings',
@@ -171,11 +176,8 @@ const translations: Record<Language, Record<string, string>> = {
     
     // Notification Settings
     'Daily Spending Reminders': 'Daily Spending Reminders',
-    'Daily Spending Reminders_friend': 'Hey, how much did you blow today?',
     'Budget Alerts': 'Budget Alerts',
-    'Budget Alerts_friend': 'Hey, your wallet is about to be empty',
     'Goal Achievements': 'Goal Achievements',
-    'Goal Achievements_friend': 'Whoa, you actually reached a goal? Unbelievable.',
     'Marketing & Promotions': 'Marketing & Promotions',
     'Report Notifications': 'Report Notifications',
     'Daily Reports': 'Daily Reports',
@@ -215,7 +217,6 @@ const translations: Record<Language, Record<string, string>> = {
     'Monthly': 'Monthly',
     'Yearly': 'Yearly',
     'Total Spending': 'Total Spending',
-    'Total Spending_friend': 'You spent $100 on a vending machine today, are you rich?',
     'Grocery': 'Grocery',
     'No daily goals': 'No daily goals',
     'No monthly goals': 'No monthly goals',
@@ -246,13 +247,15 @@ const translations: Record<Language, Record<string, string>> = {
     'Your Budget': 'Your Budget',
     'Insight': 'Insight',
     'Insight_friend': 'Truth Bomb Insight',
+    'Insight_teacher': 'Evaluation Opinion',
     'Top Categories': 'Top Categories',
     'Food & Dining': 'Food & Dining',
     'Transport': 'Transport',
     'Coffee': 'Coffee',
     
     'insight_text': 'Great job! You spent less than your average budget. Your biggest expense was Food, but you successfully avoided unnecessary shopping.',
-    'insight_text_friend': 'Look at you! Actually saved some money this time? You spent a bit on food, but I\'ll give you props for avoiding those impulse buys.',
+    'insight_text_friend': 'Look at you! Actually saved some money this time? You spent a bit on food, but I\'ll give you props for avoiding those impulse buys. But $100 on a vending machine? Are you rich?',
+    'insight_text_teacher': 'Your spending is within acceptable parameters. Budget compliance was maintained. However, please exercise caution regarding category distribution. Vending machine expenditures are unnecessary waste.',
 
     // Goals Page
     'Edit Your Goal': 'Edit Your Goal',
@@ -302,7 +305,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     }
     
     const savedTone = localStorage.getItem('tone') as Tone;
-    if (savedTone && (savedTone === 'Normal' || savedTone === 'Friend')) {
+    if (savedTone && (savedTone === 'Normal' || savedTone === 'Friend' || savedTone === 'Teacher')) {
       setToneState(savedTone);
     }
   }, []);
@@ -323,6 +326,11 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
       const friendKey = `${key}_friend`;
       if (translations[language][friendKey]) {
         return translations[language][friendKey];
+      }
+    } else if (tone === 'Teacher') {
+      const teacherKey = `${key}_teacher`;
+      if (translations[language][teacherKey]) {
+        return translations[language][teacherKey];
       }
     }
     return translations[language][key] || key;
