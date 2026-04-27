@@ -218,11 +218,7 @@ export default function ReportPeriodPage() {
                     <h3 className="text-[15px] font-bold text-[var(--primary)]">{t('Insight')}</h3>
                   </div>
                   <p className="text-[14px] font-medium leading-relaxed text-text-main">
-                    {language === 'ko' ? (
-                      <>잘하셨어요! 평균 예산보다 <span className="font-bold text-[var(--primary)]">27% 적게</span> 지출하셨습니다. 가장 큰 지출 항목은 <span className="font-bold">식비</span>였지만, 불필요한 쇼핑은 성공적으로 피하셨네요.</>
-                    ) : (
-                      <>Great job! You spent <span className="font-bold text-[var(--primary)]">27% less</span> than your average budget. Your biggest expense was <span className="font-bold">Food</span>, but you successfully avoided unnecessary shopping.</>
-                    )}
+                    {t('insight_text')}
                   </p>
                 </div>
 

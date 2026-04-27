@@ -336,6 +336,38 @@ export default function AppSetting({ isOpen, onClose }: AppSettingProps) {
                     </div>
                   </div>
                 </div>
+              ) : activeTab === 'Tone' ? (
+                <div className="flex flex-col gap-6 animate-fade-in">
+                   <p className="text-text-main font-medium">{t('Select your preferred app tone')}</p>
+                   <div className="flex gap-4">
+                      <button 
+                        onClick={() => {
+                          const { setTone } = (useLanguage as any)(); // Cast as any because I just added it
+                          setTone('Normal');
+                        }}
+                        className={`flex-1 py-4 px-6 rounded-2xl border-2 transition-all duration-200 font-bold text-[16px] cursor-pointer ${
+                          (useLanguage as any)().tone === 'Normal' 
+                          ? 'border-[var(--primary)] bg-[var(--primary)]/5 text-[var(--primary)]' 
+                          : 'border-slate-100/10 bg-surface-alt/50 text-text-muted hover:border-slate-200/30'
+                        }`}
+                      >
+                        {t('Normal')}
+                      </button>
+                      <button 
+                        onClick={() => {
+                          const { setTone } = (useLanguage as any)();
+                          setTone('Friend');
+                        }}
+                        className={`flex-1 py-4 px-6 rounded-2xl border-2 transition-all duration-200 font-bold text-[16px] cursor-pointer ${
+                          (useLanguage as any)().tone === 'Friend' 
+                          ? 'border-[var(--primary)] bg-[var(--primary)]/5 text-[var(--primary)]' 
+                          : 'border-slate-100/10 bg-surface-alt/50 text-text-muted hover:border-slate-200/30'
+                        }`}
+                      >
+                        {t('Friend_tone')}
+                      </button>
+                   </div>
+                </div>
               ) : (
                 <div className="text-text-muted">
                   {t(activeTab)} {t('related settings will be displayed here.')}

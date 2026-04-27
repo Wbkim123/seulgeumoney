@@ -3,16 +3,19 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 type Language = 'ko' | 'en';
+type Tone = 'Normal' | 'Friend';
 
 interface LanguageContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
+  tone: Tone;
+  setTone: (tone: Tone) => void;
   t: (key: string) => string;
   formatYear: (year: number | string) => string;
   formatDay: (day: number | string) => string;
 }
 
-const translations = {
+const translations: Record<Language, Record<string, string>> = {
   ko: {
     // App Setting
     'App Setting': '앱 설정',
@@ -23,7 +26,11 @@ const translations = {
     'Friend': '친구',
     'Tone': '말투',
     'Language Settings': '언어 설정',
+    'Tone Settings': '말투 설정',
     'Select your preferred language': '선호하는 언어를 선택하세요',
+    'Select your preferred app tone': '앱의 전체적인 말투를 선택하세요',
+    'Normal': '기본',
+    'Friend_tone': '친구 (팩폭)',
     'Korean': '한국어',
     'English': '영어',
     'Settings': '설정',
@@ -31,8 +38,11 @@ const translations = {
     
     // Notification Settings
     'Daily Spending Reminders': '일일 지출 알림',
+    'Daily Spending Reminders_friend': '야, 오늘 얼마나 썼냐?',
     'Budget Alerts': '예산 경고',
+    'Budget Alerts_friend': '야, 너 지갑 거덜나기 직전이야',
     'Goal Achievements': '목표 달성 알림',
+    'Goal Achievements_friend': '올~ 목표 달성? 웬일이냐?',
     'Marketing & Promotions': '마케팅 및 프로모션',
     'Report Notifications': '리포트 알림 설정',
     'Daily Reports': '일일 리포트 알림',
@@ -72,6 +82,7 @@ const translations = {
     'Monthly': '월간',
     'Yearly': '연간',
     'Total Spending': '총 지출',
+    'Total Spending_friend': '야 너 오늘 총 $100이나 썼네, 너 부자야?',
     'Grocery': '식료품',
     'No daily goals': '일간 목표가 없습니다',
     'No monthly goals': '월간 목표가 없습니다',
@@ -101,10 +112,14 @@ const translations = {
     'Total Spent': '총 지출액',
     'Your Budget': '나의 예산',
     'Insight': '인사이트',
+    'Insight_friend': '팩폭 인사이트',
     'Top Categories': '주요 카테고리',
     'Food & Dining': '식사 및 외식',
     'Transport': '교통',
     'Coffee': '커피',
+    
+    'insight_text': '잘하셨어요! 평균 예산보다 적게 지출하셨습니다. 가장 큰 지출 항목은 식비였지만, 불필요한 쇼핑은 성공적으로 피하셨네요.',
+    'insight_text_friend': '오~ 웬일이야? 이번엔 예산 좀 아꼈네? 식비에 좀 쓰긴 했어도 충동구매 안 한 건 칭찬해줄게.',
 
     // Goals Page
     'Edit Your Goal': '목표 수정',
@@ -146,10 +161,14 @@ const translations = {
     'Notification': 'Notification',
     'Theme': 'Theme',
     'Change PW': 'Change PW',
-    'People': 'People',
+    'Friend': 'Friend',
     'Tone': 'Tone',
     'Language Settings': 'Language Settings',
+    'Tone Settings': 'Tone Settings',
     'Select your preferred language': 'Select your preferred language',
+    'Select your preferred app tone': 'Select your preferred app tone',
+    'Normal': 'Normal',
+    'Friend_tone': 'Friend (Blunt)',
     'Korean': 'Korean',
     'English': 'English',
     'Settings': 'Settings',
@@ -157,8 +176,11 @@ const translations = {
     
     // Notification Settings
     'Daily Spending Reminders': 'Daily Spending Reminders',
+    'Daily Spending Reminders_friend': 'Hey, how much did you blow today?',
     'Budget Alerts': 'Budget Alerts',
+    'Budget Alerts_friend': 'Hey, your wallet is about to be empty',
     'Goal Achievements': 'Goal Achievements',
+    'Goal Achievements_friend': 'Whoa, you actually reached a goal? Unbelievable.',
     'Marketing & Promotions': 'Marketing & Promotions',
     'Report Notifications': 'Report Notifications',
     'Daily Reports': 'Daily Reports',
@@ -198,6 +220,7 @@ const translations = {
     'Monthly': 'Monthly',
     'Yearly': 'Yearly',
     'Total Spending': 'Total Spending',
+    'Total Spending_friend': 'You spent $100 on a vending machine today, are you rich?',
     'Grocery': 'Grocery',
     'No daily goals': 'No daily goals',
     'No monthly goals': 'No monthly goals',
@@ -227,10 +250,14 @@ const translations = {
     'Total Spent': 'Total Spent',
     'Your Budget': 'Your Budget',
     'Insight': 'Insight',
+    'Insight_friend': 'Truth Bomb Insight',
     'Top Categories': 'Top Categories',
     'Food & Dining': 'Food & Dining',
     'Transport': 'Transport',
     'Coffee': 'Coffee',
+    
+    'insight_text': 'Great job! You spent less than your average budget. Your biggest expense was Food, but you successfully avoided unnecessary shopping.',
+    'insight_text_friend': 'Look at you! Actually saved some money this time? You spent a bit on food, but I\'ll give you props for avoiding those impulse buys.',
 
     // Goals Page
     'Edit Your Goal': 'Edit Your Goal',
@@ -271,11 +298,17 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguageState] = useState<Language>('ko');
+  const [tone, setToneState] = useState<Tone>('Normal');
 
   useEffect(() => {
     const savedLang = localStorage.getItem('language') as Language;
     if (savedLang && (savedLang === 'ko' || savedLang === 'en')) {
       setLanguageState(savedLang);
+    }
+    
+    const savedTone = localStorage.getItem('tone') as Tone;
+    if (savedTone && (savedTone === 'Normal' || savedTone === 'Friend')) {
+      setToneState(savedTone);
     }
   }, []);
 
@@ -284,8 +317,19 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem('language', lang);
   };
 
+  const setTone = (t: Tone) => {
+    setToneState(t);
+    localStorage.setItem('tone', t);
+  };
+
   const t = (key: string) => {
-    return translations[language][key as keyof typeof translations['en']] || key;
+    if (tone === 'Friend') {
+      const friendKey = `${key}_friend`;
+      if (translations[language][friendKey]) {
+        return translations[language][friendKey];
+      }
+    }
+    return translations[language][key] || key;
   };
 
   const formatYear = (year: number | string) => {
@@ -297,7 +341,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t, formatYear, formatDay }}>
+    <LanguageContext.Provider value={{ language, setLanguage, tone, setTone, t, formatYear, formatDay }}>
       {children}
     </LanguageContext.Provider>
   );
