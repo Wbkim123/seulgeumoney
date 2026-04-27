@@ -38,11 +38,8 @@ const translations: Record<Language, Record<string, string>> = {
     
     // Notification Settings
     'Daily Spending Reminders': '일일 지출 알림',
-    'Daily Spending Reminders_friend': '야, 오늘 얼마나 썼냐?',
     'Budget Alerts': '예산 경고',
-    'Budget Alerts_friend': '야, 너 지갑 거덜나기 직전이야',
     'Goal Achievements': '목표 달성 알림',
-    'Goal Achievements_friend': '올~ 목표 달성? 웬일이냐?',
     'Marketing & Promotions': '마케팅 및 프로모션',
     'Report Notifications': '리포트 알림 설정',
     'Daily Reports': '일일 리포트 알림',
@@ -82,7 +79,6 @@ const translations: Record<Language, Record<string, string>> = {
     'Monthly': '월간',
     'Yearly': '연간',
     'Total Spending': '총 지출',
-    'Total Spending_friend': '야 너 오늘 총 $100이나 썼네, 너 부자야?',
     'Grocery': '식료품',
     'No daily goals': '일간 목표가 없습니다',
     'No monthly goals': '월간 목표가 없습니다',
@@ -112,14 +108,13 @@ const translations: Record<Language, Record<string, string>> = {
     'Total Spent': '총 지출액',
     'Your Budget': '나의 예산',
     'Insight': '인사이트',
-    'Insight_friend': '팩폭 인사이트',
     'Top Categories': '주요 카테고리',
     'Food & Dining': '식사 및 외식',
     'Transport': '교통',
     'Coffee': '커피',
     
     'insight_text': '잘하셨어요! 평균 예산보다 적게 지출하셨습니다. 가장 큰 지출 항목은 식비였지만, 불필요한 쇼핑은 성공적으로 피하셨네요.',
-    'insight_text_friend': '오~ 웬일이야? 이번엔 예산 좀 아꼈네? 식비에 좀 쓰긴 했어도 충동구매 안 한 건 칭찬해줄게.',
+    'insight_text_friend': '오~ 웬일이야? 이번엔 예산 좀 아꼈네? 식비에 좀 쓰긴 했어도 충동구매 안 한 건 칭찬해줄게. 근데 자판기에 $100이나 쓴 건 좀 아니지 않냐? 너 부자야?',
 
     // Goals Page
     'Edit Your Goal': '목표 수정',
