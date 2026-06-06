@@ -24,7 +24,7 @@ export default function PasswordPage() {
     if (isFormValid) {
       console.log('Password set!', password);
       // ✅ 다음 단계로 이동
-      router.push('/register/personal');
+      router.push('/auth/register/personal');
     }
   };
 

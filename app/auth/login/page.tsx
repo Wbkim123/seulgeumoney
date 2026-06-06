@@ -2,16 +2,20 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { FaUser, FaLock } from 'react-icons/fa';
 
 export default function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [remember, setRemember] = useState(false);
+  const router = useRouter();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log({ username, password, remember });
+    router.push('/mainpage');
   };
 
   return (
@@ -73,9 +77,9 @@ export default function LoginPage() {
               />
               Remember me
             </label>
-            <a href="#" className="hover:underline text-text-muted">
+            <Link href="/auth/forgotpw" className="hover:underline text-text-muted">
               Forgot password?
-            </a>
+            </Link>
           </div>
 
           <button
@@ -86,7 +90,7 @@ export default function LoginPage() {
           </button>
 
           <div className="text-center text-sm text-text-main">
-            Don't have an account? <a href="#" className="underline text-text-muted">Register</a>
+            Don't have an account? <Link href="/auth/register" className="underline text-text-muted">Register</Link>
           </div>
         </form>
       </div>

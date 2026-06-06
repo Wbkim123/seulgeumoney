@@ -53,7 +53,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           <div className="flex items-center justify-between px-5 py-4">
             
             <Link 
-              href="/" 
+              href="/mainpage" 
               onClick={onClose} 
               className="block h-10 w-32 cursor-pointer transition-transform hover:scale-105"
               aria-label="Go to Main Page"

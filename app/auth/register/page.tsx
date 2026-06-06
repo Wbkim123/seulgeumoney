@@ -15,7 +15,7 @@ export default function RegisterPage() {
     if (isEmailValid) {
       console.log('Email:', email);
       // ✅ 다음 단계로 이동
-      router.push('/register/emailcode');
+      router.push('/auth/register/emailcode');
     }
   };
 

@@ -16,7 +16,7 @@ export default function EmailVerifyPage() {
     if (isValidCode) {
       console.log('Verification Code:', code);
       // ✅ 다음 단계로 이동
-      router.push('/register/password');
+      router.push('/auth/register/password');
     }
   };
 

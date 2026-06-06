@@ -41,7 +41,7 @@ export default function PersonalInfoPage() {
       console.log('Phone number:', fullPhone);
 
       // ✅ 다음 단계로 이동
-      router.push('/register/success');
+      router.push('/auth/register/success');
     }
   };
 

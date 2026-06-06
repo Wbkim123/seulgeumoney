@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useGoals } from './GoalsContext';
-import { useLanguage } from './LanguageContext';
+import { useGoals } from '../GoalsContext';
+import { useLanguage } from '../LanguageContext';
 
 type GoalPillProps = {
   label: string;

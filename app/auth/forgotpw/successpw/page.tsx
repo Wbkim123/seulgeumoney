@@ -7,7 +7,7 @@ export default function RegisterSuccessPage() {
   const router = useRouter();
 
   const goToLogin = () => {
-    router.push('/login');
+    router.push('/auth/login');
   };
 
   return (
