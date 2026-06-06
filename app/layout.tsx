@@ -1,22 +1,13 @@
-import './globals.css'
-import { Nunito } from 'next/font/google'
-
-const nunito = Nunito({
-  subsets: ['latin'],
-  weight: ['700', '800'], // 800이 지원되면 숫자 더 두껍게 가능
-  display: 'swap',
-})
+import './globals.css';
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en">
-      <body className={nunito.className}>
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
-  )
+  );
 }

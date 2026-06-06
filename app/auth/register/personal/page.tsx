@@ -2,12 +2,14 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { createUserFromDraft, getSignupDraft, updateSignupDraft } from '../../authStorage';
 
 export default function PersonalInfoPage() {
   const [name, setName] = useState('');
   const [birthDate, setBirthDate] = useState('');
   const [country, setCountry] = useState('us');
   const [phoneLocal, setPhoneLocal] = useState('');
+  const [error, setError] = useState('');
   const router = useRouter();
 
   const countryDialCodes: { [key: string]: string } = {
@@ -15,46 +17,56 @@ export default function PersonalInfoPage() {
     kr: '+82',
   };
 
-  const formatPhoneNumber = (country: string, number: string) => {
-    if (country === 'kr') {
+  const formatPhoneNumber = (selectedCountry: string, number: string) => {
+    if (selectedCountry === 'kr') {
       if (number.length <= 3) return number;
-      if (number.length <= 7) return `${number.slice(0,3)}-${number.slice(3)}`;
-      return `${number.slice(0,3)}-${number.slice(3,7)}-${number.slice(7,11)}`;
-    } else if (country === 'us') {
-      if (number.length <= 3) return number;
-      if (number.length <= 6) return `(${number.slice(0,3)}) ${number.slice(3)}`;
-      return `(${number.slice(0,3)}) ${number.slice(3,6)}-${number.slice(6,10)}`;
+      if (number.length <= 7) return `${number.slice(0, 3)}-${number.slice(3)}`;
+      return `${number.slice(0, 3)}-${number.slice(3, 7)}-${number.slice(7, 11)}`;
     }
-    return number;
+
+    if (number.length <= 3) return number;
+    if (number.length <= 6) return `(${number.slice(0, 3)}) ${number.slice(3)}`;
+    return `(${number.slice(0, 3)}) ${number.slice(3, 6)}-${number.slice(6, 10)}`;
   };
 
-  // ✅ 모든 필드가 채워져야 활성화
-  const isFormValid = name && birthDate && country && phoneLocal;
+  const isFormValid = Boolean(name.trim() && birthDate && country && phoneLocal);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (isFormValid) {
-      const fullPhone = `${countryDialCodes[country]} ${phoneLocal}`;
-      console.log('Name:', name);
-      console.log('Birth of date:', birthDate);
-      console.log('Country:', country);
-      console.log('Phone number:', fullPhone);
+    setError('');
 
-      // ✅ 다음 단계로 이동
+    if (!isFormValid) return;
+
+    const draft = getSignupDraft();
+
+    if (!draft.email || !draft.password) {
+      router.replace('/auth/register');
+      return;
+    }
+
+    try {
+      const fullPhone = `${countryDialCodes[country]} ${formatPhoneNumber(country, phoneLocal)}`;
+      updateSignupDraft({
+        name: name.trim(),
+        dob: birthDate,
+        country,
+        phone: fullPhone,
+      });
+      createUserFromDraft(getSignupDraft());
       router.push('/auth/register/success');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unable to create account.');
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background px-4 transition-colors duration-300">
       <div className="w-full max-w-sm p-6 border border-border-custom/50 rounded-lg shadow-md bg-surface">
-
         <h2 className="text-2xl font-semibold text-center mb-4 text-text-main">
           Personal Information
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Name */}
           <div>
             <label htmlFor="name" className="block text-sm font-medium text-text-main mb-1">
               Name
@@ -70,7 +82,6 @@ export default function PersonalInfoPage() {
             />
           </div>
 
-          {/* Birth of date */}
           <div>
             <label htmlFor="birthDate" className="block text-sm font-medium text-text-main mb-1">
               Birth of date
@@ -86,7 +97,6 @@ export default function PersonalInfoPage() {
             />
           </div>
 
-          {/* Country selector */}
           <div>
             <label htmlFor="country" className="block text-sm font-medium text-text-main mb-1">
               Country of residence
@@ -96,7 +106,7 @@ export default function PersonalInfoPage() {
               value={country}
               onChange={(e) => {
                 setCountry(e.target.value);
-                setPhoneLocal(''); // 나라 바꾸면 번호 초기화
+                setPhoneLocal('');
               }}
               className="w-full border border-border-custom/50 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-border-custom/10 text-text-main bg-transparent"
               required
@@ -106,7 +116,6 @@ export default function PersonalInfoPage() {
             </select>
           </div>
 
-          {/* Phone number */}
           <div>
             <label htmlFor="phone" className="block text-sm font-medium text-text-main mb-1">
               Phone number
@@ -119,10 +128,7 @@ export default function PersonalInfoPage() {
                 type="tel"
                 id="phone"
                 value={formatPhoneNumber(country, phoneLocal)}
-                onChange={(e) => {
-                  const cleaned = e.target.value.replace(/\D/g, '');
-                  setPhoneLocal(cleaned);
-                }}
+                onChange={(e) => setPhoneLocal(e.target.value.replace(/\D/g, ''))}
                 inputMode="numeric"
                 className="w-full border border-border-custom/50 rounded-r-md p-2 focus:outline-none focus:ring-2 focus:ring-border-custom/10 text-text-main placeholder-text-muted bg-transparent"
                 placeholder="Enter phone number"
@@ -131,7 +137,12 @@ export default function PersonalInfoPage() {
             </div>
           </div>
 
-          {/* Continue Button */}
+          {error && (
+            <p className="rounded-md bg-red-50 px-3 py-2 text-sm font-semibold text-red-600">
+              {error}
+            </p>
+          )}
+
           <button
             type="submit"
             disabled={!isFormValid}

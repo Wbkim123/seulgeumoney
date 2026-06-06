@@ -2,21 +2,28 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { findUserByEmail, updateSignupDraft } from '../authStorage';
 
 export default function RegisterPage() {
   const [email, setEmail] = useState('');
+  const [error, setError] = useState('');
   const router = useRouter();
 
-  // ✅ 이메일 유효성 검사 (간단히 @ 포함 여부)
-  const isEmailValid = email.includes('@') && email.trim().length > 5;
+  const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (isEmailValid) {
-      console.log('Email:', email);
-      // ✅ 다음 단계로 이동
-      router.push('/auth/register/emailcode');
+    setError('');
+
+    if (!isEmailValid) return;
+
+    if (findUserByEmail(email)) {
+      setError('An account already exists with this email.');
+      return;
     }
+
+    updateSignupDraft({ email: email.trim().toLowerCase() });
+    router.push('/auth/register/emailcode');
   };
 
   return (
@@ -26,31 +33,20 @@ export default function RegisterPage() {
           Register
         </h2>
 
-        {/* Apple */}
-        <button
-          className="flex items-center justify-center w-full border border-border-custom/50 rounded-md py-2 mb-3 hover:bg-primary-light/30 transition text-text-muted font-medium"
-        >
-          <span className="mr-2">🍎</span>
+        <button className="flex items-center justify-center w-full border border-border-custom/50 rounded-md py-2 mb-3 hover:bg-primary-light/30 transition text-text-muted font-medium">
+          <span className="mr-2">A</span>
           Continue with Apple
         </button>
 
-        {/* Google */}
-        <button
-          className="flex items-center justify-center w-full border border-border-custom/50 rounded-md py-2 mb-4 hover:bg-primary-light/30 transition text-text-muted font-medium"
-        >
-          <span className="mr-2">🌐</span>
+        <button className="flex items-center justify-center w-full border border-border-custom/50 rounded-md py-2 mb-4 hover:bg-primary-light/30 transition text-text-muted font-medium">
+          <span className="mr-2">G</span>
           Continue with Google
         </button>
 
-        {/* Divider */}
         <div className="my-4 border-t border-border-custom/50" />
 
-        {/* Email form */}
         <form onSubmit={handleSubmit}>
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium text-text-main mb-1"
-          >
+          <label htmlFor="email" className="block text-sm font-medium text-text-main mb-1">
             Your Email Address
           </label>
           <input
@@ -62,6 +58,12 @@ export default function RegisterPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
+
+          {error && (
+            <p className="mb-4 rounded-md bg-red-50 px-3 py-2 text-sm font-semibold text-red-600">
+              {error}
+            </p>
+          )}
 
           <button
             type="submit"
@@ -76,16 +78,9 @@ export default function RegisterPage() {
           </button>
         </form>
 
-        {/* Terms */}
         <p className="mt-4 text-xs text-text-muted text-center">
-          By continuing, you agree to our{' '}
-          <a href="#" className="underline">
-            Terms of Use
-          </a>{' '}
-          and{' '}
-          <a href="#" className="underline">
-            Privacy Policy
-          </a>.
+          By continuing, you agree to our <a href="#" className="underline">Terms of Use</a> and{' '}
+          <a href="#" className="underline">Privacy Policy</a>.
         </p>
       </div>
     </div>

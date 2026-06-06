@@ -1,21 +1,34 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Sidebar from '../../components/sidebar';
 import CalendarSidebar from '../../components/sidecalendar';
 import AccountSetting from '../../components/AccountSetting';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { HiOutlineBars3, HiUser, HiChevronLeft } from 'react-icons/hi2';
 import { GoalsProvider } from './GoalsContext';
 import { LanguageProvider } from './LanguageContext';
+import { getAuthSession } from '../auth/authStorage';
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
+  const router = useRouter();
+  const [isAuthChecked, setIsAuthChecked] = useState(false);
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [isCalendarOpen, setCalendarOpen] = useState(false);
   const [isAccountOpen, setIsAccountOpen] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
   const [isCalendarHovering, setCalendarHovering] = useState(false);
   const [isCalendarButtonVisible, setCalendarButtonVisible] = useState(true);
+
+  useEffect(() => {
+    if (!getAuthSession()) {
+      router.replace('/auth/login');
+      return;
+    }
+
+    setIsAuthChecked(true);
+  }, [router]);
 
   const handleCloseCalendar = () => {
     setCalendarOpen(false);
@@ -34,6 +47,14 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
       setIsAccountOpen(true);
     }
   };
+
+  if (!isAuthChecked) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background text-sm font-bold text-text-muted">
+        Checking login...
+      </div>
+    );
+  }
 
   return (
     <LanguageProvider>

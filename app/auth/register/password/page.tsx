@@ -3,44 +3,39 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import { getSignupDraft, updateSignupDraft } from '../../authStorage';
 
 export default function PasswordPage() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const router = useRouter();
 
-  // ✅ 유효성 검사
   const isLongEnough = password.length >= 8;
   const hasNumber = /\d/.test(password);
   const hasSymbol = /[!@#$%^&*(),.?":{}|<>]/.test(password);
   const hasUppercase = /[A-Z]/.test(password);
-  const isMatch = confirmPassword && password === confirmPassword;
-
-  // ✅ 버튼 활성화 여부
+  const isMatch = confirmPassword.length > 0 && password === confirmPassword;
   const isFormValid = isLongEnough && hasNumber && hasSymbol && hasUppercase && isMatch;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (isFormValid) {
-      console.log('Password set!', password);
-      // ✅ 다음 단계로 이동
-      router.push('/auth/register/personal');
+
+    if (!isFormValid) return;
+
+    if (!getSignupDraft().email) {
+      router.replace('/auth/register');
+      return;
     }
+
+    updateSignupDraft({ password });
+    router.push('/auth/register/personal');
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background px-4">
       <div className="relative w-full max-w-sm pt-12 p-6 border border-border-custom/50 rounded-lg shadow-md bg-surface">
-
-        {/* ✅ 슬저씨 이미지 박스 위 좌측에 걸치게 */}
         <div className="absolute top-0 left-0 -translate-x-[-30%] -translate-y-[60%]">
-          <Image
-            src="/seuljeossi.png"
-            alt="Seuljeossi Character"
-            width={90}
-            height={90}
-            className=""
-          />
+          <Image src="/seuljeossi.png" alt="Seuljeossi Character" width={90} height={90} />
         </div>
 
         <h2 className="text-2xl font-semibold text-center mb-2 text-text-main">
@@ -51,7 +46,6 @@ export default function PasswordPage() {
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Password */}
           <div>
             <label htmlFor="password" className="block text-sm font-medium text-text-main mb-1">
               Password
@@ -67,7 +61,6 @@ export default function PasswordPage() {
             />
           </div>
 
-          {/* Confirm Password */}
           <div>
             <label htmlFor="confirmPassword" className="block text-sm font-medium text-text-main mb-1">
               Confirm Password
@@ -89,48 +82,30 @@ export default function PasswordPage() {
             />
             {confirmPassword && (
               <p className={`mt-1 text-sm ${isMatch ? 'text-primary-light' : 'text-red-500'}`}>
-                {isMatch ? 'Passwords match ✅' : 'Passwords do not match ❌'}
+                {isMatch ? 'Passwords match' : 'Passwords do not match'}
               </p>
             )}
           </div>
 
-          {/* Requirements */}
           <div className="mt-4 space-y-2">
             <div className="flex items-center text-sm text-text-muted">
-              <span
-                className={`inline-block w-3 h-3 rounded-full mr-2 ${
-                  isLongEnough ? 'bg-primary-light' : 'bg-gray-300 dark:bg-gray-600'
-                }`}
-              ></span>
+              <span className={`inline-block w-3 h-3 rounded-full mr-2 ${isLongEnough ? 'bg-primary-light' : 'bg-gray-300 dark:bg-gray-600'}`} />
               Minimum 8 characters
             </div>
             <div className="flex items-center text-sm text-text-muted">
-              <span
-                className={`inline-block w-3 h-3 rounded-full mr-2 ${
-                  hasNumber ? 'bg-primary-light' : 'bg-gray-300 dark:bg-gray-600'
-                }`}
-              ></span>
+              <span className={`inline-block w-3 h-3 rounded-full mr-2 ${hasNumber ? 'bg-primary-light' : 'bg-gray-300 dark:bg-gray-600'}`} />
               At least one number
             </div>
             <div className="flex items-center text-sm text-text-muted">
-              <span
-                className={`inline-block w-3 h-3 rounded-full mr-2 ${
-                  hasSymbol ? 'bg-primary-light' : 'bg-gray-300 dark:bg-gray-600'
-                }`}
-              ></span>
+              <span className={`inline-block w-3 h-3 rounded-full mr-2 ${hasSymbol ? 'bg-primary-light' : 'bg-gray-300 dark:bg-gray-600'}`} />
               At least one symbol
             </div>
             <div className="flex items-center text-sm text-text-muted">
-              <span
-                className={`inline-block w-3 h-3 rounded-full mr-2 ${
-                  hasUppercase ? 'bg-primary-light' : 'bg-gray-300 dark:bg-gray-600'
-                }`}
-              ></span>
+              <span className={`inline-block w-3 h-3 rounded-full mr-2 ${hasUppercase ? 'bg-primary-light' : 'bg-gray-300 dark:bg-gray-600'}`} />
               At least one uppercase
             </div>
           </div>
 
-          {/* Continue Button */}
           <button
             type="submit"
             disabled={!isFormValid}

@@ -5,16 +5,40 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { FaUser, FaLock } from 'react-icons/fa';
+import {
+  ADMIN_PASSWORD,
+  ADMIN_USERNAME,
+  authenticateAdmin,
+  authenticateUser,
+  saveAdminSession,
+  saveUserSession,
+} from '../authStorage';
 
 export default function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [remember, setRemember] = useState(false);
+  const [error, setError] = useState('');
   const router = useRouter();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log({ username, password, remember });
+    setError('');
+
+    if (authenticateAdmin(username, password)) {
+      saveAdminSession();
+      router.push('/mainpage');
+      return;
+    }
+
+    const user = authenticateUser(username, password);
+
+    if (!user) {
+      setError('Invalid email/username or password.');
+      return;
+    }
+
+    saveUserSession(user);
     router.push('/mainpage');
   };
 
@@ -65,6 +89,16 @@ export default function LoginPage() {
               required
             />
             <FaLock className="ml-2 text-primary" size={18} />
+          </div>
+
+          {error && (
+            <p className="rounded-lg bg-red-50 px-3 py-2 text-sm font-semibold text-red-600">
+              {error}
+            </p>
+          )}
+
+          <div className="rounded-lg bg-primary-muted px-3 py-2 text-xs font-bold leading-5 text-text-muted">
+            Demo admin: {ADMIN_USERNAME} / {ADMIN_PASSWORD}
           </div>
 
           <div className="flex items-center justify-between text-sm text-text-main">
