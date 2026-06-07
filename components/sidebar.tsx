@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import {
   HiXMark,
   HiCurrencyDollar,
@@ -9,11 +10,13 @@ import {
   HiFlag,
   HiCalendarDays,
   HiCog6Tooth,
+  HiArrowRightOnRectangle,
 } from 'react-icons/hi2';
 
 // ✨ 방금 만든 AppSetting 컴포넌트를 불러옵니다.
 import AppSetting from './AppSetting';
 import { useLanguage } from '../app/(main)/LanguageContext';
+import { clearAuthSession } from '../app/auth/authStorage';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -31,6 +34,14 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   // ✨ App Setting 창 상태 관리
   const [isAppSettingOpen, setIsAppSettingOpen] = useState(false);
   const { t } = useLanguage();
+  const router = useRouter();
+
+  const handleLogout = () => {
+    clearAuthSession();
+    setIsAppSettingOpen(false);
+    onClose();
+    router.replace('/auth/login');
+  };
 
   return (
     <>
@@ -109,8 +120,8 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
 
           <div className="flex-1" />
 
-          {/* Bottom-left gear */}
-          <div className="px-5 pb-5">
+          {/* Bottom actions */}
+          <div className="flex items-center gap-2 px-5 pb-5">
             <button
               onClick={() => setIsAppSettingOpen(true)} // ✨ 클릭 시 모달 오픈
               className="
@@ -124,6 +135,20 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
               aria-label="Settings"
             >
               <HiCog6Tooth size={20} />
+            </button>
+            <button
+              onClick={handleLogout}
+              className="
+                inline-flex items-center justify-center
+                rounded-full p-2
+                text-[var(--primary)]
+                hover:bg-surface-alt/80
+                transition
+                cursor-pointer
+              "
+              aria-label="Log out"
+            >
+              <HiArrowRightOnRectangle size={20} />
             </button>
           </div>
         </div>

@@ -186,3 +186,32 @@ export function resetPassword(password: string) {
   writeJson(USERS_STORAGE_KEY, nextUsers);
   localStorage.removeItem(RESET_DRAFT_KEY);
 }
+
+export function changeCurrentUserPassword(currentPassword: string, nextPassword: string) {
+  const session = getAuthSession();
+
+  if (!session) {
+    throw new Error('Please log in before changing your password.');
+  }
+
+  if (session.role === 'admin') {
+    throw new Error('The local admin password cannot be changed.');
+  }
+
+  const users = getUsers();
+  const user = users.find((storedUser) => storedUser.id === session.userId);
+
+  if (!user) {
+    throw new Error('Unable to find the current user.');
+  }
+
+  if (user.password !== currentPassword) {
+    throw new Error('Current password is incorrect.');
+  }
+
+  const nextUsers = users.map((storedUser) =>
+    storedUser.id === user.id ? { ...storedUser, password: nextPassword } : storedUser
+  );
+
+  writeJson(USERS_STORAGE_KEY, nextUsers);
+}

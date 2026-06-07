@@ -35,7 +35,7 @@ export default function AccountSetting({ onClose }: AccountSettingProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const datePickerRef = useRef<HTMLDivElement>(null);
 
-  // ✨ viewDate 초기값을 data.dob 기반으로 설정하되, 안전하게 처리
+  // Initialize the calendar view from the saved date when possible.
   const [viewDate, setViewDate] = useState(new Date('1987-05-15'));
 
   useEffect(() => {
@@ -145,13 +145,13 @@ export default function AccountSetting({ onClose }: AccountSettingProps) {
 
   const inputStyles = "w-full rounded-2xl bg-surface-alt px-5 py-2.5 text-[14px] font-semibold text-text-main outline-none ring-1 ring-border-custom/10 border border-transparent focus:border-[var(--primary)] focus:bg-surface transition-all";
 
-  // ✨ 날짜 표시를 위한 헬퍼 (split 시 오류 방지)
+  // Format the saved ISO date for display.
   const renderDob = () => {
     if (!data.dob) return t("Select Date");
     if (language === 'ko') {
       const parts = data.dob.split('-');
       if (parts.length === 3) {
-        return `${parts[0]}년 ${parseInt(parts[1])}월 ${parseInt(parts[2])}일`;
+        return `${parts[0]}.${parseInt(parts[1])}.${parseInt(parts[2])}`;
       }
       return data.dob;
     }
@@ -292,3 +292,4 @@ export default function AccountSetting({ onClose }: AccountSettingProps) {
     </div>
   );
 }
+

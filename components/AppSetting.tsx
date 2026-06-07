@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { HiXMark } from 'react-icons/hi2';
 import { useLanguage } from '../app/(main)/LanguageContext';
+import { changeCurrentUserPassword } from '../app/auth/authStorage';
 
 interface AppSettingProps {
   isOpen: boolean;
@@ -22,6 +23,13 @@ export default function AppSetting({ isOpen, onClose }: AppSettingProps) {
   const [activeTab, setActiveTab] = useState('Language');
   const [isReportSubView, setIsReportSubView] = useState(false);
   const { language, setLanguage, tone, setTone, t } = useLanguage();
+  const [passwordForm, setPasswordForm] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: '',
+  });
+  const [passwordError, setPasswordError] = useState('');
+  const [passwordSuccess, setPasswordSuccess] = useState('');
 
   // Notification states
   const [notifications, setNotifications] = useState({
@@ -55,6 +63,8 @@ export default function AppSetting({ isOpen, onClose }: AppSettingProps) {
   // Reset subview when tab changes
   React.useEffect(() => {
     setIsReportSubView(false);
+    setPasswordError('');
+    setPasswordSuccess('');
   }, [activeTab]);
 
   // Load settings from localStorage
@@ -107,6 +117,49 @@ export default function AppSetting({ isOpen, onClose }: AppSettingProps) {
     document.documentElement.style.setProperty('--primary', color);
   };
 
+  const updatePasswordField = (field: keyof typeof passwordForm, value: string) => {
+    setPasswordForm((prev) => ({ ...prev, [field]: value }));
+    setPasswordError('');
+    setPasswordSuccess('');
+  };
+
+  const isPasswordLongEnough = passwordForm.newPassword.length >= 8;
+  const passwordHasNumber = /\d/.test(passwordForm.newPassword);
+  const passwordHasSymbol = /[!@#$%^&*(),.?":{}|<>]/.test(passwordForm.newPassword);
+  const passwordHasUppercase = /[A-Z]/.test(passwordForm.newPassword);
+  const passwordMatches =
+    passwordForm.confirmPassword.length > 0 && passwordForm.newPassword === passwordForm.confirmPassword;
+  const canChangePassword =
+    passwordForm.currentPassword.length > 0 &&
+    isPasswordLongEnough &&
+    passwordHasNumber &&
+    passwordHasSymbol &&
+    passwordHasUppercase &&
+    passwordMatches;
+
+  const handlePasswordChange = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setPasswordError('');
+    setPasswordSuccess('');
+
+    if (!canChangePassword) {
+      setPasswordError(t('Please complete every password requirement.'));
+      return;
+    }
+
+    try {
+      changeCurrentUserPassword(passwordForm.currentPassword, passwordForm.newPassword);
+      setPasswordForm({
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: '',
+      });
+      setPasswordSuccess(t('Password changed successfully!'));
+    } catch (error) {
+      setPasswordError(error instanceof Error ? t(error.message) : t('Unable to change password.'));
+    }
+  };
+
   if (!isOpen) return null;
 
   const NotificationToggle = ({ label, desc, enabled, onToggle }: { label: string, desc: string, enabled: boolean, onToggle: () => void }) => (
@@ -145,6 +198,12 @@ export default function AppSetting({ isOpen, onClose }: AppSettingProps) {
         </svg>
       </div>
     </button>
+  );
+
+  const PasswordRequirement = ({ passed, label }: { passed: boolean; label: string }) => (
+    <li className={`text-[12px] font-bold ${passed ? 'text-[var(--primary)]' : 'text-text-muted'}`}>
+      {passed ? 'OK' : '-'} {t(label)}
+    </li>
   );
 
   return (
@@ -336,6 +395,79 @@ export default function AppSetting({ isOpen, onClose }: AppSettingProps) {
                     </div>
                   </div>
                 </div>
+              ) : activeTab === 'Change PW' ? (
+                <form onSubmit={handlePasswordChange} className="flex max-w-[520px] flex-col gap-5 animate-fade-in">
+                  <div className="flex flex-col gap-1.5">
+                    <label htmlFor="currentPassword" className="text-[12px] font-bold text-text-muted">
+                      {t('Current Password')}
+                    </label>
+                    <input
+                      id="currentPassword"
+                      type="password"
+                      value={passwordForm.currentPassword}
+                      onChange={(event) => updatePasswordField('currentPassword', event.target.value)}
+                      className="w-full rounded-2xl bg-surface-alt px-5 py-3 text-[14px] font-semibold text-text-main outline-none ring-1 ring-border-custom/10 border border-transparent focus:border-[var(--primary)] focus:bg-surface transition-all"
+                      autoComplete="current-password"
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-1.5">
+                    <label htmlFor="newPassword" className="text-[12px] font-bold text-text-muted">
+                      {t('New Password')}
+                    </label>
+                    <input
+                      id="newPassword"
+                      type="password"
+                      value={passwordForm.newPassword}
+                      onChange={(event) => updatePasswordField('newPassword', event.target.value)}
+                      className="w-full rounded-2xl bg-surface-alt px-5 py-3 text-[14px] font-semibold text-text-main outline-none ring-1 ring-border-custom/10 border border-transparent focus:border-[var(--primary)] focus:bg-surface transition-all"
+                      autoComplete="new-password"
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-1.5">
+                    <label htmlFor="confirmPassword" className="text-[12px] font-bold text-text-muted">
+                      {t('Confirm New Password')}
+                    </label>
+                    <input
+                      id="confirmPassword"
+                      type="password"
+                      value={passwordForm.confirmPassword}
+                      onChange={(event) => updatePasswordField('confirmPassword', event.target.value)}
+                      className="w-full rounded-2xl bg-surface-alt px-5 py-3 text-[14px] font-semibold text-text-main outline-none ring-1 ring-border-custom/10 border border-transparent focus:border-[var(--primary)] focus:bg-surface transition-all"
+                      autoComplete="new-password"
+                    />
+                  </div>
+
+                  <ul className="grid grid-cols-1 gap-1 sm:grid-cols-2">
+                    <PasswordRequirement passed={isPasswordLongEnough} label="At least 8 characters" />
+                    <PasswordRequirement passed={passwordHasUppercase} label="At least 1 uppercase letter" />
+                    <PasswordRequirement passed={passwordHasNumber} label="At least 1 number" />
+                    <PasswordRequirement passed={passwordHasSymbol} label="At least 1 symbol" />
+                    <PasswordRequirement passed={passwordMatches} label="Passwords match" />
+                  </ul>
+
+                  {passwordError && (
+                    <p className="rounded-2xl bg-red-500/10 px-4 py-3 text-[13px] font-bold text-red-500">
+                      {passwordError}
+                    </p>
+                  )}
+                  {passwordSuccess && (
+                    <p className="rounded-2xl bg-[var(--primary)]/10 px-4 py-3 text-[13px] font-bold text-[var(--primary)]">
+                      {passwordSuccess}
+                    </p>
+                  )}
+
+                  <div className="flex justify-end pt-1">
+                    <button
+                      type="submit"
+                      disabled={!canChangePassword}
+                      className="rounded-xl bg-[var(--primary)] px-8 py-2.5 text-[13px] font-bold text-white shadow-xl shadow-[var(--primary)]/20 transition-all hover:bg-[var(--primary-hover)] hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:shadow-none disabled:hover:translate-y-0"
+                    >
+                      {t('Change Password')}
+                    </button>
+                  </div>
+                </form>
               ) : activeTab === 'Tone' ? (
                 <div className="flex flex-col gap-6 animate-fade-in">
                    <p className="text-text-main font-medium">{t('Select your preferred app tone')}</p>
