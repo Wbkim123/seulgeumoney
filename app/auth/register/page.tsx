@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { findUserByEmail, updateSignupDraft } from '../authStorage';
 
@@ -60,9 +61,14 @@ export default function RegisterPage() {
           />
 
           {error && (
-            <p className="mb-4 rounded-md bg-red-50 px-3 py-2 text-sm font-semibold text-red-600">
-              {error}
-            </p>
+            <div className="mb-4 rounded-md bg-red-50 px-3 py-2 text-sm font-semibold text-red-600">
+              <p>{error}</p>
+              {error === 'An account already exists with this email.' && (
+                <Link href="/auth/login" className="mt-2 inline-block text-red-700 underline underline-offset-2">
+                  Go to login
+                </Link>
+              )}
+            </div>
           )}
 
           <button

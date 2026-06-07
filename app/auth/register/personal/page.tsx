@@ -4,32 +4,40 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createUserFromDraft, getSignupDraft, updateSignupDraft } from '../../authStorage';
 
+type CountryCode = 'us' | 'kr';
+
+const COUNTRY_DIAL_CODES: Record<CountryCode, string> = {
+  us: '+1',
+  kr: '+82',
+};
+
+function formatPhoneNumber(country: CountryCode, number: string) {
+  if (country === 'kr') {
+    if (number.length <= 3) return number;
+    if (number.length <= 7) return `${number.slice(0, 3)}-${number.slice(3)}`;
+    return `${number.slice(0, 3)}-${number.slice(3, 7)}-${number.slice(7, 11)}`;
+  }
+
+  if (number.length <= 3) return number;
+  if (number.length <= 6) return `(${number.slice(0, 3)}) ${number.slice(3)}`;
+  return `(${number.slice(0, 3)}) ${number.slice(3, 6)}-${number.slice(6, 10)}`;
+}
+
+function joinName(firstName: string, lastName: string) {
+  return `${firstName.trim()} ${lastName.trim()}`;
+}
+
 export default function PersonalInfoPage() {
-  const [name, setName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [birthDate, setBirthDate] = useState('');
-  const [country, setCountry] = useState('us');
+  const [country, setCountry] = useState<CountryCode>('us');
+  const [address, setAddress] = useState('');
   const [phoneLocal, setPhoneLocal] = useState('');
   const [error, setError] = useState('');
   const router = useRouter();
 
-  const countryDialCodes: { [key: string]: string } = {
-    us: '+1',
-    kr: '+82',
-  };
-
-  const formatPhoneNumber = (selectedCountry: string, number: string) => {
-    if (selectedCountry === 'kr') {
-      if (number.length <= 3) return number;
-      if (number.length <= 7) return `${number.slice(0, 3)}-${number.slice(3)}`;
-      return `${number.slice(0, 3)}-${number.slice(3, 7)}-${number.slice(7, 11)}`;
-    }
-
-    if (number.length <= 3) return number;
-    if (number.length <= 6) return `(${number.slice(0, 3)}) ${number.slice(3)}`;
-    return `(${number.slice(0, 3)}) ${number.slice(3, 6)}-${number.slice(6, 10)}`;
-  };
-
-  const isFormValid = Boolean(name.trim() && birthDate && country && phoneLocal);
+  const isFormValid = Boolean(firstName.trim() && lastName.trim() && birthDate && country && address.trim() && phoneLocal);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,11 +53,12 @@ export default function PersonalInfoPage() {
     }
 
     try {
-      const fullPhone = `${countryDialCodes[country]} ${formatPhoneNumber(country, phoneLocal)}`;
+      const fullPhone = `${COUNTRY_DIAL_CODES[country]} ${formatPhoneNumber(country, phoneLocal)}`;
       updateSignupDraft({
-        name: name.trim(),
+        name: joinName(firstName, lastName),
         dob: birthDate,
         country,
+        address: address.trim(),
         phone: fullPhone,
       });
       createUserFromDraft(getSignupDraft());
@@ -67,24 +76,43 @@ export default function PersonalInfoPage() {
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label htmlFor="name" className="block text-sm font-medium text-text-main mb-1">
-              Name
-            </label>
-            <input
-              type="text"
-              id="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full border border-border-custom/50 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-border-custom/10 text-text-main placeholder-text-muted bg-transparent"
-              placeholder="Your name"
-              required
-            />
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <div>
+              <label htmlFor="firstName" className="block text-sm font-medium text-text-main mb-1">
+                First name
+              </label>
+              <input
+                type="text"
+                id="firstName"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                className="w-full border border-border-custom/50 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-border-custom/10 text-text-main placeholder-text-muted bg-transparent"
+                placeholder="First name"
+                autoComplete="given-name"
+                required
+              />
+            </div>
+
+            <div>
+              <label htmlFor="lastName" className="block text-sm font-medium text-text-main mb-1">
+                Last name
+              </label>
+              <input
+                type="text"
+                id="lastName"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                className="w-full border border-border-custom/50 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-border-custom/10 text-text-main placeholder-text-muted bg-transparent"
+                placeholder="Last name"
+                autoComplete="family-name"
+                required
+              />
+            </div>
           </div>
 
           <div>
             <label htmlFor="birthDate" className="block text-sm font-medium text-text-main mb-1">
-              Birth of date
+              Date of birth
             </label>
             <input
               type="date"
@@ -105,7 +133,7 @@ export default function PersonalInfoPage() {
               id="country"
               value={country}
               onChange={(e) => {
-                setCountry(e.target.value);
+                setCountry(e.target.value as CountryCode);
                 setPhoneLocal('');
               }}
               className="w-full border border-border-custom/50 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-border-custom/10 text-text-main bg-transparent"
@@ -122,7 +150,7 @@ export default function PersonalInfoPage() {
             </label>
             <div className="flex">
               <span className="inline-flex items-center px-3 border border-r-0 border-border-custom/50 rounded-l-md bg-surface-alt text-text-muted">
-                {countryDialCodes[country]}
+                {COUNTRY_DIAL_CODES[country]}
               </span>
               <input
                 type="tel"
@@ -135,6 +163,22 @@ export default function PersonalInfoPage() {
                 required
               />
             </div>
+          </div>
+
+          <div>
+            <label htmlFor="address" className="block text-sm font-medium text-text-main mb-1">
+              Home address
+            </label>
+            <input
+              type="text"
+              id="address"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              className="w-full border border-border-custom/50 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-border-custom/10 text-text-main placeholder-text-muted bg-transparent"
+              placeholder="Enter home address"
+              autoComplete="street-address"
+              required
+            />
           </div>
 
           {error && (

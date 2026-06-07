@@ -167,6 +167,7 @@ const translations: Record<Language, Record<string, string>> = {
     'Cancel': '취소',
     'Back': '뒤로',
     'Changes saved successfully!': '변경 사항이 저장되었습니다!',
+    'Unable to update your profile.': '프로필을 업데이트할 수 없습니다.',
     'Unsaved Changes Warning': "저장되지 않은 변경 사항이 있습니다. 저장하지 않고 나가시겠습니까? \n\n'확인'을 누르면 취소되고, '취소'를 누르면 계속 수정할 수 있습니다."
   },
   en: {
@@ -320,6 +321,7 @@ const translations: Record<Language, Record<string, string>> = {
     'Cancel': 'Cancel',
     'Back': 'Back',
     'Changes saved successfully!': 'Changes saved successfully!',
+    'Unable to update your profile.': 'Unable to update your profile.',
     'Unsaved Changes Warning': "You have unsaved changes. Do you want to leave without saving? \n\nClick 'OK' to Discard, or 'Cancel' to Keep Editing."
   }
 };

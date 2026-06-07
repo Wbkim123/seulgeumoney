@@ -4,6 +4,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { HiCamera, HiCalendarDays, HiChevronLeft, HiChevronRight } from 'react-icons/hi2';
 import { useLanguage } from '../app/(main)/LanguageContext';
+import { getCurrentUser, updateCurrentUserProfile } from '../app/auth/authStorage';
+import type { StoredUser } from '../app/auth/authStorage';
 
 interface AccountData {
   name: string;
@@ -18,17 +20,55 @@ interface AccountSettingProps {
   onClose: () => void;
 }
 
+const DEFAULT_ACCOUNT_DATA: AccountData = {
+  name: 'Seulgee-jjeossi',
+  dob: '1987-05-15',
+  phone: '+82 10-1234-5678',
+  address: 'Seoul, Republic of Korea',
+  email: 'money.uncle@email.com',
+  profilePic: '/seuljeossi.png',
+};
+
+const getAccountStorageKey = (userId?: string) =>
+  userId ? `seulgeumoney_account_data_${userId}` : 'seulgeumoney_account_data';
+
+function parseStoredAccountData(raw: string | null) {
+  if (!raw) return null;
+
+  try {
+    return JSON.parse(raw) as Partial<AccountData>;
+  } catch (error) {
+    console.error('Failed to parse account data', error);
+    return null;
+  }
+}
+
+function getDobDate(dob: string) {
+  const date = new Date(dob);
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
+function buildAccountData(currentUser: StoredUser | null, savedData: Partial<AccountData> | null) {
+  if (!currentUser) {
+    return { ...DEFAULT_ACCOUNT_DATA, ...savedData };
+  }
+
+  return {
+    ...DEFAULT_ACCOUNT_DATA,
+    name: currentUser.name,
+    dob: currentUser.dob,
+    phone: currentUser.phone,
+    address: currentUser.address ?? DEFAULT_ACCOUNT_DATA.address,
+    email: currentUser.email,
+    profilePic: savedData?.profilePic ?? DEFAULT_ACCOUNT_DATA.profilePic,
+  };
+}
+
 export default function AccountSetting({ onClose }: AccountSettingProps) {
   const { t, formatYear, language } = useLanguage();
   const [initialData, setInitialData] = useState<AccountData | null>(null);
-  const [data, setData] = useState<AccountData>({
-    name: 'Seulgee-jjeossi',
-    dob: '1987-05-15',
-    phone: '+82 10-1234-5678',
-    address: 'Seoul, Republic of Korea',
-    email: 'money.uncle@email.com',
-    profilePic: '/seuljeossi.png',
-  });
+  const [data, setData] = useState<AccountData>(DEFAULT_ACCOUNT_DATA);
+  const [accountStorageKey, setAccountStorageKey] = useState(getAccountStorageKey());
 
   const [isLoaded, setIsLoaded] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -39,22 +79,20 @@ export default function AccountSetting({ onClose }: AccountSettingProps) {
   const [viewDate, setViewDate] = useState(new Date('1987-05-15'));
 
   useEffect(() => {
-    const saved = localStorage.getItem('seulgeumoney_account_data');
-    let baseData = data;
-    if (saved) {
-      try {
-        baseData = JSON.parse(saved);
-        setData(baseData);
-        if (baseData.dob) {
-          const d = new Date(baseData.dob);
-          if (!isNaN(d.getTime())) {
-            setViewDate(d);
-          }
-        }
-      } catch (e) {
-        console.error('Failed to parse account data', e);
-      }
+    const currentUser = getCurrentUser();
+    const storageKey = getAccountStorageKey(currentUser?.id);
+    const savedData = parseStoredAccountData(localStorage.getItem(storageKey));
+    const legacySavedData = currentUser ? null : parseStoredAccountData(localStorage.getItem(getAccountStorageKey()));
+    const baseData = buildAccountData(currentUser, savedData ?? legacySavedData);
+
+    setAccountStorageKey(storageKey);
+    setData(baseData);
+
+    const dobDate = getDobDate(baseData.dob);
+    if (dobDate) {
+      setViewDate(dobDate);
     }
+
     setInitialData(baseData);
     setIsLoaded(true);
   }, []);
@@ -95,10 +133,33 @@ export default function AccountSetting({ onClose }: AccountSettingProps) {
   }, [isDirty, initialData, data, t]);
 
   const handleSave = () => {
-    localStorage.setItem('seulgeumoney_account_data', JSON.stringify(data));
-    setInitialData(data);
-    alert(t('Changes saved successfully!'));
-    onClose();
+    try {
+      const currentUser = getCurrentUser();
+
+      if (currentUser) {
+        updateCurrentUserProfile({
+          name: data.name,
+          dob: data.dob,
+          email: data.email,
+          phone: data.phone,
+          address: data.address,
+        });
+        localStorage.setItem(
+          accountStorageKey,
+          JSON.stringify({
+            profilePic: data.profilePic,
+          })
+        );
+      } else {
+        localStorage.setItem(accountStorageKey, JSON.stringify(data));
+      }
+
+      setInitialData(data);
+      alert(t('Changes saved successfully!'));
+      onClose();
+    } catch (error) {
+      alert(error instanceof Error ? t(error.message) : t('Unable to update your profile.'));
+    }
   };
 
   const handleCancel = () => {

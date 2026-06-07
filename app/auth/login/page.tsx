@@ -15,7 +15,7 @@ import {
 } from '../authStorage';
 
 export default function LoginPage() {
-  const [username, setUsername] = useState('');
+  const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [remember, setRemember] = useState(false);
   const [error, setError] = useState('');
@@ -25,16 +25,16 @@ export default function LoginPage() {
     e.preventDefault();
     setError('');
 
-    if (authenticateAdmin(username, password)) {
+    if (authenticateAdmin(identifier, password)) {
       saveAdminSession();
       router.push('/mainpage');
       return;
     }
 
-    const user = authenticateUser(username, password);
+    const user = authenticateUser(identifier, password);
 
     if (!user) {
-      setError('Invalid email/username or password.');
+      setError('Invalid email or password.');
       return;
     }
 
@@ -68,10 +68,10 @@ export default function LoginPage() {
           >
             <input
               type="text"
-              placeholder="Username"
+              placeholder="Email address"
               className="flex-1 outline-none bg-transparent text-text-main placeholder-text-muted text-left"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={identifier}
+              onChange={(e) => setIdentifier(e.target.value)}
               required
             />
             <FaUser className="ml-2 text-primary" size={18} />
