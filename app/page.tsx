@@ -3,17 +3,27 @@ import Link from 'next/link';
 
 const features = [
   {
-    title: 'Track spending clearly',
-    description: 'See daily expenses, category totals, and trends without digging through a spreadsheet.',
+    title: 'Spending dashboard',
+    description: 'Record income and expenses, then see totals and recent transactions in one place.',
   },
   {
-    title: 'Set practical goals',
-    description: 'Create daily, monthly, and yearly targets so your budget stays visible while you spend.',
+    title: 'Goal tracking',
+    description: 'Set daily, monthly, and yearly limits so you can compare spending against your plan.',
   },
   {
-    title: 'Review your money rhythm',
-    description: 'Use reports and calendar views to understand what changed and where to adjust next.',
+    title: 'Reports and calendar',
+    description: 'Review spending patterns by period and open calendar days to check what happened.',
   },
+  {
+    title: 'Personal account tools',
+    description: 'Manage profile details, app settings, password changes, and login sessions locally.',
+  },
+];
+
+const workflow = [
+  'Create an account with email, password, and personal info.',
+  'Track spending, income, goals, and notes as you use the app.',
+  'Review reports and calendar history when you need to adjust habits.',
 ];
 
 export default function IndexPage() {
@@ -40,17 +50,26 @@ export default function IndexPage() {
           </nav>
         </header>
 
-        <div className="grid flex-1 items-center gap-10 py-12 lg:grid-cols-[1.05fr_0.95fr]">
+        <div className="grid flex-1 items-center gap-10 py-10 lg:grid-cols-[1.05fr_0.95fr]">
           <div className="max-w-2xl">
             <p className="mb-5 text-sm font-extrabold uppercase tracking-[0.18em] text-[var(--primary)]">
-              Personal finance workspace
+              Personal finance tracker
             </p>
             <h1 className="text-5xl font-extrabold leading-[1.05] text-text-main sm:text-6xl">
               Seulgeumoney
             </h1>
             <p className="mt-6 max-w-xl text-lg font-bold leading-8 text-text-muted">
-              A simple money dashboard for tracking spending, reviewing reports, and keeping savings goals in one calm place.
+              A simple dashboard for students and everyday users who want to track where money goes, set spending goals,
+              and review habits without building a spreadsheet.
             </p>
+            <div className="mt-7 grid gap-3 sm:grid-cols-3">
+              {workflow.map((step, index) => (
+                <div key={step} className="rounded-2xl border border-border-custom/50 bg-surface px-4 py-3">
+                  <p className="text-sm font-extrabold text-[var(--primary)]">0{index + 1}</p>
+                  <p className="mt-1 text-sm font-bold leading-6 text-text-main">{step}</p>
+                </div>
+              ))}
+            </div>
             <div className="mt-9 flex flex-wrap gap-3">
               <Link
                 href="/auth/register/"
@@ -72,8 +91,9 @@ export default function IndexPage() {
             <div className="relative w-full max-w-[460px] rounded-[28px] border border-border-custom/60 bg-surface p-6 shadow-[0_22px_55px_rgba(0,0,0,0.12)]">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-extrabold text-[var(--primary)]">This month</p>
+                  <p className="text-sm font-extrabold text-[var(--primary)]">What the app helps with</p>
                   <p className="mt-1 text-3xl font-extrabold text-text-main">$1,082</p>
+                  <p className="mt-1 text-sm font-bold text-text-muted">Monthly spending at a glance</p>
                 </div>
                 <Image src="/seuljeossi.png" alt="Seulgeumoney character" width={92} height={92} priority />
               </div>
