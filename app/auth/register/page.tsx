@@ -34,12 +34,12 @@ export default function RegisterPage() {
           Register
         </h2>
 
-        <button className="flex items-center justify-center w-full border border-border-custom/50 rounded-md py-2 mb-3 hover:bg-primary-light/30 transition text-text-muted font-medium">
+        <button className="flex w-full cursor-pointer items-center justify-center rounded-md border border-border-custom/50 py-2 mb-3 text-text-muted font-medium transition hover:bg-primary-light/30">
           <span className="mr-2">A</span>
           Continue with Apple
         </button>
 
-        <button className="flex items-center justify-center w-full border border-border-custom/50 rounded-md py-2 mb-4 hover:bg-primary-light/30 transition text-text-muted font-medium">
+        <button className="flex w-full cursor-pointer items-center justify-center rounded-md border border-border-custom/50 py-2 mb-4 text-text-muted font-medium transition hover:bg-primary-light/30">
           <span className="mr-2">G</span>
           Continue with Google
         </button>
@@ -76,7 +76,7 @@ export default function RegisterPage() {
             disabled={!isEmailValid}
             className={`w-full font-semibold py-2 rounded-md transition ${
               isEmailValid
-                ? 'bg-primary-light hover:bg-primary text-white'
+                ? 'cursor-pointer bg-primary-light hover:bg-primary text-white'
                 : 'bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed'
             }`}
           >

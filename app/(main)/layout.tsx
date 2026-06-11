@@ -9,7 +9,32 @@ import { useRouter } from 'next/navigation';
 import { HiOutlineBars3, HiUser, HiChevronLeft } from 'react-icons/hi2';
 import { GoalsProvider } from './GoalsContext';
 import { LanguageProvider } from './LanguageContext';
-import { getAuthSession } from '../auth/authStorage';
+import { getAuthSession, getCurrentUser } from '../auth/authStorage';
+
+const DEFAULT_PROFILE_PIC = '/seuljeossi.png';
+
+function getAccountStorageKey(userId?: string) {
+  return userId ? `seulgeumoney_account_data_${userId}` : 'seulgeumoney_account_data';
+}
+
+function getSavedProfilePic() {
+  const currentUser = getCurrentUser();
+
+  if (!currentUser) return '';
+
+  const rawAccountData = localStorage.getItem(getAccountStorageKey(currentUser.id));
+
+  if (!rawAccountData) return '';
+
+  try {
+    const savedAccountData = JSON.parse(rawAccountData) as { profilePic?: string };
+    const profilePic = savedAccountData.profilePic ?? '';
+    return profilePic && profilePic !== DEFAULT_PROFILE_PIC ? profilePic : '';
+  } catch {
+    localStorage.removeItem(getAccountStorageKey(currentUser.id));
+    return '';
+  }
+}
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -20,6 +45,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   const [isHovering, setIsHovering] = useState(false);
   const [isCalendarHovering, setCalendarHovering] = useState(false);
   const [isCalendarButtonVisible, setCalendarButtonVisible] = useState(true);
+  const [profilePic, setProfilePic] = useState('');
 
   useEffect(() => {
     if (!getAuthSession()) {
@@ -27,8 +53,23 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
       return;
     }
 
+    setProfilePic(getSavedProfilePic());
     setIsAuthChecked(true);
   }, [router]);
+
+  useEffect(() => {
+    if (!isAuthChecked) return;
+
+    const syncProfilePic = () => setProfilePic(getSavedProfilePic());
+
+    window.addEventListener('profilePicUpdated', syncProfilePic);
+    window.addEventListener('storage', syncProfilePic);
+
+    return () => {
+      window.removeEventListener('profilePicUpdated', syncProfilePic);
+      window.removeEventListener('storage', syncProfilePic);
+    };
+  }, [isAuthChecked]);
 
   const handleCloseCalendar = () => {
     setCalendarOpen(false);
@@ -87,11 +128,13 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
             {/* Profile / Back button */}
             <button
               onClick={handleAccountToggle}
-              className="flex h-12 w-12 items-center justify-center rounded-full bg-surface shadow-[0_8px_20px_rgba(0,0,0,0.08)] hover:scale-105 transition-all duration-200 cursor-pointer ring-1 ring-border-custom/5"
+              className="relative flex h-12 w-12 items-center justify-center overflow-hidden rounded-full bg-surface shadow-[0_8px_20px_rgba(0,0,0,0.08)] hover:scale-105 transition-all duration-200 cursor-pointer ring-1 ring-border-custom/5"
               aria-label={isAccountOpen ? "Back to page" : "Account Settings"}
             >
               {isAccountOpen ? (
                 <HiChevronLeft size={30} className="text-[var(--primary)]" />
+              ) : profilePic ? (
+                <Image src={profilePic} alt="Profile" fill className="rounded-full object-cover" unoptimized />
               ) : (
                 <HiUser size={30} className="text-[var(--primary)]" />
               )}

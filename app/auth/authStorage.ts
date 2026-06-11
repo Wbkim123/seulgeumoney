@@ -59,6 +59,35 @@ function writeJson<T>(key: string, value: T) {
   localStorage.setItem(key, JSON.stringify(value));
 }
 
+function readAuthSession() {
+  const persistentSession = readJson<AuthSession | null>(AUTH_STORAGE_KEY, null);
+
+  if (persistentSession) {
+    return { session: persistentSession, remember: true };
+  }
+
+  const rawTemporarySession = sessionStorage.getItem(AUTH_STORAGE_KEY);
+
+  if (!rawTemporarySession) {
+    return null;
+  }
+
+  try {
+    return { session: JSON.parse(rawTemporarySession) as AuthSession, remember: false };
+  } catch {
+    sessionStorage.removeItem(AUTH_STORAGE_KEY);
+    return null;
+  }
+}
+
+function writeAuthSession(session: AuthSession, remember: boolean) {
+  localStorage.removeItem(AUTH_STORAGE_KEY);
+  sessionStorage.removeItem(AUTH_STORAGE_KEY);
+
+  const storage = remember ? localStorage : sessionStorage;
+  storage.setItem(AUTH_STORAGE_KEY, JSON.stringify(session));
+}
+
 function normalizeEmail(email: string) {
   return email.trim().toLowerCase();
 }
@@ -162,31 +191,32 @@ export function authenticateAdmin(username: string, password: string) {
   return username.trim() === ADMIN_USERNAME && password === ADMIN_PASSWORD;
 }
 
-export function saveSession(session: Omit<AuthSession, 'loggedInAt'>) {
-  writeJson(AUTH_STORAGE_KEY, {
+export function saveSession(session: Omit<AuthSession, 'loggedInAt'>, remember = true) {
+  writeAuthSession({
     ...session,
     loggedInAt: new Date().toISOString(),
-  });
+  }, remember);
 }
 
-export function saveAdminSession() {
+export function saveAdminSession(remember = true) {
   saveSession({
     userId: 'admin',
     email: ADMIN_USERNAME,
     role: 'admin',
-  });
+  }, remember);
 }
 
-export function saveUserSession(user: StoredUser) {
+export function saveUserSession(user: StoredUser, remember = true) {
   saveSession({
     userId: user.id,
     email: user.email,
     role: 'user',
-  });
+  }, remember);
 }
 
 export function getAuthSession() {
-  const session = readJson<AuthSession | null>(AUTH_STORAGE_KEY, null);
+  const storedAuth = readAuthSession();
+  const session = storedAuth?.session ?? null;
 
   if (!session) return null;
   if (session.role === 'admin' && session.email === ADMIN_USERNAME) return session;
@@ -208,6 +238,7 @@ export function getCurrentUser() {
 
 export function updateCurrentUserProfile(profile: Pick<StoredUser, 'name' | 'dob' | 'email' | 'phone' | 'address'>) {
   const { session, users, user } = requireCurrentUserContext('Please log in before updating your profile.');
+  const shouldRememberSession = readAuthSession()?.remember ?? true;
   const email = normalizeEmail(profile.email);
   const emailOwner = users.find((storedUser) => storedUser.email === email);
 
@@ -234,7 +265,7 @@ export function updateCurrentUserProfile(profile: Pick<StoredUser, 'name' | 'dob
       userId: session.userId,
       email,
       role: session.role,
-    });
+    }, shouldRememberSession);
   }
 
   return nextUser;
@@ -242,6 +273,7 @@ export function updateCurrentUserProfile(profile: Pick<StoredUser, 'name' | 'dob
 
 export function clearAuthSession() {
   localStorage.removeItem(AUTH_STORAGE_KEY);
+  sessionStorage.removeItem(AUTH_STORAGE_KEY);
 }
 
 export function startPasswordReset(email: string) {

@@ -144,16 +144,21 @@ export default function AccountSetting({ onClose }: AccountSettingProps) {
           phone: data.phone,
           address: data.address,
         });
-        localStorage.setItem(
-          accountStorageKey,
-          JSON.stringify({
-            profilePic: data.profilePic,
-          })
-        );
+        if (data.profilePic === DEFAULT_ACCOUNT_DATA.profilePic) {
+          localStorage.removeItem(accountStorageKey);
+        } else {
+          localStorage.setItem(
+            accountStorageKey,
+            JSON.stringify({
+              profilePic: data.profilePic,
+            })
+          );
+        }
       } else {
         localStorage.setItem(accountStorageKey, JSON.stringify(data));
       }
 
+      window.dispatchEvent(new Event('profilePicUpdated'));
       setInitialData(data);
       alert(t('Changes saved successfully!'));
       onClose();

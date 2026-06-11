@@ -18,6 +18,7 @@ export default function LoginPage() {
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [remember, setRemember] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const router = useRouter();
 
@@ -26,7 +27,7 @@ export default function LoginPage() {
     setError('');
 
     if (authenticateAdmin(identifier, password)) {
-      saveAdminSession();
+      saveAdminSession(remember);
       router.push('/mainpage');
       return;
     }
@@ -38,7 +39,7 @@ export default function LoginPage() {
       return;
     }
 
-    saveUserSession(user);
+    saveUserSession(user, remember);
     router.push('/mainpage');
   };
 
@@ -81,7 +82,7 @@ export default function LoginPage() {
             className="flex items-center rounded-full px-4 py-2 border border-border-custom/50 focus-within:ring-2 focus-within:ring-border-custom/10"
           >
             <input
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               placeholder="Password"
               className="flex-1 outline-none bg-transparent text-text-main placeholder-text-muted text-left"
               value={password}
@@ -102,26 +103,36 @@ export default function LoginPage() {
           </div>
 
           <div className="flex items-center justify-between text-sm text-text-main">
-            <label className="flex items-center">
+            <label className="flex cursor-pointer items-center">
               <input
                 type="checkbox"
-                className="mr-1 accent-primary"
+                className="mr-1 cursor-pointer accent-primary"
                 checked={remember}
                 onChange={(e) => setRemember(e.target.checked)}
               />
               Remember me
             </label>
-            <Link href="/auth/forgotpw" className="hover:underline text-text-muted">
-              Forgot password?
-            </Link>
+            <label className="flex cursor-pointer items-center">
+              <input
+                type="checkbox"
+                className="mr-1 cursor-pointer accent-primary"
+                checked={showPassword}
+                onChange={(e) => setShowPassword(e.target.checked)}
+              />
+              Show password
+            </label>
           </div>
 
           <button
             type="submit"
-            className="rounded-full py-2 font-semibold transition bg-primary-light text-white hover:bg-primary"
+            className="cursor-pointer rounded-full py-2 font-semibold transition bg-primary-light text-white hover:bg-primary"
           >
             Login
           </button>
+
+          <Link href="/auth/forgotpw" className="text-center text-sm text-text-muted hover:underline">
+            Forgot password?
+          </Link>
 
           <div className="text-center text-sm text-text-main">
             Don't have an account? <Link href="/auth/register" className="underline text-text-muted">Register</Link>
